@@ -1,4 +1,4 @@
-import { copyFile } from "node:fs/promises";
+import { copyFile, cp } from "node:fs/promises";
 import { defineConfig } from "tsup";
 
 export default defineConfig({
@@ -13,5 +13,7 @@ export default defineConfig({
   onSuccess: async () => {
     await copyFile("src/theme.css", "dist/theme.css");
     await copyFile("src/personalities.css", "dist/personalities.css");
+    await copyFile("src/fonts.css", "dist/fonts.css");
+    await cp("src/fonts", "dist/fonts", { recursive: true });
   },
 });

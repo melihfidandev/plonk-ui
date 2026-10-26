@@ -4,6 +4,7 @@
  *   @import "plonk/theme.css";
  *   @source "../node_modules/plonk/dist";
  */
+@import "./fonts.css";
 @import "./personalities.css";
 
 /* Token'ları Tailwind'e tanıt: bg-plonk-primary, rounded-plonk-md, font-plonk-display … */
