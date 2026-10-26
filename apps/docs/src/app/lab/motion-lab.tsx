@@ -1,17 +1,23 @@
 "use client";
 
 import {
+  Avatar,
+  AvatarGroup,
+  Badge,
   Button,
+  Card,
   Checkbox,
   cn,
   contrastRatio,
   DEFAULT_PERSONALITY,
   Input,
+  Kbd,
   MOTION_TOKENS,
   overshoot,
   PERSONALITY_NAMES,
   personalities,
   PlonkProvider,
+  Progress,
   Radio,
   RadioGroup,
   resolveEasing,
@@ -175,6 +181,13 @@ export function MotionLab() {
             note="Alana odaklan: kalkar ve odak renginde gölge bırakır. Boş gönder: hata sallanarak gelir."
           >
             <FormLab />
+          </Section>
+
+          <Section
+            title="Gösterim"
+            note="Card, Badge, Avatar, Progress, Kbd. Retro'da her kart bir pencere."
+          >
+            <DisplayLab />
           </Section>
 
           <Section
@@ -496,6 +509,143 @@ function FormLab() {
           readOnly
         />
       </div>
+    </div>
+  );
+}
+
+// Örnek profil resmi: dışarıdan resim çekmemek için satır içi SVG.
+const PHOTO = `data:image/svg+xml,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" fill="#5FBFFF"/><circle cx="20" cy="16" r="7" fill="#1F1A17"/><path d="M6 40c2-9 8-13 14-13s12 4 14 13" fill="#1F1A17"/></svg>',
+)}`;
+
+const TEAM = [
+  "Melih Fidan",
+  "Ayşe Yılmaz",
+  "Can Demir",
+  "Deniz Kaya",
+  "Ece Su",
+  "Ferit Oral",
+];
+
+function DisplayLab() {
+  const [progress, setProgress] = useState(35);
+  const [open, setOpen] = useState(true);
+
+  return (
+    <div className="grid gap-12">
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <Card
+          title="Aylık gelir"
+          actions={
+            <Badge variant="success" dot>
+              +12%
+            </Badge>
+          }
+        >
+          <p className="font-plonk-display text-4xl">₺48.250</p>
+          <p className="mt-1 text-sm text-plonk-ink-muted">Geçen ay ₺43.080</p>
+        </Card>
+
+        <Card
+          title="Sprint 14"
+          description="Bitmesine 3 gün"
+          tape
+          tilt="right"
+          footer={
+            <AvatarGroup max={3} size="sm" aria-label="Ekip">
+              {TEAM.map((n) => (
+                <Avatar key={n} name={n} />
+              ))}
+            </AvatarGroup>
+          }
+        >
+          <Progress label="Tamamlanan" value={68} showValue variant="success" />
+        </Card>
+
+        {open ? (
+          <Card
+            title="Yeni sürüm"
+            onClose={() => setOpen(false)}
+            closeLabel="Kapat"
+            footer={
+              <>
+                <Button size="sm">Güncelle</Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setOpen(false)}
+                >
+                  Sonra
+                </Button>
+              </>
+            }
+          >
+            <p className="text-sm">
+              Plonk 0.2 hazır. Değişiklikleri görmek için güncelle.
+            </p>
+          </Card>
+        ) : (
+          <Button variant="neutral" onClick={() => setOpen(true)}>
+            Kartı geri getir
+          </Button>
+        )}
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <Badge>Taslak</Badge>
+        <Badge variant="primary">Yeni</Badge>
+        <Badge variant="secondary">Beta</Badge>
+        <Badge variant="accent">Öne çıkan</Badge>
+        <Badge variant="success" dot>
+          Aktif
+        </Badge>
+        <Badge variant="warning" dot>
+          Beklemede
+        </Badge>
+        <Badge variant="danger" dot>
+          Hata
+        </Badge>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-8">
+        <div className="flex items-end gap-3">
+          <Avatar name="Melih Fidan" src={PHOTO} size="lg" />
+          <Avatar name="Ayşe Yılmaz" size="lg" />
+          <Avatar name="Bozuk Resim" src="/yok.png" size="lg" />
+        </div>
+        <AvatarGroup max={4} aria-label="Ekip">
+          {TEAM.map((n) => (
+            <Avatar key={n} name={n} />
+          ))}
+        </AvatarGroup>
+      </div>
+
+      <div className="grid max-w-xl gap-6">
+        <Progress label="Yükleme" value={progress} showValue />
+        <div className="flex flex-wrap gap-3">
+          <Button
+            size="sm"
+            variant="neutral"
+            onClick={() => setProgress((v) => Math.max(0, v - 20))}
+          >
+            −20
+          </Button>
+          <Button
+            size="sm"
+            variant="neutral"
+            onClick={() => setProgress((v) => Math.min(100, v + 20))}
+          >
+            +20
+          </Button>
+        </div>
+        <Progress label="Bekleniyor (belirsiz)" variant="secondary" />
+      </div>
+
+      <p className="flex flex-wrap items-center gap-2 text-plonk-ink-muted">
+        Komut paleti: <Kbd>⌘</Kbd>
+        <Kbd>K</Kbd> · Kaydet: <Kbd>Ctrl</Kbd>
+        <Kbd>S</Kbd>
+      </p>
     </div>
   );
 }

@@ -234,6 +234,184 @@
       var(--plonk-motion-enter-easing) both;
   }
 
+  /* ---------- Card ---------- */
+
+  .plonk-card-header {
+    padding: 1rem 1.25rem 0.25rem;
+  }
+  .plonk-card-header:only-child {
+    padding-bottom: 1rem;
+  }
+  .plonk-card-close {
+    order: 3;
+    width: 2rem;
+    height: 2rem;
+    margin: -0.25rem -0.5rem 0 0;
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-radius: var(--plonk-radius-pill);
+    background: var(--plonk-color-surface);
+    transition: background-color var(--plonk-motion-spring-duration)
+      var(--plonk-motion-spring-easing);
+  }
+  .plonk-card-close:hover {
+    background: var(--plonk-color-sunken);
+  }
+  .plonk-card-close > svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+  .plonk-card-description {
+    margin-top: 0.25rem;
+  }
+
+  /* Sticker'da üstte bir parça bant. */
+  .plonk-card[data-tape]::before {
+    content: "";
+    position: absolute;
+    top: -0.8rem;
+    left: 50%;
+    width: 5.5rem;
+    height: 1.5rem;
+    translate: -50% 0;
+    rotate: -4deg;
+    background: color-mix(
+      in oklab,
+      var(--plonk-color-primary) 60%,
+      transparent
+    );
+    border-inline: 1px dashed
+      color-mix(in oklab, var(--plonk-color-ink) 35%, transparent);
+    pointer-events: none;
+  }
+
+  /* Retro: her kart bir pencere. Başlık çizgili bir çubuğun ortasında. */
+  [data-plonk-personality="retro"] {
+    .plonk-card[data-tape]::before {
+      display: none;
+    }
+    .plonk-card-header {
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.3rem 0.5rem;
+      border-bottom: var(--plonk-border-width) solid var(--plonk-color-ink);
+      background: repeating-linear-gradient(
+          to bottom,
+          var(--plonk-color-ink) 0 1px,
+          transparent 1px 3px
+        )
+        content-box;
+    }
+    .plonk-card-header:only-child {
+      border-bottom: 0;
+    }
+    .plonk-card-heading {
+      text-align: center;
+    }
+    .plonk-card-title {
+      display: inline-block;
+      padding-inline: 0.6rem;
+      background: var(--plonk-color-surface);
+      font-size: 0.875rem;
+      line-height: 1.5rem;
+    }
+    .plonk-card-close {
+      order: 0;
+      width: 1rem;
+      height: 1rem;
+      margin: 0 0 0 0.25rem;
+      outline: 3px solid var(--plonk-color-surface);
+    }
+    .plonk-card-close > svg {
+      opacity: 0;
+    }
+    .plonk-card-close:is(:hover, :focus-visible) > svg {
+      opacity: 1;
+    }
+    .plonk-card-actions {
+      padding-inline: 0.4rem;
+      background: var(--plonk-color-surface);
+    }
+    .plonk-card-description {
+      margin-top: 0;
+      padding-top: 0.75rem;
+    }
+    .plonk-card-footer {
+      border-top: var(--plonk-border-width) solid var(--plonk-color-ink);
+      background: var(--plonk-color-sunken);
+    }
+  }
+
+  /* ---------- Avatar grubu: üst üste biner, üzerine gelince kalkar ---------- */
+
+  .plonk-avatar-group > .plonk-avatar {
+    transition: translate var(--plonk-motion-spring-duration)
+      var(--plonk-motion-spring-easing);
+  }
+  .plonk-avatar-group > .plonk-avatar + .plonk-avatar {
+    margin-inline-start: calc(var(--plonk-avatar-overlap, 0.5rem) * -1);
+  }
+  @media (hover: hover) {
+    .plonk-avatar-group > .plonk-avatar:hover {
+      translate: 0 -0.3rem;
+      z-index: 1;
+    }
+  }
+
+  /* ---------- Progress ---------- */
+
+  .plonk-progress-fill {
+    left: 0;
+    width: 100%;
+    border-right: var(--plonk-border-width) solid var(--plonk-color-ink);
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent 0 6px,
+      color-mix(in oklab, var(--plonk-color-ink) 12%, transparent) 6px 12px
+    );
+    transition: translate var(--plonk-motion-spring-duration)
+      var(--plonk-motion-spring-easing);
+  }
+  [data-indeterminate] > .plonk-progress-fill {
+    width: 40%;
+    border-left: var(--plonk-border-width) solid var(--plonk-color-ink);
+    animation: plonk-progress-slide 1400ms cubic-bezier(0.65, 0, 0.35, 1)
+      infinite;
+  }
+  [data-plonk-personality="retro"] {
+    .plonk-progress-fill {
+      background-image: none;
+    }
+    [data-indeterminate] > .plonk-progress-fill {
+      animation-timing-function: steps(8, jump-none);
+    }
+    /* Dolgu bloklara bölünür. */
+    .plonk-progress-track::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent 0 10px,
+        var(--plonk-color-sunken) 10px 13px
+      );
+      pointer-events: none;
+    }
+  }
+  [data-plonk-motion="reduce"] [data-indeterminate] > .plonk-progress-fill {
+    animation-duration: 2600ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-indeterminate] > .plonk-progress-fill {
+      animation-duration: 2600ms;
+    }
+  }
+
+  /* ---------- Kbd: tuşun alt kenarı kalın ---------- */
+
+  .plonk-kbd {
+    border-bottom-width: calc(var(--plonk-border-width) * 2);
+  }
+
   /* Yükleniyor: üç nokta sırayla zıplar. Retro'da zıplamaz, kademeli yanıp söner. */
   .plonk-dots > * {
     width: 0.38em;
@@ -344,5 +522,14 @@
     opacity: 0;
     scale: 0.6;
     translate: 0 -0.35rem;
+  }
+}
+
+@keyframes plonk-progress-slide {
+  from {
+    translate: -100% 0;
+  }
+  to {
+    translate: 250% 0;
   }
 }

@@ -5,10 +5,15 @@ export {
   usePersonality,
   type PlonkProviderProps,
 } from "./provider/PlonkProvider";
+export * from "./components/avatar";
+export * from "./components/badge";
 export * from "./components/button";
+export * from "./components/card";
 export * from "./components/checkbox";
 export * from "./components/field";
 export * from "./components/input";
+export * from "./components/kbd";
+export * from "./components/progress";
 export * from "./components/radio";
 export * from "./components/switch";
 export * from "./components/textarea";
