@@ -169,7 +169,9 @@
     transition-timing-function: var(--plonk-motion-spring-easing);
     transition-duration: var(--plonk-motion-spring-duration);
   }
-  .plonk-field:focus-within {
+  .plonk-field:focus-within,
+  .plonk-field[aria-expanded="true"],
+  .plonk-field:has([aria-expanded="true"]) {
     translate: calc(var(--plonk-shadow-x) * -0.5)
       calc(var(--plonk-shadow-y) * -0.5);
     box-shadow: var(--plonk-shadow-x) var(--plonk-shadow-y) 0
@@ -221,6 +223,7 @@
     transition: stroke-dashoffset 240ms cubic-bezier(0.65, 0, 0.35, 1);
   }
   :checked:not(:indeterminate) + svg .plonk-check-mark,
+  .plonk-item[data-selected] .plonk-check-mark,
   :indeterminate + svg .plonk-dash-mark {
     stroke-dashoffset: 0;
     transition-delay: 40ms;
@@ -586,6 +589,123 @@
     }
   }
 
+  /* ---------- Menu, Select, ComboBox listeleri ---------- */
+
+  .plonk-item {
+    transition: background-color var(--plonk-motion-press-duration)
+      var(--plonk-motion-press-easing);
+  }
+  .plonk-item-description,
+  .plonk-item-shortcut {
+    color: var(--plonk-color-ink-muted);
+  }
+  .plonk-item[data-focused] {
+    background: var(--plonk-color-primary);
+    color: var(--plonk-color-on-primary);
+  }
+  .plonk-item[data-focused] :is(.plonk-item-description, .plonk-item-shortcut) {
+    color: inherit;
+  }
+  .plonk-item[data-variant="danger"] {
+    color: color-mix(
+      in oklab,
+      var(--plonk-color-danger) 60%,
+      var(--plonk-color-ink)
+    );
+  }
+  .plonk-item[data-variant="danger"][data-focused] {
+    background: var(--plonk-color-danger);
+    color: var(--plonk-color-on-danger);
+  }
+  .plonk-item[data-disabled] {
+    color: var(--plonk-color-ink-muted);
+    opacity: 0.6;
+  }
+  .plonk-mark {
+    background: color-mix(in oklab, var(--plonk-color-accent) 55%, transparent);
+    color: inherit;
+    border-radius: 3px;
+    box-shadow: 0 0 0 1px
+      color-mix(in oklab, var(--plonk-color-accent) 55%, transparent);
+  }
+
+  /*
+   * Açılırken seçenekler yukarıdan sırayla düşer. Sıra sadece seçenekleri
+   * sayar (bölüm başlıkları ve ayraçlar hariç); bölümler sırayı sürdürür.
+   */
+  .plonk-list[data-entering] .plonk-item {
+    --plonk-stagger: 0;
+    animation: plonk-item-in 260ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+    animation-delay: calc(var(--plonk-stagger) * 25ms);
+  }
+  .plonk-list[data-entering] .plonk-item:nth-child(2 of .plonk-item) {
+    --plonk-stagger: 1;
+  }
+  .plonk-list[data-entering] .plonk-item:nth-child(3 of .plonk-item) {
+    --plonk-stagger: 2;
+  }
+  .plonk-list[data-entering] .plonk-item:nth-child(4 of .plonk-item) {
+    --plonk-stagger: 3;
+  }
+  .plonk-list[data-entering] .plonk-item:nth-child(5 of .plonk-item) {
+    --plonk-stagger: 4;
+  }
+  .plonk-list[data-entering] .plonk-item:nth-child(6 of .plonk-item) {
+    --plonk-stagger: 5;
+  }
+  .plonk-list[data-entering] .plonk-item:nth-child(7 of .plonk-item) {
+    --plonk-stagger: 6;
+  }
+  .plonk-list[data-entering] .plonk-item:nth-child(8 of .plonk-item) {
+    --plonk-stagger: 7;
+  }
+  .plonk-list[data-entering] .plonk-item:nth-child(9 of .plonk-item) {
+    --plonk-stagger: 8;
+  }
+  .plonk-list[data-entering] .plonk-item:nth-child(n + 10 of .plonk-item) {
+    --plonk-stagger: 9;
+  }
+  /* İkinci bölüm ve ayraçtan sonrası, öncekilerin arkasından gelsin. */
+  .plonk-list[data-entering]
+    :is(section, [role="group"], [role="separator"])
+    ~ *
+    .plonk-item,
+  .plonk-list[data-entering]
+    :is(section, [role="group"], [role="separator"])
+    ~ .plonk-item {
+    animation-delay: calc((var(--plonk-stagger) + 4) * 25ms);
+  }
+
+  /* Açıkken ok yayla ters döner. */
+  .plonk-chevron {
+    transition: rotate var(--plonk-motion-spring-duration)
+      var(--plonk-motion-spring-easing);
+  }
+  [aria-expanded="true"] .plonk-chevron,
+  .plonk-field:has([aria-expanded="true"]) .plonk-chevron {
+    rotate: 180deg;
+  }
+
+  /* Retro: eski Mac menüleri gibi, odaktaki satır tersine döner (siyah zemin). */
+  [data-plonk-personality="retro"] {
+    .plonk-item[data-focused] {
+      background: var(--plonk-color-ink);
+      color: var(--plonk-color-surface);
+    }
+    .plonk-list[data-entering] .plonk-item {
+      animation: none;
+    }
+  }
+
+  [data-plonk-motion="reduce"] .plonk-list[data-entering] .plonk-item {
+    animation: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-plonk-personality] .plonk-list[data-entering] .plonk-item {
+      animation: none;
+    }
+  }
+
   /* ---------- Avatar grubu: üst üste biner, üzerine gelince kalkar ---------- */
 
   .plonk-avatar-group > .plonk-avatar {
@@ -864,5 +984,12 @@
     opacity: 0;
     scale: 0.4;
     rotate: 10deg;
+  }
+}
+
+@keyframes plonk-item-in {
+  from {
+    opacity: 0;
+    translate: 0 -0.4rem;
   }
 }

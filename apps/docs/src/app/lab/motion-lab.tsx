@@ -8,6 +8,8 @@ import {
   Card,
   Checkbox,
   cn,
+  ComboBox,
+  ComboBoxItem,
   contrastRatio,
   DEFAULT_PERSONALITY,
   Dialog,
@@ -15,6 +17,11 @@ import {
   Drawer,
   Input,
   Kbd,
+  Menu,
+  MenuItem,
+  MenuSection,
+  MenuSeparator,
+  MenuTrigger,
   MOTION_TOKENS,
   overshoot,
   PERSONALITY_NAMES,
@@ -26,6 +33,8 @@ import {
   RadioGroup,
   resolveEasing,
   sampleEasing,
+  Select,
+  SelectItem,
   Switch,
   Textarea,
   Tooltip,
@@ -180,6 +189,13 @@ export function MotionLab() {
             note="Aç, Tab ile gez, Esc ile kapat: odak içeride kalır ve kapanınca açan düğmeye döner."
           >
             <DialogLab />
+          </Section>
+
+          <Section
+            title="Menu, Select, ComboBox"
+            note="Seçenekler sırayla düşer. Ok tuşları, Enter, Esc ve yazarak arama çalışır. ComboBox'ta yazdıkça eşleşen harfler vurgulanır."
+          >
+            <SelectionLab />
           </Section>
 
           <Section
@@ -611,6 +627,150 @@ function DialogLab() {
           Proje silindi
         </Badge>
       )}
+    </div>
+  );
+}
+
+const CITIES = [
+  "Adana",
+  "Ankara",
+  "Antalya",
+  "Bursa",
+  "Diyarbakır",
+  "Erzurum",
+  "Eskişehir",
+  "Gaziantep",
+  "İstanbul",
+  "İzmir",
+  "Kayseri",
+  "Konya",
+  "Muğla",
+  "Samsun",
+  "Şanlıurfa",
+  "Trabzon",
+];
+
+const Icon = ({ d }: { d: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2.5}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d={d} />
+  </svg>
+);
+
+function SelectionLab() {
+  const [last, setLast] = useState<string>("—");
+  const [plan, setPlan] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+
+  return (
+    <div className="grid gap-10 lg:grid-cols-2">
+      <div className="grid content-start gap-6">
+        <div className="flex flex-wrap items-center gap-4">
+          <MenuTrigger>
+            <Button variant="neutral" iconEnd={<Icon d="m6 9 6 6 6-6" />}>
+              Eylemler
+            </Button>
+            <Menu onAction={(key) => setLast(String(key))}>
+              <MenuSection title="Proje">
+                <MenuItem
+                  id="Düzenle"
+                  icon={<Icon d="M4 20h4L18.5 9.5a2.1 2.1 0 0 0-4-4L4 16z" />}
+                  shortcut="⌘E"
+                >
+                  Düzenle
+                </MenuItem>
+                <MenuItem
+                  id="Kopyala"
+                  icon={<Icon d="M8 8h12v12H8zM4 16V4h12" />}
+                  shortcut="⌘D"
+                  description="Ayarlarla birlikte"
+                >
+                  Kopyasını oluştur
+                </MenuItem>
+                <MenuItem
+                  id="Arşivle"
+                  icon={<Icon d="M4 7h16v13H4zM2 3h20v4H2zM10 12h4" />}
+                  isDisabled
+                >
+                  Arşivle
+                </MenuItem>
+              </MenuSection>
+              <MenuSeparator />
+              <MenuItem
+                id="Sil"
+                variant="danger"
+                icon={
+                  <Icon d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" />
+                }
+                shortcut="⌫"
+              >
+                Sil
+              </MenuItem>
+            </Menu>
+          </MenuTrigger>
+          <span className="text-sm text-plonk-ink-muted">
+            Son eylem: <b className="text-plonk-ink">{last}</b>
+          </span>
+        </div>
+
+        <MenuTrigger>
+          <Button variant="ghost">Görünüm (seçimli menü)</Button>
+          <Menu selectionMode="single" defaultSelectedKeys={["grid"]}>
+            <MenuItem id="list">Liste</MenuItem>
+            <MenuItem id="grid">Izgara</MenuItem>
+            <MenuItem id="board">Pano</MenuItem>
+          </Menu>
+        </MenuTrigger>
+      </div>
+
+      <form
+        noValidate
+        onSubmit={(e) => {
+          e.preventDefault();
+          setSubmitted(true);
+        }}
+        className="grid content-start gap-6"
+      >
+        <Select
+          label="Plan"
+          placeholder="Bir plan seç"
+          isRequired
+          selectedKey={plan}
+          onSelectionChange={(key) => setPlan(key == null ? null : String(key))}
+          error={submitted && !plan && "Bir plan seçmelisin"}
+        >
+          <SelectItem id="free" description="1 proje, 3 üye">
+            Ücretsiz
+          </SelectItem>
+          <SelectItem id="pro" description="Sınırsız proje, 10 üye">
+            Pro
+          </SelectItem>
+          <SelectItem id="team" description="Her şey sınırsız">
+            Ekip
+          </SelectItem>
+        </Select>
+        <ComboBox
+          label="Şehir"
+          placeholder="Yazmaya başla…"
+          description="81 il yerine örnek bir liste"
+          emptyMessage="Bu isimde bir şehir yok"
+        >
+          {CITIES.map((c) => (
+            <ComboBoxItem key={c} id={c}>
+              {c}
+            </ComboBoxItem>
+          ))}
+        </ComboBox>
+        <div>
+          <Button type="submit">Devam</Button>
+        </div>
+      </form>
     </div>
   );
 }
