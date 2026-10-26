@@ -2,16 +2,22 @@
 
 import {
   Button,
+  Checkbox,
   cn,
   contrastRatio,
   DEFAULT_PERSONALITY,
+  Input,
   MOTION_TOKENS,
   overshoot,
   PERSONALITY_NAMES,
   personalities,
   PlonkProvider,
+  Radio,
+  RadioGroup,
   resolveEasing,
   sampleEasing,
+  Switch,
+  Textarea,
   type ButtonSize,
   type ButtonVariant,
   type ColorToken,
@@ -44,12 +50,6 @@ const SWATCHES: [ColorToken, ColorToken | null][] = [
 
 const cssVar = (token: ColorToken) =>
   `var(--plonk-color-${token.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)})`;
-
-function restart(el: HTMLElement, className: string) {
-  el.classList.remove(className);
-  void el.offsetWidth;
-  el.classList.add(className);
-}
 
 // Kişilik adreste durur (/lab#retro), böylece doğrudan link verilebilir.
 const subscribeHash = (onChange: () => void) => {
@@ -171,10 +171,10 @@ export function MotionLab() {
           </Section>
 
           <Section
-            title="Basma denemesi"
-            note="Prototip. Gerçek Switch bir sonraki durakta gelecek."
+            title="Form"
+            note="Alana odaklan: kalkar ve odak renginde gölge bırakır. Boş gönder: hata sallanarak gelir."
           >
-            <PressDemo />
+            <FormLab />
           </Section>
 
           <Section
@@ -289,53 +289,6 @@ function Section({
   );
 }
 
-function PressDemo() {
-  const [on, setOn] = useState(false);
-  const clear = (e: React.AnimationEvent<HTMLElement>) =>
-    e.currentTarget.classList.remove("plonk-pop", "plonk-squish");
-
-  return (
-    <div className="flex flex-wrap items-center gap-8">
-      <button
-        role="switch"
-        aria-checked={on}
-        onClick={(e) => {
-          setOn(!on);
-          // İç katmanın sınıfı hiç değişmediği için React onu yeniden yazmaz.
-          const squisher = e.currentTarget.querySelector("[data-squish]");
-          if (squisher instanceof HTMLElement)
-            restart(squisher, "plonk-squish");
-        }}
-        className={cn(
-          "relative h-9 w-16 rounded-plonk-pill transition-colors plonk-border",
-          on ? "bg-plonk-success" : "bg-plonk-surface",
-        )}
-      >
-        <span
-          className={cn(
-            "absolute top-1/2 left-1 -mt-3 size-6 [transition-property:translate] plonk-motion-snap",
-            on && "translate-x-[1.6rem]",
-          )}
-        >
-          <span
-            data-squish
-            onAnimationEnd={clear}
-            className="block size-full rounded-plonk-pill bg-plonk-accent plonk-border"
-          />
-        </span>
-        <span className="sr-only">Bildirimler</span>
-      </button>
-
-      <div className="plonk-tilt-reverse rounded-plonk-lg bg-plonk-surface p-5 plonk-shadow plonk-border">
-        <p className="font-plonk-display text-xl">Kart</p>
-        <p className="text-sm text-plonk-ink-muted">
-          tilt-reverse ile yapıştırılmış
-        </p>
-      </div>
-    </div>
-  );
-}
-
 const VARIANTS: ButtonVariant[] = [
   "primary",
   "secondary",
@@ -407,8 +360,141 @@ function ButtonLab() {
 
       <div className="max-w-sm">
         <Button size="lg" variant="accent" className="w-full plonk-tilt">
-          Tam genişlik (Sticker’da eğik)
+          Tam genişlik
         </Button>
+      </div>
+    </div>
+  );
+}
+
+const Search = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+    <circle cx="11" cy="11" r="6.5" />
+    <path d="m16 16 4.5 4.5" strokeLinecap="round" />
+  </svg>
+);
+
+const NOTIFICATIONS = ["E-posta", "Push", "SMS"] as const;
+
+function FormLab() {
+  const [submitted, setSubmitted] = useState(false);
+  const [email, setEmail] = useState("");
+  const [terms, setTerms] = useState(false);
+  const [plan, setPlan] = useState<string | undefined>();
+  const [channels, setChannels] = useState<string[]>(["E-posta"]);
+
+  const emailError = !email
+    ? "E-posta zorunlu"
+    : !/^\S+@\S+\.\S+$/.test(email)
+      ? "Geçerli bir adres yaz"
+      : undefined;
+  const all = channels.length === NOTIFICATIONS.length;
+  const some = channels.length > 0 && !all;
+
+  return (
+    <div className="grid gap-12 lg:grid-cols-2">
+      <form
+        noValidate
+        onSubmit={(e) => {
+          e.preventDefault();
+          setSubmitted(true);
+        }}
+        className="grid content-start gap-6 self-start rounded-plonk-lg bg-plonk-surface p-6 plonk-shadow plonk-border"
+      >
+        <p className="font-plonk-display text-2xl">Hesap aç</p>
+        <Input label="Ad" placeholder="Melih" autoComplete="off" />
+        <Input
+          label="E-posta"
+          type="email"
+          required
+          placeholder="ad@ornek.com"
+          description="Faturalar bu adrese gelir."
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          error={submitted && emailError}
+        />
+        <RadioGroup
+          label="Plan"
+          required
+          orientation="horizontal"
+          value={plan ?? null}
+          onValueChange={setPlan}
+          error={submitted && !plan && "Bir plan seç"}
+        >
+          <Radio value="free" label="Ücretsiz" />
+          <Radio value="pro" label="Pro" />
+          <Radio value="team" label="Ekip" />
+        </RadioGroup>
+        <Checkbox
+          label="Kullanım şartlarını kabul ediyorum"
+          checked={terms}
+          onChange={(e) => setTerms(e.target.checked)}
+          error={submitted && !terms && "Devam etmek için gerekli"}
+        />
+        <div className="flex flex-wrap gap-3">
+          <Button type="submit">Gönder</Button>
+          <Button
+            variant="ghost"
+            onClick={() => {
+              setSubmitted(false);
+              setEmail("");
+              setTerms(false);
+              setPlan(undefined);
+            }}
+          >
+            Sıfırla
+          </Button>
+        </div>
+      </form>
+
+      <div className="grid content-start gap-8">
+        <Input
+          label="Ara"
+          placeholder="Bileşen ara…"
+          iconStart={<Search />}
+          iconEnd={<kbd className="font-plonk-mono text-xs">⌘K</kbd>}
+        />
+        <Textarea
+          label="Not"
+          autoResize
+          placeholder="Yazdıkça uzar…"
+          description="autoResize açık"
+        />
+        <div className="grid gap-3">
+          <Checkbox
+            label="Tüm bildirimler"
+            checked={all}
+            indeterminate={some}
+            onChange={() => setChannels(all ? [] : [...NOTIFICATIONS])}
+          />
+          <div className="grid gap-3 pl-9">
+            {NOTIFICATIONS.map((c) => (
+              <Checkbox
+                key={c}
+                label={c}
+                checked={channels.includes(c)}
+                onChange={(e) =>
+                  setChannels((list) =>
+                    e.target.checked
+                      ? [...list, c]
+                      : list.filter((x) => x !== c),
+                  )
+                }
+              />
+            ))}
+          </div>
+        </div>
+        <div className="grid gap-4">
+          <Switch label="Karanlık mod" description="Henüz sadece bir switch." />
+          <Switch label="Otomatik kaydet" defaultChecked />
+          <Switch label="Devre dışı" disabled />
+        </div>
+        <Input
+          label="Devre dışı alan"
+          value="Değiştirilemez"
+          disabled
+          readOnly
+        />
       </div>
     </div>
   );

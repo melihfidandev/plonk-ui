@@ -146,6 +146,94 @@
     animation: plonk-squish var(--plonk-jelly-duration) ease-out;
   }
 
+  [data-plonk-jelly="shake"] {
+    animation: plonk-shake var(--plonk-jelly-duration) ease-out;
+  }
+
+  /*
+   * Yazı alanı kutusu. Odaklanınca yarım gölge kadar yukarı kalkar ve odak
+   * renginde sert bir gölge bırakır; bırakınca yayla yerine oturur.
+   */
+  .plonk-field {
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+    background: var(--plonk-color-sunken);
+    box-shadow: 0 0 0 var(--plonk-color-focus);
+    transition-property: translate, box-shadow, background-color;
+    transition-timing-function: var(--plonk-motion-spring-easing);
+    transition-duration: var(--plonk-motion-spring-duration);
+  }
+  .plonk-field:focus-within {
+    translate: calc(var(--plonk-shadow-x) * -0.5)
+      calc(var(--plonk-shadow-y) * -0.5);
+    box-shadow: var(--plonk-shadow-x) var(--plonk-shadow-y) 0
+      var(--plonk-color-focus);
+  }
+  .plonk-field[data-invalid] {
+    background: color-mix(
+      in oklab,
+      var(--plonk-color-danger) 14%,
+      var(--plonk-color-sunken)
+    );
+  }
+  .plonk-field:has(:disabled) {
+    border-style: dashed;
+    color: var(--plonk-color-ink-muted);
+  }
+
+  /* Checkbox ve radio kutusu: tarayıcı görünüşü kapalı, çerçeve bizden. */
+  .plonk-control {
+    appearance: none;
+    margin: 0;
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+    background-color: var(--plonk-color-sunken);
+    transition: background-color var(--plonk-motion-snap-duration)
+      var(--plonk-motion-snap-easing);
+    outline-offset: 2px;
+  }
+  .plonk-control:focus-visible {
+    outline: 3px solid var(--plonk-color-focus);
+  }
+  .plonk-control:disabled {
+    cursor: not-allowed;
+    border-style: dashed;
+    background-color: var(--plonk-color-sunken);
+  }
+  .plonk-control[aria-invalid="true"]:not(:checked) {
+    background-color: color-mix(
+      in oklab,
+      var(--plonk-color-danger) 20%,
+      var(--plonk-color-sunken)
+    );
+  }
+
+  /* Tik işareti çizilerek gelir. Yay aşması çizgiyi bozacağı için düzgün eğri. */
+  .plonk-check-mark,
+  .plonk-dash-mark {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 240ms cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  :checked:not(:indeterminate) + svg .plonk-check-mark,
+  :indeterminate + svg .plonk-dash-mark {
+    stroke-dashoffset: 0;
+    transition-delay: 40ms;
+  }
+  :disabled + svg {
+    color: var(--plonk-color-ink-muted);
+  }
+  [data-plonk-personality="retro"] :is(.plonk-check-mark, .plonk-dash-mark) {
+    transition-timing-function: steps(3, end);
+    transition-duration: 150ms;
+  }
+
+  /* Hata etiketi: eğik bir sticker gibi yapışarak gelir. */
+  .plonk-field-error {
+    rotate: calc(var(--plonk-tilt) * -1);
+    transform-origin: left center;
+    animation: plonk-tag-in var(--plonk-motion-enter-duration)
+      var(--plonk-motion-enter-easing) both;
+  }
+
   /* Yükleniyor: üç nokta sırayla zıplar. Retro'da zıplamaz, kademeli yanıp söner. */
   .plonk-dots > * {
     width: 0.38em;
@@ -233,5 +321,28 @@
   80% {
     scale: calc(1 + 0.05 * var(--plonk-jelly-amount))
       calc(1 - 0.04 * var(--plonk-jelly-amount));
+  }
+}
+
+@keyframes plonk-shake {
+  15% {
+    transform: translateX(calc(-8px * var(--plonk-jelly-amount)));
+  }
+  35% {
+    transform: translateX(calc(7px * var(--plonk-jelly-amount)));
+  }
+  55% {
+    transform: translateX(calc(-4px * var(--plonk-jelly-amount)));
+  }
+  75% {
+    transform: translateX(calc(2px * var(--plonk-jelly-amount)));
+  }
+}
+
+@keyframes plonk-tag-in {
+  from {
+    opacity: 0;
+    scale: 0.6;
+    translate: 0 -0.35rem;
   }
 }
