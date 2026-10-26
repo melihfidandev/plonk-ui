@@ -12,6 +12,7 @@ import {
   DEFAULT_PERSONALITY,
   Dialog,
   DialogTrigger,
+  Drawer,
   Input,
   Kbd,
   MOTION_TOKENS,
@@ -19,6 +20,7 @@ import {
   PERSONALITY_NAMES,
   personalities,
   PlonkProvider,
+  Popover,
   Progress,
   Radio,
   RadioGroup,
@@ -26,6 +28,8 @@ import {
   sampleEasing,
   Switch,
   Textarea,
+  Tooltip,
+  TooltipTrigger,
   type ButtonSize,
   type ButtonVariant,
   type ColorToken,
@@ -176,6 +180,13 @@ export function MotionLab() {
             note="Aç, Tab ile gez, Esc ile kapat: odak içeride kalır ve kapanınca açan düğmeye döner."
           >
             <DialogLab />
+          </Section>
+
+          <Section
+            title="Drawer, Popover, Tooltip"
+            note="Drawer kenardan yayla gelir. Popover tıklanan noktadan büyür. Tooltip için simgelerin üzerine gel ya da Tab ile odaklan."
+          >
+            <LayersLab />
           </Section>
 
           <Section
@@ -600,6 +611,106 @@ function DialogLab() {
           Proje silindi
         </Badge>
       )}
+    </div>
+  );
+}
+
+const ICONS = {
+  Kalın: "M7 5h6a3.5 3.5 0 0 1 0 7H7zm0 7h7a3.5 3.5 0 0 1 0 7H7z",
+  İtalik: "M10 5h8M6 19h8M14 5l-4 14",
+  Bağlantı:
+    "M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1",
+} as const;
+
+function LayersLab() {
+  return (
+    <div className="grid gap-8">
+      <div className="flex flex-wrap items-center gap-4">
+        {(["right", "left", "bottom"] as const).map((placement) => (
+          <DialogTrigger key={placement}>
+            <Button variant="neutral">Drawer · {placement}</Button>
+            <Drawer
+              placement={placement}
+              title="Filtreler"
+              description="Sonuçları daralt."
+              closeLabel="Kapat"
+              footer={({ close }) => (
+                <>
+                  <Button variant="ghost" onPress={close}>
+                    Temizle
+                  </Button>
+                  <Button onPress={close}>Uygula</Button>
+                </>
+              )}
+            >
+              <div className="grid gap-5">
+                <Input label="Ara" placeholder="Proje adı…" />
+                <RadioGroup label="Durum" defaultValue="all">
+                  <Radio value="all" label="Hepsi" />
+                  <Radio value="active" label="Aktif" />
+                  <Radio value="archived" label="Arşivlenmiş" />
+                </RadioGroup>
+                <Switch label="Sadece benimkiler" />
+              </div>
+            </Drawer>
+          </DialogTrigger>
+        ))}
+      </div>
+
+      <div className="flex flex-wrap items-center gap-4">
+        <DialogTrigger>
+          <Button variant="secondary">Paylaş</Button>
+          <Popover title="Bağlantıyı paylaş">
+            {({ close }) => (
+              <div className="grid gap-3">
+                <Input
+                  aria-label="Bağlantı"
+                  defaultValue="plonk.dev/s/a8f3"
+                  readOnly
+                />
+                <Button size="sm" onPress={close}>
+                  Kopyala
+                </Button>
+              </div>
+            )}
+          </Popover>
+        </DialogTrigger>
+        <DialogTrigger>
+          <Button variant="accent">Bilgi</Button>
+          <Popover placement="top" aria-label="Plan bilgisi">
+            <p className="text-sm">
+              Pro planda 10 ekip üyesi ve sınırsız proje var.
+            </p>
+          </Popover>
+        </DialogTrigger>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-2">
+        {Object.entries(ICONS).map(([label, d]) => (
+          <TooltipTrigger key={label}>
+            <Button variant="neutral" size="sm" aria-label={label}>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="size-4"
+              >
+                <path d={d} />
+              </svg>
+            </Button>
+            <Tooltip>{label}</Tooltip>
+          </TooltipTrigger>
+        ))}
+        <TooltipTrigger>
+          <Button variant="ghost" size="sm">
+            Kısayol
+          </Button>
+          <Tooltip placement="bottom">Komut paletini aç: ⌘K</Tooltip>
+        </TooltipTrigger>
+      </div>
     </div>
   );
 }

@@ -475,6 +475,111 @@
     }
   }
 
+  /* ---------- Drawer ---------- */
+
+  /*
+   * Panel, ekran kenarının dışına doğru 3rem gizli pay ile çizilir. Sticker'ın
+   * yayı hedefi aştığında kenarda boşluk açılmaz, panelin devamı görünür.
+   */
+  .plonk-drawer {
+    --plonk-drawer-overhang: 3rem;
+  }
+  .plonk-drawer[data-placement="right"] {
+    --plonk-drawer-from: 100% 0;
+    margin-right: calc(var(--plonk-drawer-overhang) * -1);
+  }
+  .plonk-drawer[data-placement="right"] > .plonk-card {
+    padding-right: var(--plonk-drawer-overhang);
+    border-right: 0;
+    border-radius: var(--plonk-radius-lg) 0 0 var(--plonk-radius-lg);
+  }
+  .plonk-drawer[data-placement="left"] {
+    --plonk-drawer-from: -100% 0;
+    margin-left: calc(var(--plonk-drawer-overhang) * -1);
+  }
+  .plonk-drawer[data-placement="left"] > .plonk-card {
+    padding-left: var(--plonk-drawer-overhang);
+    border-left: 0;
+    border-radius: 0 var(--plonk-radius-lg) var(--plonk-radius-lg) 0;
+    box-shadow: var(--plonk-shadow-x) 0 0 var(--plonk-shadow-color);
+  }
+  .plonk-drawer[data-placement="bottom"] {
+    --plonk-drawer-from: 0 100%;
+    margin-bottom: calc(var(--plonk-drawer-overhang) * -1);
+  }
+  .plonk-drawer[data-placement="bottom"] > .plonk-card {
+    padding-bottom: var(--plonk-drawer-overhang);
+    border-bottom: 0;
+    border-radius: var(--plonk-radius-lg) var(--plonk-radius-lg) 0 0;
+  }
+  .plonk-drawer[data-entering] {
+    animation: plonk-drawer-in var(--plonk-motion-enter-duration)
+      var(--plonk-motion-enter-easing);
+  }
+  .plonk-drawer[data-exiting] {
+    animation: plonk-drawer-out var(--plonk-motion-exit-duration)
+      var(--plonk-motion-exit-easing) forwards;
+  }
+
+  /* ---------- Popover ve Tooltip ---------- */
+
+  /* Tetikleyicide tıklanan noktadan büyür. */
+  .plonk-popover,
+  .plonk-tooltip {
+    transform-origin: var(--trigger-anchor-point, center);
+  }
+  .plonk-popover[data-entering] {
+    animation: plonk-popover-in var(--plonk-motion-enter-duration)
+      var(--plonk-motion-enter-easing);
+  }
+  .plonk-popover[data-exiting],
+  .plonk-tooltip[data-exiting] {
+    animation: plonk-fade-out var(--plonk-motion-exit-duration)
+      var(--plonk-motion-exit-easing) forwards;
+  }
+
+  /* Tooltip: eğik küçük bir etiket; zıplayıp eğimine oturur. */
+  .plonk-tooltip {
+    rotate: calc(var(--plonk-tilt) * -1.4);
+    box-shadow: calc(var(--plonk-shadow-x) * 0.5)
+      calc(var(--plonk-shadow-y) * 0.5) 0
+      color-mix(in oklab, var(--plonk-color-ink) 35%, transparent);
+  }
+  .plonk-tooltip[data-entering] {
+    animation: plonk-tooltip-in var(--plonk-motion-spring-duration)
+      var(--plonk-motion-spring-easing);
+  }
+
+  /* Retro'da menü ve ipuçları animasyonsuz, anında belirir; sistem tepkisi. */
+  [data-plonk-personality="retro"] {
+    .plonk-popover[data-entering],
+    .plonk-tooltip[data-entering],
+    .plonk-popover[data-exiting],
+    .plonk-tooltip[data-exiting] {
+      animation: none;
+    }
+    .plonk-tooltip {
+      font-family: var(--plonk-font-mono);
+      font-weight: 400;
+      box-shadow: none;
+    }
+  }
+
+  [data-plonk-motion="reduce"] {
+    .plonk-popover[data-entering],
+    .plonk-tooltip[data-entering] {
+      animation: plonk-fade-in 150ms ease-out;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-plonk-personality] {
+      .plonk-popover[data-entering],
+      .plonk-tooltip[data-entering] {
+        animation: plonk-fade-in 150ms ease-out;
+      }
+    }
+  }
+
   /* ---------- Avatar grubu: üst üste biner, üzerine gelince kalkar ---------- */
 
   .plonk-avatar-group > .plonk-avatar {
@@ -725,5 +830,33 @@
   to {
     opacity: 0;
     scale: 1;
+  }
+}
+
+@keyframes plonk-drawer-in {
+  from {
+    translate: var(--plonk-drawer-from);
+  }
+}
+
+@keyframes plonk-drawer-out {
+  to {
+    translate: var(--plonk-drawer-from);
+  }
+}
+
+@keyframes plonk-popover-in {
+  from {
+    opacity: 0;
+    scale: 0.6;
+    rotate: -5deg;
+  }
+}
+
+@keyframes plonk-tooltip-in {
+  from {
+    opacity: 0;
+    scale: 0.4;
+    rotate: 10deg;
   }
 }
