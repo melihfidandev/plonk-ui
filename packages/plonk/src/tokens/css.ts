@@ -94,5 +94,13 @@ export function buildPersonalitiesCss(): string {
       reduced,
     ),
   );
-  return parts.join("\n\n") + "\n";
+  // Değişkenler Tailwind'in base katmanında: kullanıcının katmansız CSS'i ve
+  // utility sınıfları (ör. [--plonk-jelly-amount:0.3]) bunları ezebilir.
+  const [header, note, ...rules] = parts;
+  const body = rules
+    .join("\n\n")
+    .split("\n")
+    .map((line) => (line ? `  ${line}` : line))
+    .join("\n");
+  return `${header}\n\n${note}\n\n@layer base {\n${body}\n}\n`;
 }

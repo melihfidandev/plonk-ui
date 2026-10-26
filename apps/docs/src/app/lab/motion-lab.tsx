@@ -10,6 +10,8 @@ import {
   cn,
   contrastRatio,
   DEFAULT_PERSONALITY,
+  Dialog,
+  DialogTrigger,
   Input,
   Kbd,
   MOTION_TOKENS,
@@ -92,7 +94,7 @@ export function MotionLab() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
           <div className="mr-auto">
             <p className="text-[11px] font-bold tracking-widest uppercase opacity-50">
-              Aşama 2 · temel bileşenler
+              Aşama 3 · etkileşimli bileşenler
             </p>
             <h1 className="text-xl font-black tracking-tight">Laboratuvar</h1>
           </div>
@@ -168,6 +170,13 @@ export function MotionLab() {
             </h2>
             <p className="mt-3 max-w-prose text-lg">{p.description}</p>
           </section>
+
+          <Section
+            title="Dialog"
+            note="Aç, Tab ile gez, Esc ile kapat: odak içeride kalır ve kapanınca açan düğmeye döner."
+          >
+            <DialogLab />
+          </Section>
 
           <Section
             title="Button"
@@ -509,6 +518,88 @@ function FormLab() {
           readOnly
         />
       </div>
+    </div>
+  );
+}
+
+function DialogLab() {
+  const [name, setName] = useState("Melih Fidan");
+  const [deleted, setDeleted] = useState(false);
+
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      <DialogTrigger>
+        <Button>Profili düzenle</Button>
+        <Dialog
+          title="Profili düzenle"
+          description="Değişiklikler tüm ekip üyelerine görünür."
+          closeLabel="Kapat"
+          footer={({ close }) => (
+            <>
+              <Button variant="ghost" onPress={close}>
+                Vazgeç
+              </Button>
+              <Button onPress={close}>Kaydet</Button>
+            </>
+          )}
+        >
+          <div className="grid gap-5">
+            <Input
+              label="Ad"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <Switch label="Profilim herkese açık" defaultChecked />
+          </div>
+        </Dialog>
+      </DialogTrigger>
+
+      <DialogTrigger>
+        <Button variant="danger">Projeyi sil</Button>
+        <Dialog
+          role="alertdialog"
+          size="sm"
+          title="Proje silinsin mi?"
+          description="“Plonk docs” ve içindeki 24 sayfa kalıcı olarak silinecek."
+          footer={({ close }) => (
+            <>
+              <Button variant="neutral" onPress={close} autoFocus>
+                Vazgeç
+              </Button>
+              <Button
+                variant="danger"
+                onPress={() => {
+                  setDeleted(true);
+                  close();
+                }}
+              >
+                Sil
+              </Button>
+            </>
+          )}
+        />
+      </DialogTrigger>
+
+      <DialogTrigger>
+        <Button variant="neutral">Uzun içerik</Button>
+        <Dialog title="Kullanım şartları" size="lg" closeLabel="Kapat">
+          <div className="grid gap-4">
+            {Array.from({ length: 14 }, (_, i) => (
+              <p key={i}>
+                {i + 1}. Plonk bir portfolyo projesidir. Bileşenler olduğu gibi
+                sunulur; aktif destek verilmez ama katkılar her zaman
+                memnuniyetle karşılanır.
+              </p>
+            ))}
+          </div>
+        </Dialog>
+      </DialogTrigger>
+
+      {deleted && (
+        <Badge variant="danger" dot>
+          Proje silindi
+        </Badge>
+      )}
     </div>
   );
 }

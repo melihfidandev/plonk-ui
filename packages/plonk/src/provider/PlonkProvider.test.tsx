@@ -61,4 +61,17 @@ describe("PlonkProvider", () => {
     expect(root.style.getPropertyValue("--plonk-jelly-amount")).toBe("0.3");
     expect(root.style.color).toBe("red");
   });
+
+  it("katman kabı sadece CSS değişkenlerini taşır", () => {
+    render(
+      <PlonkProvider
+        personality="retro"
+        style={{ padding: 20, ["--plonk-tilt" as string]: "3deg" }}
+      />,
+    );
+    const layer = document.querySelector<HTMLElement>("[data-plonk-layer]")!;
+    expect(layer).toHaveAttribute("data-plonk-personality", "retro");
+    expect(layer.style.getPropertyValue("--plonk-tilt")).toBe("3deg");
+    expect(layer.style.padding).toBe("");
+  });
 });

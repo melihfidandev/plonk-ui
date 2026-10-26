@@ -367,6 +367,114 @@
     }
   }
 
+  /* ---------- Dialog ---------- */
+
+  .plonk-dialog-overlay {
+    background: color-mix(in oklab, var(--plonk-color-ink) 45%, transparent);
+  }
+  .plonk-dialog-overlay[data-entering] {
+    animation: plonk-fade-in 220ms ease-out;
+  }
+  .plonk-dialog-overlay[data-exiting] {
+    animation: plonk-fade-out var(--plonk-motion-exit-duration)
+      var(--plonk-motion-exit-easing) forwards;
+  }
+
+  /*
+   * Sticker: masaya fırlatılmış bir kart gibi aşağıdan, eğik ve küçük gelir;
+   * enter yayıyla hedefi biraz aşar, sonra jöleyle yerine oturur.
+   */
+  .plonk-dialog[data-entering] {
+    animation:
+      plonk-dialog-in var(--plonk-motion-enter-duration)
+        var(--plonk-motion-enter-easing),
+      plonk-pop var(--plonk-jelly-duration) ease-out
+        calc(var(--plonk-motion-enter-duration) * 0.3);
+  }
+  .plonk-dialog[data-exiting] {
+    animation: plonk-dialog-out var(--plonk-motion-exit-duration)
+      var(--plonk-motion-exit-easing) forwards;
+  }
+
+  /* Büyüyen çerçeveler sadece Retro'da. */
+  .plonk-zoom {
+    display: none;
+  }
+
+  [data-plonk-personality="retro"] {
+    /* Eski masaüstlerinin noktalı deseni. */
+    .plonk-dialog-overlay {
+      background: repeating-conic-gradient(
+          color-mix(in oklab, var(--plonk-color-ink) 45%, transparent) 0 25%,
+          transparent 0 50%
+        )
+        0 0 / 4px 4px;
+    }
+    .plonk-dialog-overlay[data-entering] {
+      animation: plonk-fade-in 100ms steps(2, jump-none);
+    }
+
+    /*
+     * Pencere açılmadan önce ortadan büyüyen üç çerçeve (eski Mac'teki
+     * "zoom rects"). Pencere, çerçeveler bitince bir anda belirir.
+     * Gizleme visibility ile değil opacity ile: görünmez ama odak alabilir,
+     * böylece React Aria açılışta odağı pencereye taşıyabilir.
+     * plonk-hold, React Aria'nın açılışı bitene kadar beklemesi içindir.
+     */
+    .plonk-dialog[data-entering] {
+      animation: plonk-hold 260ms;
+    }
+    .plonk-dialog[data-entering] > .plonk-card {
+      animation: plonk-reveal 260ms step-end;
+    }
+    .plonk-dialog[data-entering] .plonk-zoom {
+      display: block;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .plonk-zoom > * {
+      position: absolute;
+      inset: 0;
+      border: var(--plonk-border-width) solid var(--plonk-color-ink);
+      opacity: 0;
+      animation: plonk-zoom-rect 200ms steps(4, jump-none) both;
+    }
+    .plonk-zoom > :nth-child(2) {
+      animation-delay: 30ms;
+    }
+    .plonk-zoom > :nth-child(3) {
+      animation-delay: 60ms;
+    }
+  }
+
+  /* Hareket azaltılınca: sadece kısa bir belirme, çerçeve ya da fırlatma yok. */
+  [data-plonk-motion="reduce"] {
+    .plonk-dialog[data-entering] {
+      animation: plonk-fade-in 150ms ease-out;
+    }
+    .plonk-dialog[data-entering] > .plonk-card {
+      animation: none;
+    }
+    .plonk-dialog[data-entering] .plonk-zoom {
+      display: none;
+    }
+  }
+  /* Retro kurallarını ezebilmek için aynı özgüllükte ([data-plonk-personality]). */
+  @media (prefers-reduced-motion: reduce) {
+    [data-plonk-personality] {
+      .plonk-dialog[data-entering] {
+        animation: plonk-fade-in 150ms ease-out;
+      }
+      .plonk-dialog[data-entering] > .plonk-card {
+        animation: none;
+      }
+      .plonk-dialog[data-entering] .plonk-zoom {
+        display: none;
+      }
+    }
+  }
+
   /* ---------- Avatar grubu: üst üste biner, üzerine gelince kalkar ---------- */
 
   .plonk-avatar-group > .plonk-avatar {
@@ -557,5 +665,65 @@
   }
   to {
     translate: 250% 0;
+  }
+}
+
+@keyframes plonk-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes plonk-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes plonk-dialog-in {
+  from {
+    opacity: 0;
+    translate: 0 3rem;
+    scale: 0.82;
+    rotate: -7deg;
+  }
+}
+
+@keyframes plonk-dialog-out {
+  to {
+    opacity: 0;
+    translate: 0 1.25rem;
+    scale: 0.94;
+    rotate: 2deg;
+  }
+}
+
+@keyframes plonk-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes plonk-hold {
+  to {
+    --plonk-hold: 1;
+  }
+}
+
+@keyframes plonk-zoom-rect {
+  from {
+    opacity: 1;
+    scale: 0.15;
+  }
+  99% {
+    opacity: 1;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 1;
   }
 }

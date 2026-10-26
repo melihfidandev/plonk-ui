@@ -51,7 +51,7 @@ describe("Button", () => {
       </Button>,
     );
     const button = screen.getByRole("button", { name: "Kaydet" });
-    expect(button).toHaveAttribute("aria-busy", "true");
+    expect(button).toHaveAttribute("data-pending");
     expect(button).toHaveAttribute("aria-disabled", "true");
     expect(button).not.toBeDisabled();
     await userEvent.click(button);
@@ -99,5 +99,23 @@ describe("Button", () => {
     const ref = createRef<HTMLButtonElement>();
     render(<Button ref={ref}>Tamam</Button>);
     expect(ref.current).toBe(screen.getByRole("button"));
+  });
+
+  it("HTML'deki disabled ile isDisabled aynı işi görür", () => {
+    render(
+      <>
+        <Button disabled>A</Button>
+        <Button isDisabled>B</Button>
+      </>,
+    );
+    expect(screen.getByRole("button", { name: "A" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "B" })).toBeDisabled();
+  });
+
+  it("dokunma ve klavye için onPress de çalışır", async () => {
+    const onPress = vi.fn();
+    render(<Button onPress={onPress}>Kaydet</Button>);
+    await userEvent.click(screen.getByRole("button"));
+    expect(onPress).toHaveBeenCalledOnce();
   });
 });

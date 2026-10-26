@@ -2,100 +2,115 @@
 
 /* Yeniden üretmek için: pnpm --filter plonk tokens */
 
-:root,
-[data-plonk-personality="sticker"] {
-  --plonk-color-canvas: #FFF9EC;
-  --plonk-color-surface: #FFFFFF;
-  --plonk-color-sunken: #FFFDF8;
-  --plonk-color-ink: #1F1A17;
-  --plonk-color-ink-muted: #6B625B;
-  --plonk-color-primary: #FFD23F;
-  --plonk-color-on-primary: #1F1A17;
-  --plonk-color-accent: #FF8CC6;
-  --plonk-color-on-accent: #1F1A17;
-  --plonk-color-secondary: #5FBFFF;
-  --plonk-color-on-secondary: #1F1A17;
-  --plonk-color-success: #7DDE92;
-  --plonk-color-on-success: #1F1A17;
-  --plonk-color-warning: #FFB547;
-  --plonk-color-on-warning: #1F1A17;
-  --plonk-color-danger: #FF6B6B;
-  --plonk-color-on-danger: #1F1A17;
-  --plonk-color-focus: #1E7FE0;
-  --plonk-border-width: 2.5px;
-  --plonk-shadow-x: 4px;
-  --plonk-shadow-y: 4px;
-  --plonk-shadow-color: var(--plonk-color-ink);
-  --plonk-radius-sm: 8px;
-  --plonk-radius-md: 12px;
-  --plonk-radius-lg: 18px;
-  --plonk-radius-pill: 999px;
-  --plonk-font-display: "Lilita One", ui-rounded, system-ui, sans-serif;
-  --plonk-font-body: "Nunito", ui-rounded, system-ui, sans-serif;
-  --plonk-font-mono: ui-monospace, "SF Mono", Menlo, monospace;
-  --plonk-tilt: 1.5deg;
-  --plonk-motion-press-easing: cubic-bezier(0.3, 0.7, 0.4, 1);
-  --plonk-motion-press-duration: 70ms;
-  --plonk-motion-spring-easing: linear(0, 0.002 0.63%, 0.009 1.25%, 0.034 2.5%, 0.072 3.75%, 0.15 5.63%, 0.278 8.13%, 0.704 15.63%, 0.906 20%, 0.974 21.88%, 1.046 24.38%, 1.097 26.88%, 1.129 29.38%, 1.142 31.25%, 1.147 33.13%, 1.146 35%, 1.14 36.88%, 1.116 40.63%, 1.048 48.75%, 1.021 52.5%, 0.998 56.88%, 0.983 61.88%, 0.979 65.63%, 0.979 70%, 0.999 88.13%, 1);
-  --plonk-motion-spring-duration: 730ms;
-  --plonk-motion-snap-easing: linear(0, 0.007 1.25%, 0.026 2.5%, 0.056 3.75%, 0.116 5.63%, 0.244 8.75%, 0.649 17.5%, 0.75 20%, 0.838 22.5%, 0.912 25%, 0.972 27.5%, 1.019 30%, 1.059 33.13%, 1.075 35%, 1.089 37.5%, 1.094 39.38%, 1.094 41.88%, 1.09 44.38%, 1.081 47.5%, 1.021 61.88%, 1.009 65.63%, 1 70%, 0.994 75%, 0.991 81.25%, 1);
-  --plonk-motion-snap-duration: 762ms;
-  --plonk-motion-enter-easing: linear(0, 0.006 1.25%, 0.037 3.13%, 0.069 4.38%, 0.131 6.25%, 0.258 9.38%, 0.618 17.5%, 0.74 20.63%, 0.824 23.13%, 0.895 25.62%, 0.966 28.75%, 1.008 31.25%, 1.047 34.38%, 1.062 36.25%, 1.076 38.75%, 1.082 41.25%, 1.083 44.38%, 1.079 46.88%, 1.07 50%, 1.02 64.38%, 1.002 72.5%, 0.996 77.5%, 0.993 83.13%, 1);
-  --plonk-motion-enter-duration: 814ms;
-  --plonk-motion-exit-easing: cubic-bezier(0.4, 0, 1, 1);
-  --plonk-motion-exit-duration: 140ms;
-  --plonk-jelly-amount: 0.75;
-  --plonk-jelly-duration: 620ms;
-}
-
-[data-plonk-personality="retro"] {
-  --plonk-color-canvas: #D8D2C2;
-  --plonk-color-surface: #F5F2E9;
-  --plonk-color-sunken: #FFFFFF;
-  --plonk-color-ink: #141414;
-  --plonk-color-ink-muted: #5A564C;
-  --plonk-color-primary: #5B4CFF;
-  --plonk-color-on-primary: #FFFFFF;
-  --plonk-color-accent: #00B3A4;
-  --plonk-color-on-accent: #141414;
-  --plonk-color-secondary: #FF5A36;
-  --plonk-color-on-secondary: #141414;
-  --plonk-color-success: #3FA34D;
-  --plonk-color-on-success: #141414;
-  --plonk-color-warning: #E8A317;
-  --plonk-color-on-warning: #141414;
-  --plonk-color-danger: #D63B2F;
-  --plonk-color-on-danger: #FFFFFF;
-  --plonk-color-focus: #5B4CFF;
-  --plonk-border-width: 2px;
-  --plonk-shadow-x: 4px;
-  --plonk-shadow-y: 4px;
-  --plonk-shadow-color: var(--plonk-color-ink);
-  --plonk-radius-sm: 0px;
-  --plonk-radius-md: 0px;
-  --plonk-radius-lg: 0px;
-  --plonk-radius-pill: 0px;
-  --plonk-font-display: "Silkscreen", ui-monospace, monospace;
-  --plonk-font-body: "IBM Plex Mono", ui-monospace, monospace;
-  --plonk-font-mono: "IBM Plex Mono", ui-monospace, monospace;
-  --plonk-tilt: 0deg;
-  --plonk-motion-press-easing: linear;
-  --plonk-motion-press-duration: 0ms;
-  --plonk-motion-spring-easing: steps(2, end);
-  --plonk-motion-spring-duration: 100ms;
-  --plonk-motion-snap-easing: steps(3, end);
-  --plonk-motion-snap-duration: 240ms;
-  --plonk-motion-enter-easing: steps(4, end);
-  --plonk-motion-enter-duration: 200ms;
-  --plonk-motion-exit-easing: steps(2, end);
-  --plonk-motion-exit-duration: 100ms;
-  --plonk-jelly-amount: 0;
-  --plonk-jelly-duration: 0ms;
-}
-
-@media (prefers-reduced-motion: reduce) {
+@layer base {
   :root,
-  [data-plonk-personality] {
+  [data-plonk-personality="sticker"] {
+    --plonk-color-canvas: #FFF9EC;
+    --plonk-color-surface: #FFFFFF;
+    --plonk-color-sunken: #FFFDF8;
+    --plonk-color-ink: #1F1A17;
+    --plonk-color-ink-muted: #6B625B;
+    --plonk-color-primary: #FFD23F;
+    --plonk-color-on-primary: #1F1A17;
+    --plonk-color-accent: #FF8CC6;
+    --plonk-color-on-accent: #1F1A17;
+    --plonk-color-secondary: #5FBFFF;
+    --plonk-color-on-secondary: #1F1A17;
+    --plonk-color-success: #7DDE92;
+    --plonk-color-on-success: #1F1A17;
+    --plonk-color-warning: #FFB547;
+    --plonk-color-on-warning: #1F1A17;
+    --plonk-color-danger: #FF6B6B;
+    --plonk-color-on-danger: #1F1A17;
+    --plonk-color-focus: #1E7FE0;
+    --plonk-border-width: 2.5px;
+    --plonk-shadow-x: 4px;
+    --plonk-shadow-y: 4px;
+    --plonk-shadow-color: var(--plonk-color-ink);
+    --plonk-radius-sm: 8px;
+    --plonk-radius-md: 12px;
+    --plonk-radius-lg: 18px;
+    --plonk-radius-pill: 999px;
+    --plonk-font-display: "Lilita One", ui-rounded, system-ui, sans-serif;
+    --plonk-font-body: "Nunito", ui-rounded, system-ui, sans-serif;
+    --plonk-font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+    --plonk-tilt: 1.5deg;
+    --plonk-motion-press-easing: cubic-bezier(0.3, 0.7, 0.4, 1);
+    --plonk-motion-press-duration: 70ms;
+    --plonk-motion-spring-easing: linear(0, 0.002 0.63%, 0.009 1.25%, 0.034 2.5%, 0.072 3.75%, 0.15 5.63%, 0.278 8.13%, 0.704 15.63%, 0.906 20%, 0.974 21.88%, 1.046 24.38%, 1.097 26.88%, 1.129 29.38%, 1.142 31.25%, 1.147 33.13%, 1.146 35%, 1.14 36.88%, 1.116 40.63%, 1.048 48.75%, 1.021 52.5%, 0.998 56.88%, 0.983 61.88%, 0.979 65.63%, 0.979 70%, 0.999 88.13%, 1);
+    --plonk-motion-spring-duration: 730ms;
+    --plonk-motion-snap-easing: linear(0, 0.007 1.25%, 0.026 2.5%, 0.056 3.75%, 0.116 5.63%, 0.244 8.75%, 0.649 17.5%, 0.75 20%, 0.838 22.5%, 0.912 25%, 0.972 27.5%, 1.019 30%, 1.059 33.13%, 1.075 35%, 1.089 37.5%, 1.094 39.38%, 1.094 41.88%, 1.09 44.38%, 1.081 47.5%, 1.021 61.88%, 1.009 65.63%, 1 70%, 0.994 75%, 0.991 81.25%, 1);
+    --plonk-motion-snap-duration: 762ms;
+    --plonk-motion-enter-easing: linear(0, 0.006 1.25%, 0.037 3.13%, 0.069 4.38%, 0.131 6.25%, 0.258 9.38%, 0.618 17.5%, 0.74 20.63%, 0.824 23.13%, 0.895 25.62%, 0.966 28.75%, 1.008 31.25%, 1.047 34.38%, 1.062 36.25%, 1.076 38.75%, 1.082 41.25%, 1.083 44.38%, 1.079 46.88%, 1.07 50%, 1.02 64.38%, 1.002 72.5%, 0.996 77.5%, 0.993 83.13%, 1);
+    --plonk-motion-enter-duration: 814ms;
+    --plonk-motion-exit-easing: cubic-bezier(0.4, 0, 1, 1);
+    --plonk-motion-exit-duration: 140ms;
+    --plonk-jelly-amount: 0.75;
+    --plonk-jelly-duration: 620ms;
+  }
+
+  [data-plonk-personality="retro"] {
+    --plonk-color-canvas: #D8D2C2;
+    --plonk-color-surface: #F5F2E9;
+    --plonk-color-sunken: #FFFFFF;
+    --plonk-color-ink: #141414;
+    --plonk-color-ink-muted: #5A564C;
+    --plonk-color-primary: #5B4CFF;
+    --plonk-color-on-primary: #FFFFFF;
+    --plonk-color-accent: #00B3A4;
+    --plonk-color-on-accent: #141414;
+    --plonk-color-secondary: #FF5A36;
+    --plonk-color-on-secondary: #141414;
+    --plonk-color-success: #3FA34D;
+    --plonk-color-on-success: #141414;
+    --plonk-color-warning: #E8A317;
+    --plonk-color-on-warning: #141414;
+    --plonk-color-danger: #D63B2F;
+    --plonk-color-on-danger: #FFFFFF;
+    --plonk-color-focus: #5B4CFF;
+    --plonk-border-width: 2px;
+    --plonk-shadow-x: 4px;
+    --plonk-shadow-y: 4px;
+    --plonk-shadow-color: var(--plonk-color-ink);
+    --plonk-radius-sm: 0px;
+    --plonk-radius-md: 0px;
+    --plonk-radius-lg: 0px;
+    --plonk-radius-pill: 0px;
+    --plonk-font-display: "Silkscreen", ui-monospace, monospace;
+    --plonk-font-body: "IBM Plex Mono", ui-monospace, monospace;
+    --plonk-font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    --plonk-tilt: 0deg;
+    --plonk-motion-press-easing: linear;
+    --plonk-motion-press-duration: 0ms;
+    --plonk-motion-spring-easing: steps(2, end);
+    --plonk-motion-spring-duration: 100ms;
+    --plonk-motion-snap-easing: steps(3, end);
+    --plonk-motion-snap-duration: 240ms;
+    --plonk-motion-enter-easing: steps(4, end);
+    --plonk-motion-enter-duration: 200ms;
+    --plonk-motion-exit-easing: steps(2, end);
+    --plonk-motion-exit-duration: 100ms;
+    --plonk-jelly-amount: 0;
+    --plonk-jelly-duration: 0ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root,
+    [data-plonk-personality] {
+      --plonk-jelly-amount: 0 !important;
+      --plonk-motion-spring-easing: cubic-bezier(0.2, 0, 0, 1);
+      --plonk-motion-spring-duration: 150ms;
+      --plonk-motion-snap-easing: cubic-bezier(0.2, 0, 0, 1);
+      --plonk-motion-snap-duration: 150ms;
+      --plonk-motion-enter-easing: cubic-bezier(0.2, 0, 0, 1);
+      --plonk-motion-enter-duration: 150ms;
+      --plonk-motion-exit-easing: cubic-bezier(0.4, 0, 1, 1);
+      --plonk-motion-exit-duration: 100ms;
+    }
+  }
+
+  [data-plonk-motion="reduce"],
+  [data-plonk-motion="reduce"] [data-plonk-personality] {
     --plonk-jelly-amount: 0 !important;
     --plonk-motion-spring-easing: cubic-bezier(0.2, 0, 0, 1);
     --plonk-motion-spring-duration: 150ms;
@@ -106,17 +121,4 @@
     --plonk-motion-exit-easing: cubic-bezier(0.4, 0, 1, 1);
     --plonk-motion-exit-duration: 100ms;
   }
-}
-
-[data-plonk-motion="reduce"],
-[data-plonk-motion="reduce"] [data-plonk-personality] {
-  --plonk-jelly-amount: 0 !important;
-  --plonk-motion-spring-easing: cubic-bezier(0.2, 0, 0, 1);
-  --plonk-motion-spring-duration: 150ms;
-  --plonk-motion-snap-easing: cubic-bezier(0.2, 0, 0, 1);
-  --plonk-motion-snap-duration: 150ms;
-  --plonk-motion-enter-easing: cubic-bezier(0.2, 0, 0, 1);
-  --plonk-motion-enter-duration: 150ms;
-  --plonk-motion-exit-easing: cubic-bezier(0.4, 0, 1, 1);
-  --plonk-motion-exit-duration: 100ms;
 }

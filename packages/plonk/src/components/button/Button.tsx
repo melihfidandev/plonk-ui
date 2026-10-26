@@ -1,6 +1,11 @@
 "use client";
 
-import type { ComponentPropsWithRef, MouseEvent, ReactNode } from "react";
+import type { CSSProperties, ReactNode, Ref } from "react";
+import {
+  Button as AriaButton,
+  type ButtonProps as AriaButtonProps,
+  type PressEvent,
+} from "react-aria-components";
 import { cn } from "../../lib/cn";
 import { playJelly } from "../../motion/jelly";
 
@@ -8,15 +13,27 @@ export type ButtonVariant =
   "primary" | "secondary" | "accent" | "danger" | "neutral" | "ghost";
 export type ButtonSize = "sm" | "md" | "lg";
 
-export interface ButtonProps extends ComponentPropsWithRef<"button"> {
+export interface ButtonProps extends Omit<
+  AriaButtonProps,
+  "className" | "style" | "children" | "isPending"
+> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   /** Metnin önündeki ikon. Ekran okuyuculardan gizlenir. */
   iconStart?: ReactNode;
   /** Metnin arkasındaki ikon. Ekran okuyuculardan gizlenir. */
   iconEnd?: ReactNode;
-  /** İş sürerken: tıklanamaz, genişliği korunur, yerine yükleniyor noktaları gelir. */
+  /**
+   * İş sürerken: tıklanamaz ama odakta kalır, genişliği korunur, yerine
+   * yükleniyor noktaları gelir. Ekran okuyucuya durum değişimi duyurulur.
+   */
   loading?: boolean;
+  /** HTML'deki gibi; `isDisabled` ile aynı. */
+  disabled?: boolean;
+  className?: string;
+  style?: CSSProperties;
+  children?: ReactNode;
+  ref?: Ref<HTMLButtonElement>;
 }
 
 const VARIANTS: Record<ButtonVariant, string> = {
@@ -40,6 +57,9 @@ const SIZES: Record<ButtonSize, string> = {
 /**
  * Basınca gölgesinin yerine iner, bırakınca yayla çıkıp jöle gibi esner.
  * Hareketin dili kişilikten gelir: Retro'da anlık ve kademeli.
+ *
+ * React Aria'nın Button'ı üzerine kurulu: dokunma, klavye ve fare aynı
+ * davranır; Dialog, Menu gibi bileşenlerin tetikleyicisi olarak çalışır.
  */
 export function Button({
   variant = "primary",
@@ -47,33 +67,29 @@ export function Button({
   iconStart,
   iconEnd,
   loading = false,
-  type = "button",
+  disabled,
+  isDisabled,
   className,
   children,
-  onClick,
+  onPress,
   ...props
 }: ButtonProps) {
-  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
-    if (loading) {
-      e.preventDefault();
-      return;
-    }
-    onClick?.(e);
-    playJelly(e.currentTarget);
+  const handlePress = (e: PressEvent) => {
+    onPress?.(e);
+    if (e.target instanceof HTMLElement) playJelly(e.target);
   };
 
   return (
-    <button
+    <AriaButton
       {...props}
-      type={type}
-      aria-busy={loading || undefined}
-      aria-disabled={loading || props["aria-disabled"] || undefined}
-      onClick={handleClick}
+      isDisabled={isDisabled ?? disabled}
+      isPending={loading}
+      onPress={handlePress}
       className={cn(
-        "relative inline-flex shrink-0 cursor-pointer items-center justify-center font-plonk-display leading-none whitespace-nowrap select-none",
-        "outline-offset-3 focus-visible:outline-3 focus-visible:outline-plonk-focus",
+        "relative inline-flex shrink-0 cursor-pointer items-center justify-center font-plonk-display leading-none whitespace-nowrap outline-none select-none",
+        "outline-offset-3 data-focus-visible:outline-3 data-focus-visible:outline-plonk-focus",
         "disabled:cursor-not-allowed disabled:border-dashed! disabled:bg-plonk-sunken disabled:text-plonk-ink-muted",
-        "aria-busy:cursor-progress",
+        "data-pending:cursor-progress",
         VARIANTS[variant],
         SIZES[size],
         className,
@@ -100,7 +116,7 @@ export function Button({
           <span />
         </span>
       )}
-    </button>
+    </AriaButton>
   );
 }
 
