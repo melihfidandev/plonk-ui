@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@import "plonk/theme.css";
+
+/* Tailwind'in kütüphane bileşenlerindeki sınıfları da görmesi için */
+@source "../../../../packages/plonk/src";
+
+body {
+  background: #fafaf7;
+  color: #111;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
