@@ -530,6 +530,7 @@ const TEAM = [
 function DisplayLab() {
   const [progress, setProgress] = useState(35);
   const [open, setOpen] = useState(true);
+  const [tape, setTape] = useState(true);
 
   return (
     <div className="grid gap-12">
@@ -549,7 +550,7 @@ function DisplayLab() {
         <Card
           title="Sprint 14"
           description="Bitmesine 3 gün"
-          tape
+          tape={tape}
           tilt="right"
           footer={
             <AvatarGroup max={3} size="sm" aria-label="Ekip">
@@ -590,6 +591,13 @@ function DisplayLab() {
           </Button>
         )}
       </div>
+
+      <Switch
+        label="Sprint kartında bant"
+        description="tape seçeneği: varsayılan kapalı, kullanan seçer. Retro'da görünmez."
+        checked={tape}
+        onChange={(e) => setTape(e.target.checked)}
+      />
 
       <div className="flex flex-wrap items-center gap-3">
         <Badge>Taslak</Badge>

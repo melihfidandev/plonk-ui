@@ -265,23 +265,48 @@
     margin-top: 0.25rem;
   }
 
-  /* Sticker'da üstte bir parça bant. */
+  /*
+   * Sticker'da üstte bir parça kâğıt bant. Saydam değil, böylece kartın
+   * çerçevesi içinden görünmez ve bant gerçekten üstüne yapışmış durur.
+   * Uçları yırtık kâğıt gibi tırtıklı; üstünde hafif lif dokusu var.
+   */
   .plonk-card[data-tape]::before {
     content: "";
     position: absolute;
-    top: -0.8rem;
+    z-index: 1;
+    top: -0.85rem;
     left: 50%;
-    width: 5.5rem;
-    height: 1.5rem;
+    width: 5.75rem;
+    height: 1.6rem;
     translate: -50% 0;
-    rotate: -4deg;
-    background: color-mix(
-      in oklab,
-      var(--plonk-color-primary) 60%,
-      transparent
+    rotate: -3deg;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        color-mix(in oklab, var(--plonk-color-surface) 22%, transparent) 0 1px,
+        transparent 1px 5px
+      ),
+      color-mix(
+        in oklab,
+        var(--plonk-color-primary) 70%,
+        var(--plonk-color-surface)
+      );
+    clip-path: polygon(
+      3px 0,
+      calc(100% - 3px) 0,
+      100% 16%,
+      calc(100% - 3px) 33%,
+      100% 50%,
+      calc(100% - 3px) 67%,
+      100% 84%,
+      calc(100% - 3px) 100%,
+      3px 100%,
+      0 84%,
+      3px 67%,
+      0 50%,
+      3px 33%,
+      0 16%
     );
-    border-inline: 1px dashed
-      color-mix(in oklab, var(--plonk-color-ink) 35%, transparent);
     pointer-events: none;
   }
 
