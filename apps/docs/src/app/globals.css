@@ -4,6 +4,19 @@
 /* Tailwind'in kütüphane bileşenlerindeki sınıfları da görmesi için */
 @source "../../../../packages/plonk/src";
 
+/* next/font fontları kendi adlarıyla yüklediği için token'ları onlara bağlıyoruz. */
+:root,
+[data-plonk-personality="sticker"] {
+  --plonk-font-display: var(--font-lilita), ui-rounded, system-ui, sans-serif;
+  --plonk-font-body: var(--font-nunito), ui-rounded, system-ui, sans-serif;
+}
+
+[data-plonk-personality="retro"] {
+  --plonk-font-display: var(--font-silkscreen), ui-monospace, monospace;
+  --plonk-font-body: var(--font-plex-mono), ui-monospace, monospace;
+  --plonk-font-mono: var(--font-plex-mono), ui-monospace, monospace;
+}
+
 body {
   background: #fafaf7;
   color: #111;

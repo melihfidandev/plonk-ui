@@ -10,5 +10,8 @@ export default defineConfig({
   external: ["react", "react-dom"],
   // Bileşenler hook kullandığı için RSC tarafında istemci bileşeni sayılmalı.
   banner: { js: '"use client";' },
-  onSuccess: () => copyFile("src/theme.css", "dist/theme.css"),
+  onSuccess: async () => {
+    await copyFile("src/theme.css", "dist/theme.css");
+    await copyFile("src/personalities.css", "dist/personalities.css");
+  },
 });

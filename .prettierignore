@@ -5,3 +5,4 @@ coverage
 pnpm-lock.yaml
 demos
 .changeset/*.md
+packages/plonk/src/personalities.css

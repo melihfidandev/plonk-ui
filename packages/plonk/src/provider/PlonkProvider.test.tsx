@@ -1,0 +1,55 @@
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { PlonkProvider, usePersonality } from "./PlonkProvider";
+
+function Probe() {
+  return <span>{usePersonality()}</span>;
+}
+
+describe("PlonkProvider", () => {
+  it("kişiliği hem DOM'a hem bağlama verir", () => {
+    render(
+      <PlonkProvider personality="retro" data-testid="root">
+        <Probe />
+      </PlonkProvider>,
+    );
+    expect(screen.getByTestId("root")).toHaveAttribute(
+      "data-plonk-personality",
+      "retro",
+    );
+    expect(screen.getByText("retro")).toBeInTheDocument();
+  });
+
+  it("provider yokken varsayılan kişiliği döner", () => {
+    render(<Probe />);
+    expect(screen.getByText("sticker")).toBeInTheDocument();
+  });
+
+  it("iç içe kullanımda en yakın provider kazanır", () => {
+    render(
+      <PlonkProvider personality="retro">
+        <PlonkProvider personality="sticker">
+          <Probe />
+        </PlonkProvider>
+      </PlonkProvider>,
+    );
+    expect(screen.getByText("sticker")).toBeInTheDocument();
+  });
+
+  it("hareket azaltma sadece istenince işaretlenir", () => {
+    const { rerender } = render(<PlonkProvider data-testid="root" />);
+    expect(screen.getByTestId("root")).not.toHaveAttribute("data-plonk-motion");
+    rerender(<PlonkProvider data-testid="root" motion="reduce" />);
+    expect(screen.getByTestId("root")).toHaveAttribute(
+      "data-plonk-motion",
+      "reduce",
+    );
+  });
+
+  it("className'i birleştirir ve diğer özellikleri aktarır", () => {
+    render(<PlonkProvider data-testid="root" className="p-4" id="app" />);
+    const root = screen.getByTestId("root");
+    expect(root).toHaveClass("plonk", "p-4");
+    expect(root).toHaveAttribute("id", "app");
+  });
+});

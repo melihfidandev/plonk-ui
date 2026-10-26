@@ -1,4 +1,173 @@
 /*
- * Plonk tasarım token'ları.
- * Renk, çerçeve, gölge, köşe, tipografi ve hareket token'ları Aşama 1'de buraya gelecek.
+ * Plonk teması. Kullanım:
+ *   @import "tailwindcss";
+ *   @import "plonk/theme.css";
+ *   @source "../node_modules/plonk/dist";
  */
+@import "./personalities.css";
+
+/* Token'ları Tailwind'e tanıt: bg-plonk-primary, rounded-plonk-md, font-plonk-display … */
+@theme inline {
+  --color-plonk-canvas: var(--plonk-color-canvas);
+  --color-plonk-surface: var(--plonk-color-surface);
+  --color-plonk-sunken: var(--plonk-color-sunken);
+  --color-plonk-ink: var(--plonk-color-ink);
+  --color-plonk-ink-muted: var(--plonk-color-ink-muted);
+  --color-plonk-primary: var(--plonk-color-primary);
+  --color-plonk-on-primary: var(--plonk-color-on-primary);
+  --color-plonk-accent: var(--plonk-color-accent);
+  --color-plonk-on-accent: var(--plonk-color-on-accent);
+  --color-plonk-secondary: var(--plonk-color-secondary);
+  --color-plonk-on-secondary: var(--plonk-color-on-secondary);
+  --color-plonk-success: var(--plonk-color-success);
+  --color-plonk-on-success: var(--plonk-color-on-success);
+  --color-plonk-warning: var(--plonk-color-warning);
+  --color-plonk-on-warning: var(--plonk-color-on-warning);
+  --color-plonk-danger: var(--plonk-color-danger);
+  --color-plonk-on-danger: var(--plonk-color-on-danger);
+  --color-plonk-focus: var(--plonk-color-focus);
+
+  --radius-plonk-sm: var(--plonk-radius-sm);
+  --radius-plonk-md: var(--plonk-radius-md);
+  --radius-plonk-lg: var(--plonk-radius-lg);
+  --radius-plonk-pill: var(--plonk-radius-pill);
+
+  --font-plonk-display: var(--plonk-font-display);
+  --font-plonk-body: var(--plonk-font-body);
+  --font-plonk-mono: var(--plonk-font-mono);
+}
+
+/* ---------- neo-brutal temel parçalar ---------- */
+
+@utility plonk-border {
+  border: var(--plonk-border-width) solid var(--plonk-color-ink);
+}
+
+@utility plonk-shadow {
+  box-shadow: var(--plonk-shadow-x) var(--plonk-shadow-y) 0
+    var(--plonk-shadow-color);
+}
+
+@utility plonk-shadow-lg {
+  box-shadow: calc(var(--plonk-shadow-x) * 2) calc(var(--plonk-shadow-y) * 2) 0
+    var(--plonk-shadow-color);
+}
+
+@utility plonk-tilt {
+  rotate: calc(var(--plonk-tilt) * -1);
+}
+
+@utility plonk-tilt-reverse {
+  rotate: var(--plonk-tilt);
+}
+
+/* ---------- hareket token'ları: eğri + süre birlikte ---------- */
+
+@utility plonk-motion-press {
+  transition-timing-function: var(--plonk-motion-press-easing);
+  transition-duration: var(--plonk-motion-press-duration);
+}
+
+@utility plonk-motion-spring {
+  transition-timing-function: var(--plonk-motion-spring-easing);
+  transition-duration: var(--plonk-motion-spring-duration);
+}
+
+@utility plonk-motion-snap {
+  transition-timing-function: var(--plonk-motion-snap-easing);
+  transition-duration: var(--plonk-motion-snap-duration);
+}
+
+@utility plonk-motion-enter {
+  transition-timing-function: var(--plonk-motion-enter-easing);
+  transition-duration: var(--plonk-motion-enter-duration);
+}
+
+@utility plonk-motion-exit {
+  transition-timing-function: var(--plonk-motion-exit-easing);
+  transition-duration: var(--plonk-motion-exit-duration);
+}
+
+@layer components {
+  .plonk {
+    font-family: var(--plonk-font-body);
+    color: var(--plonk-color-ink);
+  }
+
+  /*
+   * Basılabilir yüzey: basınca gölgenin yerine iner (press eğrisiyle),
+   * bırakınca yayla geri çıkar (spring eğrisiyle).
+   */
+  .plonk-pressable {
+    box-shadow: var(--plonk-shadow-x) var(--plonk-shadow-y) 0
+      var(--plonk-shadow-color);
+    transition-property: translate, box-shadow, background-color, color;
+    transition-timing-function: var(--plonk-motion-spring-easing);
+    transition-duration: var(--plonk-motion-spring-duration);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @media (hover: hover) {
+    .plonk-pressable:hover {
+      translate: -1px -1px;
+      box-shadow: calc(var(--plonk-shadow-x) + 1px)
+        calc(var(--plonk-shadow-y) + 1px) 0 var(--plonk-shadow-color);
+    }
+  }
+
+  .plonk-pressable:active,
+  .plonk-pressable[data-pressed] {
+    translate: var(--plonk-shadow-x) var(--plonk-shadow-y);
+    box-shadow: 0 0 0 var(--plonk-shadow-color);
+    transition-timing-function: var(--plonk-motion-press-easing);
+    transition-duration: var(--plonk-motion-press-duration);
+  }
+
+  /* Bırakınca jöle gibi esneme. Miktarı --plonk-jelly-amount belirler. */
+  .plonk-pop {
+    animation: plonk-pop var(--plonk-jelly-duration) ease-out;
+  }
+
+  /* Yer değiştirirken ezilip uzama (switch topuzu gibi). */
+  .plonk-squish {
+    animation: plonk-squish var(--plonk-jelly-duration) ease-out;
+  }
+}
+
+@keyframes plonk-pop {
+  20% {
+    scale: calc(1 + 0.16 * var(--plonk-jelly-amount))
+      calc(1 - 0.16 * var(--plonk-jelly-amount));
+    transform: rotate(calc(-3deg * var(--plonk-jelly-amount)));
+  }
+  42% {
+    scale: calc(1 - 0.08 * var(--plonk-jelly-amount))
+      calc(1 + 0.1 * var(--plonk-jelly-amount));
+    transform: rotate(calc(2.5deg * var(--plonk-jelly-amount)));
+  }
+  62% {
+    scale: calc(1 + 0.05 * var(--plonk-jelly-amount))
+      calc(1 - 0.04 * var(--plonk-jelly-amount));
+    transform: rotate(calc(-1deg * var(--plonk-jelly-amount)));
+  }
+  80% {
+    scale: calc(1 - 0.02 * var(--plonk-jelly-amount))
+      calc(1 + 0.02 * var(--plonk-jelly-amount));
+  }
+}
+
+@keyframes plonk-squish {
+  30% {
+    scale: calc(1 + 0.5 * var(--plonk-jelly-amount))
+      calc(1 - 0.3 * var(--plonk-jelly-amount));
+  }
+  58% {
+    scale: calc(1 - 0.12 * var(--plonk-jelly-amount))
+      calc(1 + 0.14 * var(--plonk-jelly-amount));
+  }
+  80% {
+    scale: calc(1 + 0.05 * var(--plonk-jelly-amount))
+      calc(1 - 0.04 * var(--plonk-jelly-amount));
+  }
+}
