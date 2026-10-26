@@ -1,6 +1,11 @@
 "use client";
 
-import { createContext, useContext, type HTMLAttributes } from "react";
+import {
+  createContext,
+  useContext,
+  type CSSProperties,
+  type HTMLAttributes,
+} from "react";
 import { cn } from "../lib/cn";
 import {
   DEFAULT_PERSONALITY,
@@ -17,6 +22,11 @@ export interface PlonkProviderProps extends HTMLAttributes<HTMLDivElement> {
    * `reduce`: hareketi her durumda azaltır.
    */
   motion?: "system" | "reduce";
+  /**
+   * Jöle miktarı: 0 kapalı, 1 tam jöle. Verilmezse kişiliğin varsayılanı.
+   * Hareket azaltıldığında her durumda 0 olur.
+   */
+  jelly?: number;
 }
 
 /**
@@ -26,7 +36,9 @@ export interface PlonkProviderProps extends HTMLAttributes<HTMLDivElement> {
 export function PlonkProvider({
   personality = DEFAULT_PERSONALITY,
   motion = "system",
+  jelly,
   className,
+  style,
   children,
   ...props
 }: PlonkProviderProps) {
@@ -36,6 +48,14 @@ export function PlonkProvider({
         {...props}
         data-plonk-personality={personality}
         data-plonk-motion={motion === "reduce" ? "reduce" : undefined}
+        style={
+          jelly === undefined
+            ? style
+            : ({
+                ...style,
+                "--plonk-jelly-amount": String(jelly),
+              } as CSSProperties)
+        }
         className={cn("plonk", className)}
       >
         {children}

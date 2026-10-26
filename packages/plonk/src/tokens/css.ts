@@ -36,7 +36,8 @@ export function personalityVariables(p: Personality): Record<string, string> {
 }
 
 /**
- * Hareket azaltıldığında: jöle kapanır, yaylar kısa ve sade bir yavaşlamaya döner.
+ * Hareket azaltıldığında: jöle kapanır (`!important`, böylece provider'ın `jelly`
+ * ayarı ya da satır içi bir stil bu kuralı ezemez), yaylar kısa ve sade bir yavaşlamaya döner.
  * Basma tepkisi kalır; geri bildirim kaybolmasın.
  */
 const REDUCED: Partial<
@@ -49,7 +50,9 @@ const REDUCED: Partial<
 };
 
 function reducedVariables(): Record<string, string> {
-  const vars: Record<string, string> = { "--plonk-jelly-amount": "0" };
+  const vars: Record<string, string> = {
+    "--plonk-jelly-amount": "0 !important",
+  };
   for (const [key, value] of Object.entries(REDUCED)) {
     vars[`--plonk-motion-${key}-easing`] = value.easing;
     vars[`--plonk-motion-${key}-duration`] = `${value.duration}ms`;

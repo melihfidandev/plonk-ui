@@ -108,30 +108,94 @@
     -webkit-tap-highlight-color: transparent;
   }
 
+  .plonk-pressable:is(:disabled, [aria-disabled="true"]) {
+    translate: none;
+    box-shadow: none;
+  }
+
   @media (hover: hover) {
-    .plonk-pressable:hover {
+    .plonk-pressable:not(:disabled, [aria-disabled="true"]):hover {
       translate: -1px -1px;
       box-shadow: calc(var(--plonk-shadow-x) + 1px)
         calc(var(--plonk-shadow-y) + 1px) 0 var(--plonk-shadow-color);
     }
   }
 
-  .plonk-pressable:active,
-  .plonk-pressable[data-pressed] {
+  .plonk-pressable:not(:disabled, [aria-disabled="true"]):is(
+      :active,
+      [data-pressed]
+    ) {
     translate: var(--plonk-shadow-x) var(--plonk-shadow-y);
     box-shadow: 0 0 0 var(--plonk-shadow-color);
     transition-timing-function: var(--plonk-motion-press-easing);
     transition-duration: var(--plonk-motion-press-duration);
   }
 
-  /* Bırakınca jöle gibi esneme. Miktarı --plonk-jelly-amount belirler. */
-  .plonk-pop {
+  /*
+   * Bırakınca jöle gibi esneme. Miktarı --plonk-jelly-amount belirler.
+   * Bileşenler `playJelly()` ile data-plonk-jelly özelliğini kullanır.
+   */
+  .plonk-pop,
+  [data-plonk-jelly="pop"] {
     animation: plonk-pop var(--plonk-jelly-duration) ease-out;
   }
 
   /* Yer değiştirirken ezilip uzama (switch topuzu gibi). */
-  .plonk-squish {
+  .plonk-squish,
+  [data-plonk-jelly="squish"] {
     animation: plonk-squish var(--plonk-jelly-duration) ease-out;
+  }
+
+  /* Yükleniyor: üç nokta sırayla zıplar. Retro'da zıplamaz, kademeli yanıp söner. */
+  .plonk-dots > * {
+    width: 0.38em;
+    aspect-ratio: 1;
+    border-radius: var(--plonk-radius-pill);
+    background: currentColor;
+    animation: plonk-dot 900ms cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+  .plonk-dots > :nth-child(2) {
+    animation-delay: 150ms;
+  }
+  .plonk-dots > :nth-child(3) {
+    animation-delay: 300ms;
+  }
+  [data-plonk-personality="retro"] .plonk-dots > * {
+    animation-name: plonk-dot-blink;
+    animation-timing-function: steps(1, end);
+  }
+  [data-plonk-motion="reduce"] .plonk-dots > * {
+    animation-name: plonk-dot-blink;
+    animation-duration: 1500ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .plonk-dots > * {
+      animation-name: plonk-dot-blink;
+      animation-duration: 1500ms;
+    }
+  }
+}
+
+@keyframes plonk-dot {
+  0%,
+  70%,
+  100% {
+    translate: 0 0;
+    opacity: 0.35;
+  }
+  35% {
+    translate: 0 -0.35em;
+    opacity: 1;
+  }
+}
+
+@keyframes plonk-dot-blink {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  33% {
+    opacity: 1;
   }
 }
 

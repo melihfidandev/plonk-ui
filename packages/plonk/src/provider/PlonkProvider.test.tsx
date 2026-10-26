@@ -52,4 +52,13 @@ describe("PlonkProvider", () => {
     expect(root).toHaveClass("plonk", "p-4");
     expect(root).toHaveAttribute("id", "app");
   });
+
+  it("jelly ayarını token'a çevirir, diğer stilleri korur", () => {
+    render(
+      <PlonkProvider data-testid="root" jelly={0.3} style={{ color: "red" }} />,
+    );
+    const root = screen.getByTestId("root");
+    expect(root.style.getPropertyValue("--plonk-jelly-amount")).toBe("0.3");
+    expect(root.style.color).toBe("red");
+  });
 });

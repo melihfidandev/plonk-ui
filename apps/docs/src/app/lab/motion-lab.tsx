@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Button,
   cn,
   contrastRatio,
   DEFAULT_PERSONALITY,
@@ -11,11 +12,13 @@ import {
   PlonkProvider,
   resolveEasing,
   sampleEasing,
+  type ButtonSize,
+  type ButtonVariant,
   type ColorToken,
   type MotionToken,
   type PersonalityName,
 } from "plonk";
-import { useState, useSyncExternalStore, type CSSProperties } from "react";
+import { useState, useSyncExternalStore } from "react";
 
 // Tailwind'in sınıfları görebilmesi için tam adlarıyla.
 const MOTION_CLASS: Record<MotionToken, string> = {
@@ -77,19 +80,13 @@ export function MotionLab() {
     dispatchEvent(new HashChangeEvent("hashchange"));
   };
 
-  // Hareket azaltılmışken jöle ayarını uygulama; azaltma kuralı kazanmalı.
-  const style =
-    jelly !== null && !reduce
-      ? ({ "--plonk-jelly-amount": String(jelly) } as CSSProperties)
-      : undefined;
-
   return (
     <div className="flex flex-1 flex-col">
       <header className="sticky top-0 z-20 border-b-2 border-black bg-[#fafaf7]/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
           <div className="mr-auto">
             <p className="text-[11px] font-bold tracking-widest uppercase opacity-50">
-              Aşama 1 · token&apos;lar ve hareket
+              Aşama 2 · temel bileşenler
             </p>
             <h1 className="text-xl font-black tracking-tight">Laboratuvar</h1>
           </div>
@@ -155,7 +152,7 @@ export function MotionLab() {
       <PlonkProvider
         personality={name}
         motion={reduce ? "reduce" : "system"}
-        style={style}
+        jelly={jelly ?? undefined}
         className="flex-1 bg-plonk-canvas"
       >
         <div className="mx-auto grid max-w-6xl gap-16 px-4 py-14">
@@ -167,8 +164,15 @@ export function MotionLab() {
           </section>
 
           <Section
+            title="Button"
+            note="Basınca gölgesinin yerine iner, bırakınca yayla çıkıp esner. Klavyeyle (Tab, Enter, Boşluk) de dene."
+          >
+            <ButtonLab />
+          </Section>
+
+          <Section
             title="Basma denemesi"
-            note="Prototip. Gerçek Button ve Switch Aşama 2'de gelecek."
+            note="Prototip. Gerçek Switch bir sonraki durakta gelecek."
           >
             <PressDemo />
           </Section>
@@ -287,28 +291,11 @@ function Section({
 
 function PressDemo() {
   const [on, setOn] = useState(false);
-  const pop = (e: React.PointerEvent<HTMLElement>) =>
-    restart(e.currentTarget, "plonk-pop");
   const clear = (e: React.AnimationEvent<HTMLElement>) =>
     e.currentTarget.classList.remove("plonk-pop", "plonk-squish");
 
   return (
     <div className="flex flex-wrap items-center gap-8">
-      <button
-        onPointerUp={pop}
-        onAnimationEnd={clear}
-        className="plonk-pressable plonk-tilt rounded-plonk-md bg-plonk-primary px-7 py-3.5 font-plonk-display text-2xl text-plonk-on-primary plonk-border"
-      >
-        Bas bana
-      </button>
-      <button
-        onPointerUp={pop}
-        onAnimationEnd={clear}
-        className="plonk-pressable plonk-tilt-reverse rounded-plonk-pill bg-plonk-surface px-6 py-3 font-bold plonk-border"
-      >
-        İkincil buton
-      </button>
-
       <button
         role="switch"
         aria-checked={on}
@@ -344,6 +331,84 @@ function PressDemo() {
         <p className="text-sm text-plonk-ink-muted">
           tilt-reverse ile yapıştırılmış
         </p>
+      </div>
+    </div>
+  );
+}
+
+const VARIANTS: ButtonVariant[] = [
+  "primary",
+  "secondary",
+  "accent",
+  "danger",
+  "neutral",
+  "ghost",
+];
+const SIZES: ButtonSize[] = ["sm", "md", "lg"];
+
+const Plus = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
+    <path d="M12 5v14M5 12h14" strokeLinecap="round" />
+  </svg>
+);
+const Arrow = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
+    <path
+      d="M5 12h13m-5-6 6 6-6 6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+function ButtonLab() {
+  const [saving, setSaving] = useState(false);
+  const [count, setCount] = useState(0);
+
+  const save = () => {
+    setSaving(true);
+    setTimeout(() => setSaving(false), 1800);
+  };
+
+  return (
+    <div className="grid gap-10">
+      <div className="flex flex-wrap items-center gap-4">
+        {VARIANTS.map((v) => (
+          <Button key={v} variant={v}>
+            {v}
+          </Button>
+        ))}
+      </div>
+
+      <div className="flex flex-wrap items-end gap-4">
+        {SIZES.map((s) => (
+          <Button key={s} size={s} iconStart={<Plus />}>
+            Yeni proje · {s}
+          </Button>
+        ))}
+      </div>
+
+      <div className="flex flex-wrap items-center gap-4">
+        <Button variant="secondary" loading={saving} onClick={save}>
+          Kaydet
+        </Button>
+        <Button
+          variant="neutral"
+          iconEnd={<Arrow />}
+          onClick={() => setCount((c) => c + 1)}
+        >
+          Sayaç: {count}
+        </Button>
+        <Button disabled>Devre dışı</Button>
+        <Button variant="ghost" disabled>
+          Ghost devre dışı
+        </Button>
+      </div>
+
+      <div className="max-w-sm">
+        <Button size="lg" variant="accent" className="w-full plonk-tilt">
+          Tam genişlik (Sticker’da eğik)
+        </Button>
       </div>
     </div>
   );

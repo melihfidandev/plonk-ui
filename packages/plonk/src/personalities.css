@@ -96,7 +96,7 @@
 @media (prefers-reduced-motion: reduce) {
   :root,
   [data-plonk-personality] {
-    --plonk-jelly-amount: 0;
+    --plonk-jelly-amount: 0 !important;
     --plonk-motion-spring-easing: cubic-bezier(0.2, 0, 0, 1);
     --plonk-motion-spring-duration: 150ms;
     --plonk-motion-snap-easing: cubic-bezier(0.2, 0, 0, 1);
@@ -110,7 +110,7 @@
 
 [data-plonk-motion="reduce"],
 [data-plonk-motion="reduce"] [data-plonk-personality] {
-  --plonk-jelly-amount: 0;
+  --plonk-jelly-amount: 0 !important;
   --plonk-motion-spring-easing: cubic-bezier(0.2, 0, 0, 1);
   --plonk-motion-spring-duration: 150ms;
   --plonk-motion-snap-easing: cubic-bezier(0.2, 0, 0, 1);
