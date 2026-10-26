@@ -95,6 +95,12 @@
     color: var(--plonk-color-ink);
   }
 
+  /* Başlık fontunun harf biçimi kişilikten gelir (Retro: büyük harf). */
+  .font-plonk-display {
+    text-transform: var(--plonk-font-display-case);
+    letter-spacing: var(--plonk-font-display-tracking);
+  }
+
   /*
    * Basılabilir yüzey: basınca gölgenin yerine iner (press eğrisiyle),
    * bırakınca yayla geri çıkar (spring eğrisiyle).

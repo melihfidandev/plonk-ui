@@ -36,6 +36,12 @@ export interface Personality {
   shadow: { x: string; y: string; color: string };
   radius: { sm: string; md: string; lg: string; pill: string };
   font: { display: string; body: string; mono: string };
+  /**
+   * Başlık fontunun harf biçimi ve aralığı. Retro'da her şey büyük harf:
+   * eski sistem ekranları gibi. Tarayıcı sayfanın diline göre çevirir (tr: i → İ).
+   */
+  displayCase: "none" | "uppercase";
+  displayTracking: string;
   /** Sticker gibi hafif eğik yerleşim açısı. */
   tilt: string;
   motion: Record<MotionToken, Easing>;
@@ -80,10 +86,12 @@ const sticker: Personality = {
   shadow: { x: "4px", y: "4px", color: "var(--plonk-color-ink)" },
   radius: { sm: "8px", md: "12px", lg: "18px", pill: "999px" },
   font: {
-    display: '"Lilita One", ui-rounded, system-ui, sans-serif',
+    display: '"Baloo 2", ui-rounded, system-ui, sans-serif',
     body: '"Nunito", ui-rounded, system-ui, sans-serif',
     mono: 'ui-monospace, "SF Mono", Menlo, monospace',
   },
+  displayCase: "none",
+  displayTracking: "0em",
   tilt: "1.5deg",
   motion: {
     press: { type: "bezier", points: [0.3, 0.7, 0.4, 1], duration: 70 },
@@ -124,10 +132,12 @@ const retro: Personality = {
   shadow: { x: "4px", y: "4px", color: "var(--plonk-color-ink)" },
   radius: { sm: "0px", md: "0px", lg: "0px", pill: "0px" },
   font: {
-    display: '"Silkscreen", ui-monospace, monospace',
+    display: '"Tiny5", ui-monospace, monospace',
     body: '"IBM Plex Mono", ui-monospace, monospace',
     mono: '"IBM Plex Mono", ui-monospace, monospace',
   },
+  displayCase: "uppercase",
+  displayTracking: "0.06em",
   tilt: "0deg",
   motion: {
     press: { type: "instant" },

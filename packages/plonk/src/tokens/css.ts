@@ -24,6 +24,8 @@ export function personalityVariables(p: Personality): Record<string, string> {
   for (const [key, value] of Object.entries(p.font)) {
     vars[`--plonk-font-${key}`] = value;
   }
+  vars["--plonk-font-display-case"] = p.displayCase;
+  vars["--plonk-font-display-tracking"] = p.displayTracking;
   vars["--plonk-tilt"] = p.tilt;
   for (const [key, easing] of Object.entries(p.motion)) {
     const { easing: fn, duration } = resolveEasing(easing);

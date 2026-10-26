@@ -31,9 +31,11 @@
     --plonk-radius-md: 12px;
     --plonk-radius-lg: 18px;
     --plonk-radius-pill: 999px;
-    --plonk-font-display: "Lilita One", ui-rounded, system-ui, sans-serif;
+    --plonk-font-display: "Baloo 2", ui-rounded, system-ui, sans-serif;
     --plonk-font-body: "Nunito", ui-rounded, system-ui, sans-serif;
     --plonk-font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+    --plonk-font-display-case: none;
+    --plonk-font-display-tracking: 0em;
     --plonk-tilt: 1.5deg;
     --plonk-motion-press-easing: cubic-bezier(0.3, 0.7, 0.4, 1);
     --plonk-motion-press-duration: 70ms;
@@ -76,9 +78,11 @@
     --plonk-radius-md: 0px;
     --plonk-radius-lg: 0px;
     --plonk-radius-pill: 0px;
-    --plonk-font-display: "Silkscreen", ui-monospace, monospace;
+    --plonk-font-display: "Tiny5", ui-monospace, monospace;
     --plonk-font-body: "IBM Plex Mono", ui-monospace, monospace;
     --plonk-font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    --plonk-font-display-case: uppercase;
+    --plonk-font-display-tracking: 0.06em;
     --plonk-tilt: 0deg;
     --plonk-motion-press-easing: linear;
     --plonk-motion-press-duration: 0ms;
