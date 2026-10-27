@@ -1607,7 +1607,7 @@ function DisplayLab() {
 
       <Switch
         label="Sprint kartında bant"
-        description="tape seçeneği: varsayılan kapalı, kullanan seçer. Retro'da görünmez."
+        description="tape seçeneği: varsayılan kapalı, kullanan seçer. Her kişilikte kendi bandı."
         checked={tape}
         onChange={(e) => setTape(e.target.checked)}
       />

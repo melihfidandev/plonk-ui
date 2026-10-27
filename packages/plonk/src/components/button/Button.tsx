@@ -7,6 +7,7 @@ import {
   type PressEvent,
 } from "react-aria-components";
 import { cn } from "../../lib/cn";
+import { playPressEffect } from "../../motion/effects";
 import { playJelly } from "../../motion/jelly";
 
 export type ButtonVariant =
@@ -48,15 +49,17 @@ const VARIANTS: Record<ButtonVariant, string> = {
     "border-(length:--plonk-border-width) border-transparent bg-transparent text-plonk-ink transition-colors plonk-motion-spring hover:bg-plonk-ink/8 active:bg-plonk-ink/14 disabled:bg-transparent",
 };
 
+// Köşe kişilikten ezilebilir: Atari'de düğmeler kubbe gibi tam yuvarlak.
 const SIZES: Record<ButtonSize, string> = {
-  sm: "h-8 gap-1.5 rounded-plonk-sm px-3 text-sm",
-  md: "h-10 gap-2 rounded-plonk-md px-4 text-base",
-  lg: "h-12 gap-2.5 rounded-plonk-md px-6 text-lg",
+  sm: "h-8 gap-1.5 rounded-[var(--plonk-button-radius,var(--plonk-radius-sm))] px-3 text-sm",
+  md: "h-10 gap-2 rounded-[var(--plonk-button-radius,var(--plonk-radius-md))] px-4 text-base",
+  lg: "h-12 gap-2.5 rounded-[var(--plonk-button-radius,var(--plonk-radius-md))] px-6 text-lg",
 };
 
 /**
  * Basınca gölgesinin yerine iner, bırakınca yayla çıkıp jöle gibi esner.
- * Hareketin dili kişilikten gelir: Retro'da anlık ve kademeli.
+ * Hareketin dili kişilikten gelir: Retro'da anlık ve kademeli, Çizgi Roman'da
+ * tıklanan yerde PAT!, Atari'de düğmeden puan uçar.
  *
  * React Aria'nın Button'ı üzerine kurulu: dokunma, klavye ve fare aynı
  * davranır; Dialog, Menu gibi bileşenlerin tetikleyicisi olarak çalışır.
@@ -76,7 +79,16 @@ export function Button({
 }: ButtonProps) {
   const handlePress = (e: PressEvent) => {
     onPress?.(e);
-    if (e.target instanceof HTMLElement) playJelly(e.target);
+    if (!(e.target instanceof HTMLElement)) return;
+    playJelly(e.target);
+    // Klavyede nokta yok: efekt düğmenin ortasından çıkar.
+    const rect = e.target.getBoundingClientRect();
+    playPressEffect(
+      e.target,
+      e.pointerType === "keyboard"
+        ? undefined
+        : { x: rect.left + e.x, y: rect.top + e.y },
+    );
   };
 
   return (
@@ -84,9 +96,10 @@ export function Button({
       {...props}
       isDisabled={isDisabled ?? disabled}
       isPending={loading}
+      data-variant={variant}
       onPress={handlePress}
       className={cn(
-        "relative inline-flex shrink-0 cursor-pointer items-center justify-center font-plonk-display leading-none whitespace-nowrap outline-none select-none",
+        "plonk-button relative inline-flex shrink-0 cursor-pointer items-center justify-center font-plonk-display leading-none whitespace-nowrap outline-none select-none",
         "outline-offset-3 data-focus-visible:outline-3 data-focus-visible:outline-plonk-focus",
         "disabled:cursor-not-allowed disabled:border-dashed! disabled:bg-plonk-sunken disabled:text-plonk-ink-muted",
         "data-pending:cursor-progress",

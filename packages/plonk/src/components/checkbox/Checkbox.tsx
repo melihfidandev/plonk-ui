@@ -3,6 +3,7 @@
 import type { ChangeEvent, ComponentPropsWithRef } from "react";
 import { cn } from "../../lib/cn";
 import { mergeRefs } from "../../lib/merge-refs";
+import { playPressEffect } from "../../motion/effects";
 import { playJelly, useShakeOnInvalid } from "../../motion/jelly";
 import {
   FieldDescription,
@@ -42,7 +43,10 @@ export function Checkbox({
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange?.(e);
-    if (boxRef.current) playJelly(boxRef.current);
+    if (!boxRef.current) return;
+    playJelly(boxRef.current);
+    // Kişiliğin imza efekti sadece işaretlenirken (PAT!, +100).
+    if (e.target.checked) playPressEffect(boxRef.current);
   };
 
   return (

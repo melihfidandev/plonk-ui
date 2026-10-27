@@ -44,14 +44,18 @@
   border: var(--plonk-border-width) solid var(--plonk-color-ink);
 }
 
+/* --plonk-shadow-glow: kişiliğe göre ek parlama (Atari'de neon); varsayılan yok. */
 @utility plonk-shadow {
-  box-shadow: var(--plonk-shadow-x) var(--plonk-shadow-y) 0
-    var(--plonk-shadow-color);
+  box-shadow:
+    var(--plonk-shadow-x) var(--plonk-shadow-y) 0 var(--plonk-shadow-color),
+    var(--plonk-shadow-glow, 0 0 #0000);
 }
 
 @utility plonk-shadow-lg {
-  box-shadow: calc(var(--plonk-shadow-x) * 2) calc(var(--plonk-shadow-y) * 2) 0
-    var(--plonk-shadow-color);
+  box-shadow:
+    calc(var(--plonk-shadow-x) * 2) calc(var(--plonk-shadow-y) * 2) 0
+      var(--plonk-shadow-color),
+    var(--plonk-shadow-glow, 0 0 #0000);
 }
 
 @utility plonk-tilt {
@@ -106,8 +110,9 @@
    * bırakınca yayla geri çıkar (spring eğrisiyle).
    */
   .plonk-pressable {
-    box-shadow: var(--plonk-shadow-x) var(--plonk-shadow-y) 0
-      var(--plonk-shadow-color);
+    box-shadow:
+      var(--plonk-shadow-x) var(--plonk-shadow-y) 0 var(--plonk-shadow-color),
+      var(--plonk-shadow-glow, 0 0 #0000);
     transition-property: translate, box-shadow, background-color, color;
     transition-timing-function: var(--plonk-motion-spring-easing);
     transition-duration: var(--plonk-motion-spring-duration);
@@ -123,8 +128,10 @@
   @media (hover: hover) {
     .plonk-pressable:not(:disabled, [aria-disabled="true"]):hover {
       translate: -1px -1px;
-      box-shadow: calc(var(--plonk-shadow-x) + 1px)
-        calc(var(--plonk-shadow-y) + 1px) 0 var(--plonk-shadow-color);
+      box-shadow:
+        calc(var(--plonk-shadow-x) + 1px) calc(var(--plonk-shadow-y) + 1px) 0
+          var(--plonk-shadow-color),
+        var(--plonk-shadow-glow, 0 0 #0000);
     }
   }
 
@@ -133,7 +140,9 @@
       [data-pressed]
     ) {
     translate: var(--plonk-shadow-x) var(--plonk-shadow-y);
-    box-shadow: 0 0 0 var(--plonk-shadow-color);
+    box-shadow:
+      0 0 0 var(--plonk-shadow-color),
+      var(--plonk-shadow-glow, 0 0 #0000);
     transition-timing-function: var(--plonk-motion-press-easing);
     transition-duration: var(--plonk-motion-press-duration);
   }
@@ -330,9 +339,27 @@
 
   /* Retro: her kart bir pencere. Başlık çizgili bir çubuğun ortasında. */
   [data-plonk-personality="retro"] {
+    /*
+     * Bant: 1-bit desenli (dither) piksel bant. Başlık ortada olduğu için
+     * sağ üst köşeye yapışır. Kart, toast ve tablo işlem çubuğu ortak.
+     */
     .plonk-card[data-tape]::before,
-    .plonk-toast-tape {
-      display: none;
+    .plonk-toast-tape,
+    .plonk-table-bulk[data-tape]::before {
+      top: -0.6rem;
+      right: 1rem;
+      left: auto;
+      width: 4.5rem;
+      height: 1.1rem;
+      translate: none;
+      rotate: none;
+      border: var(--plonk-border-width) solid var(--plonk-color-ink);
+      background: repeating-conic-gradient(
+          var(--plonk-color-ink) 0 25%,
+          var(--plonk-color-surface) 0 50%
+        )
+        0 0 / 2px 2px;
+      clip-path: none;
     }
     .plonk-card-header {
       align-items: center;
@@ -2718,8 +2745,10 @@
     .plonk-table-bulk[data-exiting] {
       animation: plonk-table-wipe-out 100ms steps(2, end) forwards;
     }
+    /* Çubuk ince: bant düğmelerin üstüne binmesin diye daha yukarıda. */
     .plonk-table-bulk[data-tape]::before {
-      display: none;
+      top: -0.85rem;
+      height: 1rem;
     }
     .plonk-table-bulk-grip {
       display: block;
@@ -2782,6 +2811,342 @@
         transition: none;
       }
     }
+  }
+
+  /* ---------- Çizgi Roman: temel bileşenler ---------- */
+
+  [data-plonk-personality="comic"] {
+    /* Basınca tıklanan yerde PAT!, ZAP! (motion/effects.ts). */
+    --plonk-press-effect: burst;
+
+    .plonk-toast-tape {
+      display: none;
+    }
+    /* Bant: mavi zemin üstünde beyaz baskı tramı, mürekkeple çizili. */
+    .plonk-card[data-tape]::before {
+      top: -0.75rem;
+      width: 6rem;
+      height: 1.45rem;
+      rotate: 2.5deg;
+      border: 2px solid var(--plonk-color-ink);
+      background:
+        radial-gradient(circle, rgb(255 255 255 / 0.6) 1.4px, transparent 1.9px)
+          0 0 / 7px 7px,
+        var(--plonk-color-secondary);
+      box-shadow: 2px 2px 0 var(--plonk-color-ink);
+      clip-path: none;
+    }
+
+    /* Basınca hız çizgisi gibi öne yatar. */
+    .plonk-button {
+      transition-property:
+        translate, box-shadow, background-color, color, transform;
+    }
+    .plonk-button:not(:disabled):is(:active, [data-pressed]) {
+      transform: skewX(-6deg);
+    }
+
+    /*
+     * Kart bir çizgi roman karesi: sağ üst köşede baskı tramı (nokta deseni).
+     * Üstteki geçiş tramı köşeden içeri doğru yüzey rengine eritir.
+     */
+    .plonk-card {
+      background-image:
+        linear-gradient(200deg, transparent 0%, var(--plonk-color-surface) 42%),
+        radial-gradient(
+          circle,
+          color-mix(in oklab, var(--plonk-color-secondary) 55%, transparent)
+            1.7px,
+          transparent 2.2px
+        );
+      background-size:
+        auto,
+        9px 9px;
+    }
+    /* Başlık anlatıcı kutusunda: sarı, eğik, karenin kenarına yapışık. */
+    .plonk-card-title {
+      display: inline-block;
+      padding: 0.2rem 0.6rem 0.05rem;
+      border: var(--plonk-border-width) solid var(--plonk-color-ink);
+      background: var(--plonk-color-accent);
+      color: var(--plonk-color-on-accent);
+      box-shadow: 3px 3px 0 var(--plonk-color-ink);
+      rotate: -1.5deg;
+    }
+
+    /*
+     * Switch: açıkken sarı zemin üstünde kırmızı düğme. Renk katman olarak
+     * değil, zeminin kendi "açık" rengi olarak verilir: kapanırken geçiş
+     * doğrudan sarıdan griye gider, arada yeşil görünmez.
+     */
+    .plonk-switch-track {
+      --plonk-color-success: var(--plonk-color-accent);
+    }
+    .plonk-switch-knob {
+      background-image: linear-gradient(
+        var(--plonk-color-primary),
+        var(--plonk-color-primary)
+      );
+    }
+
+    /* Dolgu düz renk değil, baskı tramı. */
+    .plonk-progress-fill {
+      background-image: radial-gradient(
+        circle,
+        color-mix(in oklab, var(--plonk-color-ink) 28%, transparent) 1.5px,
+        transparent 2px
+      );
+      background-size: 7px 7px;
+    }
+
+    /* Etiketler üzerine gelince patlar gibi büyüyüp yatar. */
+    .plonk-badge {
+      transition:
+        scale var(--plonk-motion-spring-duration)
+          var(--plonk-motion-spring-easing),
+        rotate var(--plonk-motion-spring-duration)
+          var(--plonk-motion-spring-easing);
+    }
+    @media (hover: hover) {
+      .plonk-badge:hover {
+        scale: 1.12;
+        rotate: -5deg;
+      }
+    }
+  }
+
+  /* ---------- Atari Salonu: temel bileşenler ---------- */
+
+  [data-plonk-personality="arcade"] {
+    /* Basınca düğmeden puan uçar (motion/effects.ts). */
+    --plonk-press-effect: score;
+    /* Sert gölgenin çevresinde neon parlama. */
+    --plonk-shadow-glow: 0 0 1.4rem -0.3rem var(--plonk-shadow-color);
+    /* Jetonlu makinenin kubbeli düğmeleri. */
+    --plonk-button-radius: var(--plonk-radius-pill);
+
+    .plonk-toast-tape {
+      display: none;
+    }
+    /* Bant yerine üstte neon bir "1UP" plakası; oyunlardaki gibi yanıp söner. */
+    .plonk-card[data-tape]::before {
+      content: "1UP";
+      top: -0.8rem;
+      width: auto;
+      height: auto;
+      padding: 0.2rem 0.65rem 0.1rem;
+      rotate: none;
+      border: 2px solid var(--plonk-color-secondary);
+      border-radius: var(--plonk-radius-pill);
+      background: var(--plonk-color-sunken);
+      box-shadow: 0 0 0.9rem -0.1rem var(--plonk-color-secondary);
+      color: var(--plonk-color-accent);
+      font-family: var(--plonk-font-display);
+      font-size: 0.75rem;
+      line-height: 1.2;
+      letter-spacing: 0.08em;
+      text-shadow: 1px 1px 0 var(--plonk-color-primary);
+      clip-path: none;
+      animation: plonk-arcade-blink 1600ms steps(1, end) infinite;
+    }
+
+    /* Kubbe: üst yarıda plastik parlaklık. */
+    .plonk-button:not([data-variant="ghost"], :disabled) {
+      background-image: linear-gradient(
+        rgb(255 255 255 / 0.42),
+        rgb(255 255 255 / 0) 55%
+      );
+    }
+
+    /* Başlık skor tabelası gibi: sarı, pembe gölgeli. */
+    .plonk-card-title {
+      color: var(--plonk-color-accent);
+      text-shadow: 2px 2px 0 var(--plonk-color-primary);
+    }
+
+    /* Yazı alanı kalkmaz; ekran gibi neon bir halka yanar. */
+    .plonk-field:not(button):focus-within,
+    .plonk-field[data-focus-visible],
+    .plonk-field[aria-expanded="true"],
+    .plonk-field:has([aria-expanded="true"]) {
+      translate: none;
+      box-shadow:
+        0 0 0 3px var(--plonk-color-secondary),
+        0 0 1.4rem -0.2rem var(--plonk-color-secondary);
+    }
+
+    /* İşaretlenince kutu üç kare yanıp söner. */
+    .plonk-control:checked {
+      animation: plonk-arcade-flash 300ms steps(1, end);
+    }
+
+    /* Switch: açıkken camgöbeği zemin üstünde pembe joystick topu. */
+    .plonk-switch-track {
+      --plonk-color-success: var(--plonk-color-secondary);
+    }
+    .plonk-switch-knob {
+      background-image: radial-gradient(
+        circle at 35% 32%,
+        rgb(255 255 255 / 0.9) 0 2px,
+        var(--plonk-color-primary) 3.5px
+      );
+    }
+
+    /* Enerji barı: çizgiler akar. */
+    .plonk-progress-fill {
+      background-image: repeating-linear-gradient(
+        -45deg,
+        transparent 0 8px,
+        rgb(0 0 0 / 0.16) 8px 16px
+      );
+      background-size: 22.6px 22.6px;
+      animation: plonk-arcade-energy 800ms linear infinite;
+    }
+    [data-indeterminate] > .plonk-progress-fill {
+      animation:
+        plonk-progress-slide 1400ms steps(10, jump-none) infinite,
+        plonk-arcade-energy 800ms linear infinite;
+    }
+
+    /* Etiketin üzerine gelince "INSERT COIN" gibi yanıp söner. */
+    @media (hover: hover) {
+      .plonk-badge:hover {
+        animation: plonk-arcade-blink 400ms steps(1, end) 3;
+      }
+    }
+  }
+  [data-plonk-motion="reduce"] [data-plonk-personality="arcade"],
+  [data-plonk-personality="arcade"][data-plonk-motion="reduce"] {
+    .plonk-progress-fill,
+    .plonk-control:checked,
+    .plonk-badge:hover,
+    .plonk-card[data-tape]::before {
+      animation: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-plonk-personality="arcade"] {
+      .plonk-progress-fill,
+      .plonk-control:checked,
+      .plonk-badge:hover,
+      .plonk-card[data-tape]::before {
+        animation: none;
+      }
+    }
+  }
+
+  /* ---------- Basma efektleri (motion/effects.ts) ---------- */
+
+  /* Çizgi Roman: tıklanan yerde yıldız balonun içinde bir ses. */
+  .plonk-fx-burst {
+    position: fixed;
+    z-index: 2147483000;
+    display: grid;
+    width: 3.6rem;
+    aspect-ratio: 1;
+    place-items: center;
+    translate: -50% -60%;
+    rotate: var(--plonk-fx-tilt, 0deg);
+    background: var(--plonk-color-ink);
+    clip-path: polygon(
+      50% 0%,
+      58.5% 13%,
+      71.7% 5%,
+      71.2% 23.4%,
+      89.1% 18.8%,
+      84.2% 33.5%,
+      98.7% 38.9%,
+      84% 50%,
+      98.7% 61.1%,
+      84.2% 66.5%,
+      89.1% 81.2%,
+      71.2% 76.6%,
+      71.7% 95%,
+      58.5% 87%,
+      50% 100%,
+      42.4% 83.1%,
+      28.3% 95%,
+      26.3% 79.7%,
+      10.9% 81.2%,
+      19.4% 64.8%,
+      1.3% 61.1%,
+      12% 50%,
+      1.3% 38.9%,
+      19.4% 35.2%,
+      10.9% 18.8%,
+      26.3% 20.3%,
+      28.3% 5%,
+      42.4% 16.9%
+    );
+    pointer-events: none;
+    animation: plonk-fx-burst 620ms ease-out both;
+  }
+  .plonk-fx-burst::before {
+    content: "";
+    position: absolute;
+    inset: var(--plonk-border-width);
+    background: var(--plonk-color-accent);
+    clip-path: polygon(
+      50% 0%,
+      58.5% 13%,
+      71.7% 5%,
+      71.2% 23.4%,
+      89.1% 18.8%,
+      84.2% 33.5%,
+      98.7% 38.9%,
+      84% 50%,
+      98.7% 61.1%,
+      84.2% 66.5%,
+      89.1% 81.2%,
+      71.2% 76.6%,
+      71.7% 95%,
+      58.5% 87%,
+      50% 100%,
+      42.4% 83.1%,
+      28.3% 95%,
+      26.3% 79.7%,
+      10.9% 81.2%,
+      19.4% 64.8%,
+      1.3% 61.1%,
+      12% 50%,
+      1.3% 38.9%,
+      19.4% 35.2%,
+      10.9% 18.8%,
+      26.3% 20.3%,
+      28.3% 5%,
+      42.4% 16.9%
+    );
+  }
+  .plonk-fx-burst > span {
+    position: relative;
+    color: var(--plonk-color-primary);
+    font-family: var(--plonk-font-display);
+    font-size: 0.9rem;
+    line-height: 1;
+    letter-spacing: 0.03em;
+    -webkit-text-stroke: 1px var(--plonk-color-ink);
+    paint-order: stroke fill;
+    text-shadow: 2px 2px 0 var(--plonk-color-ink);
+  }
+
+  /* Atari: düğmeden puan yükselir, sonunda yanıp sönerek kaybolur. */
+  .plonk-fx-score {
+    position: fixed;
+    z-index: 2147483000;
+    translate: -50% -100%;
+    color: var(--plonk-color-accent);
+    font-family: var(--plonk-font-display);
+    font-size: 1.3rem;
+    line-height: 1;
+    text-shadow: 3px 3px 0 var(--plonk-color-primary);
+    white-space: nowrap;
+    pointer-events: none;
+    animation: plonk-fx-score 900ms ease-out both;
+  }
+
+  /* Hareket azaltılınca: efekt yerinde belirip söner; büyüme ve uçuş yok. */
+  :is(.plonk-fx-burst, .plonk-fx-score)[data-reduce] {
+    animation: plonk-fx-fade 700ms ease-out both;
   }
 
   /* ---------- Avatar grubu: üst üste biner, üzerine gelince kalkar ---------- */
@@ -3424,5 +3789,85 @@
 @keyframes plonk-table-wipe-out {
   to {
     clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes plonk-fx-burst {
+  0% {
+    scale: 0.2;
+    opacity: 1;
+  }
+  30% {
+    scale: 1.15;
+  }
+  50% {
+    scale: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    scale: 1.04;
+    opacity: 0;
+  }
+}
+
+@keyframes plonk-fx-score {
+  0% {
+    transform: translateY(0) scale(0.6);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(-0.9rem) scale(1.15);
+    opacity: 1;
+  }
+  70%,
+  80%,
+  90% {
+    opacity: 1;
+  }
+  75%,
+  85%,
+  95%,
+  100% {
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(-4.25rem) scale(1);
+  }
+}
+
+@keyframes plonk-fx-fade {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  15%,
+  70% {
+    opacity: 1;
+  }
+}
+
+@keyframes plonk-arcade-flash {
+  0% {
+    background-color: var(--plonk-color-surface);
+  }
+  33% {
+    background-color: var(--plonk-color-accent);
+  }
+  66% {
+    background-color: var(--plonk-color-surface);
+  }
+}
+
+@keyframes plonk-arcade-energy {
+  to {
+    background-position: 22.6px 0;
+  }
+}
+
+@keyframes plonk-arcade-blink {
+  50% {
+    opacity: 0.25;
   }
 }

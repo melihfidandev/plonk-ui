@@ -2,6 +2,7 @@
 
 import { useRef, type ChangeEvent, type ComponentPropsWithRef } from "react";
 import { cn } from "../../lib/cn";
+import { playPressEffect } from "../../motion/effects";
 import { playJelly } from "../../motion/jelly";
 import {
   FieldDescription,
@@ -33,7 +34,10 @@ export function Switch({
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange?.(e);
-    if (knobRef.current) playJelly(knobRef.current, "squish");
+    if (!knobRef.current) return;
+    playJelly(knobRef.current, "squish");
+    // Kişiliğin imza efekti sadece açılırken (PAT!, +100).
+    if (e.target.checked) playPressEffect(knobRef.current);
   };
 
   return (
@@ -51,7 +55,7 @@ export function Switch({
           />
           <span
             aria-hidden="true"
-            className="absolute inset-0 rounded-plonk-pill bg-plonk-sunken transition-colors plonk-motion-snap plonk-border group-has-checked:bg-plonk-success group-has-disabled:border-dashed!"
+            className="plonk-switch-track absolute inset-0 rounded-plonk-pill bg-plonk-sunken transition-colors plonk-motion-snap plonk-border group-has-checked:bg-plonk-success group-has-disabled:border-dashed!"
           />
           <span
             aria-hidden="true"
@@ -59,7 +63,7 @@ export function Switch({
           >
             <span
               ref={knobRef}
-              className="block size-full rounded-plonk-pill bg-plonk-surface plonk-border group-has-disabled:bg-plonk-sunken"
+              className="plonk-switch-knob block size-full rounded-plonk-pill bg-plonk-surface plonk-border group-has-disabled:bg-plonk-sunken"
             />
           </span>
         </span>
