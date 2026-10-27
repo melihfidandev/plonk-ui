@@ -52,7 +52,7 @@ const MAX_VISIBLE = 3;
  * catch'inden, bir store'dan) toast açılabilsin diye modül düzeyinde.
  * Görüntüleyen, en dıştaki `PlonkProvider`'ın açtığı bildirim bölgesidir.
  */
-export const toastQueue = new ToastQueue<ToastContent>({
+export const toastQueue = /* @__PURE__ */ new ToastQueue<ToastContent>({
   maxVisibleToasts: MAX_VISIBLE,
 });
 
@@ -109,7 +109,7 @@ const shortcut =
  * toast.dismiss(id);
  * ```
  */
-export const toast = Object.assign(
+export const toast = /* @__PURE__ */ Object.assign(
   (title: ReactNode, options?: ToastOptions) => show(title, options),
   {
     info: shortcut("info"),

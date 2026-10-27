@@ -25,7 +25,7 @@ import { Calendar, RangeCalendar, type CalendarPreset } from "./Calendar";
 
 const noop = () => () => {};
 /** Sunucu render'ında React Aria "bugün"ü okumasın diye sabit yer tutucu. */
-const SERVER_PLACEHOLDER = new CalendarDate(2000, 1, 1);
+const SERVER_PLACEHOLDER = /* @__PURE__ */ new CalendarDate(2000, 1, 1);
 
 const useIsClient = () =>
   useSyncExternalStore(
