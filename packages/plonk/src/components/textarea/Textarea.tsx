@@ -41,7 +41,7 @@ export function Textarea({
   const boxRef = useShakeOnInvalid<HTMLDivElement>(field.invalid);
 
   return (
-    <div className={cn("grid gap-1.5", className)}>
+    <div className={cn("flex flex-col gap-1.5", className)}>
       {label && (
         <FieldLabel htmlFor={field.id} required={required}>
           {label}

@@ -169,7 +169,12 @@
     transition-timing-function: var(--plonk-motion-spring-easing);
     transition-duration: var(--plonk-motion-spring-duration);
   }
-  .plonk-field:focus-within,
+  /*
+   * Yazı alanlarında tıklayınca da (imleç orada), düğme olan alanlarda
+   * (Select) sadece klavye odağında; fareyle seçene odak gölgesi takılmasın.
+   */
+  .plonk-field:not(button):focus-within,
+  .plonk-field[data-focus-visible],
   .plonk-field[aria-expanded="true"],
   .plonk-field:has([aria-expanded="true"]) {
     translate: calc(var(--plonk-shadow-x) * -0.5)
@@ -591,6 +596,36 @@
 
   /* ---------- Menu, Select, ComboBox listeleri ---------- */
 
+  /*
+   * Liste, tıklanan noktadan değil tetikleyiciye bakan kenarından açılır ve
+   * eğilmez. Select fareye basınca açılıp bırakınca imlecin altındaki seçeneği
+   * seçtiği için, liste hiçbir karede tetikleyicinin üstüne taşmamalı.
+   */
+  .plonk-list {
+    transform-origin: top center;
+  }
+  .plonk-list[data-placement="top"] {
+    transform-origin: bottom center;
+  }
+  .plonk-list[data-placement="left"] {
+    transform-origin: right center;
+  }
+  .plonk-list[data-placement="right"] {
+    transform-origin: left center;
+  }
+  /*
+   * Seçim yapınca liste hemen tepki versin: ilk karede belirgin solan, kısa
+   * bir çıkış (ease-out). Genel exit eğrisi yavaş başladığı için gecikmeli
+   * hissettiriyordu.
+   */
+  .plonk-list[data-exiting] {
+    animation: plonk-fade-out 100ms cubic-bezier(0.2, 0, 0, 1) forwards;
+  }
+  .plonk-list[data-entering] {
+    animation: plonk-list-in var(--plonk-motion-enter-duration)
+      var(--plonk-motion-enter-easing);
+  }
+
   .plonk-item {
     transition: background-color var(--plonk-motion-press-duration)
       var(--plonk-motion-press-easing);
@@ -599,11 +634,32 @@
   .plonk-item-shortcut {
     color: var(--plonk-color-ink-muted);
   }
-  .plonk-item[data-focused] {
+  .plonk-item:is([data-hovered], [data-focus-visible]) {
     background: var(--plonk-color-primary);
     color: var(--plonk-color-on-primary);
   }
-  .plonk-item[data-focused] :is(.plonk-item-description, .plonk-item-shortcut) {
+  /*
+   * Kapanırken odak vurgusu gösterme: React Aria kapanış sırasında ilk
+   * seçeneğe odak verebiliyor; kapanan listede bir an sarı yanıp sönmesin.
+   */
+  .plonk-list[data-exiting]
+    .plonk-item:is([data-hovered], [data-focus-visible]) {
+    background: transparent;
+    color: inherit;
+  }
+  .plonk-item:is([data-hovered], [data-focus-visible])
+    :is(.plonk-item-description, .plonk-item-shortcut) {
+    color: inherit;
+  }
+  /*
+   * Vurgu odağa değil niyete bağlı: fareyle üstüne gelinen ya da klavyeyle
+   * gelinen seçenek. Safari fareyle tıklanan düğmeye odak vermediği için React
+   * Aria kapanırken odağı bir an ilk seçeneğe veriyor; "odak" vurgusu orada
+   * sarı yanıp sönüyordu. Klavye kullanılırken fareyle kalan vurgu silinir.
+   */
+  .plonk-list:has([data-focus-visible])
+    .plonk-item[data-hovered]:not([data-focus-visible]) {
+    background: transparent;
     color: inherit;
   }
   .plonk-item[data-variant="danger"] {
@@ -613,7 +669,7 @@
       var(--plonk-color-ink)
     );
   }
-  .plonk-item[data-variant="danger"][data-focused] {
+  .plonk-item[data-variant="danger"]:is([data-hovered], [data-focus-visible]) {
     background: var(--plonk-color-danger);
     color: var(--plonk-color-on-danger);
   }
@@ -688,7 +744,7 @@
 
   /* Retro: eski Mac menüleri gibi, odaktaki satır tersine döner (siyah zemin). */
   [data-plonk-personality="retro"] {
-    .plonk-item[data-focused] {
+    .plonk-item:is([data-hovered], [data-focus-visible]) {
       background: var(--plonk-color-ink);
       color: var(--plonk-color-surface);
     }
@@ -703,6 +759,90 @@
   @media (prefers-reduced-motion: reduce) {
     [data-plonk-personality] .plonk-list[data-entering] .plonk-item {
       animation: none;
+    }
+  }
+
+  /* ---------- Tabs ---------- */
+
+  .plonk-tab {
+    color: var(--plonk-color-ink-muted);
+    transition: color var(--plonk-motion-snap-duration)
+      var(--plonk-motion-snap-easing);
+  }
+  .plonk-tab[data-selected] {
+    color: var(--plonk-color-on-primary);
+  }
+  @media (hover: hover) {
+    .plonk-tab:not([data-selected], [data-disabled]):hover {
+      color: var(--plonk-color-ink);
+    }
+  }
+  /*
+   * Gösterge: TabList seçili sekmeyi ölçüp --plonk-tab-* değişkenlerine yazar.
+   * Sticker'da yay hedefi aşar; varışta jöleyle ezilip uzar (playJelly).
+   */
+  .plonk-tab-indicator {
+    translate: var(--plonk-tab-x, 0) var(--plonk-tab-y, 0);
+    width: var(--plonk-tab-w, 0);
+    height: var(--plonk-tab-h, 0);
+    background: var(--plonk-color-primary);
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+  }
+  .plonk-tab-indicator[data-ready] {
+    transition-property: translate, width, height;
+    transition-duration: var(--plonk-motion-snap-duration);
+    transition-timing-function: var(--plonk-motion-snap-easing);
+  }
+  .plonk-tab-panel {
+    animation: plonk-panel-in var(--plonk-motion-enter-duration)
+      var(--plonk-motion-enter-easing);
+  }
+
+  [data-plonk-personality="retro"] {
+    .plonk-tab-indicator {
+      background: var(--plonk-color-ink);
+      border-color: var(--plonk-color-ink);
+    }
+    .plonk-tab[data-selected] {
+      color: var(--plonk-color-surface);
+    }
+    .plonk-tab-panel {
+      animation: none;
+    }
+  }
+
+  /* ---------- Accordion ---------- */
+
+  /*
+   * React Aria panelin gerçek yüksekliğini --disclosure-panel-height'a yazar.
+   * Açılırken yay (hedefi biraz aşar), kapanırken kısa ve sade.
+   */
+  .plonk-accordion-panel {
+    height: var(--disclosure-panel-height);
+    overflow: clip;
+    transition: height var(--plonk-motion-exit-duration)
+      var(--plonk-motion-exit-easing);
+  }
+  [data-expanded] > .plonk-accordion-panel {
+    transition-duration: var(--plonk-motion-spring-duration);
+    transition-timing-function: var(--plonk-motion-spring-easing);
+  }
+  .plonk-accordion-item[data-expanded] {
+    background: color-mix(
+      in oklab,
+      var(--plonk-color-primary) 18%,
+      var(--plonk-color-surface)
+    );
+  }
+
+  [data-plonk-motion="reduce"] {
+    .plonk-tab-panel {
+      animation: plonk-fade-in 150ms ease-out;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-plonk-personality] .plonk-tab-panel {
+      animation: plonk-fade-in 150ms ease-out;
     }
   }
 
@@ -991,5 +1131,19 @@
   from {
     opacity: 0;
     translate: 0 -0.4rem;
+  }
+}
+
+@keyframes plonk-panel-in {
+  from {
+    opacity: 0;
+    translate: 0 0.6rem;
+  }
+}
+
+@keyframes plonk-list-in {
+  from {
+    opacity: 0;
+    scale: 1 0.75;
   }
 }

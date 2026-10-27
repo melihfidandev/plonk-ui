@@ -78,7 +78,7 @@ export function RadioGroup({
       {...props}
       disabled={disabled}
       aria-describedby={field.describedBy}
-      className={cn("grid min-w-0 gap-1.5", className)}
+      className={cn("flex min-w-0 flex-col gap-1.5", className)}
     >
       {label && (
         <legend className="mb-1.5 text-sm font-bold text-plonk-ink">
@@ -154,7 +154,7 @@ export function Radio({
   };
 
   return (
-    <div className={cn("grid gap-0.5", className)}>
+    <div className={cn("flex flex-col gap-0.5", className)}>
       <div className="flex items-start gap-3">
         <span
           ref={dotRef}

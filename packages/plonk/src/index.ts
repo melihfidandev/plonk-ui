@@ -5,6 +5,7 @@ export {
   usePersonality,
   type PlonkProviderProps,
 } from "./provider/PlonkProvider";
+export * from "./components/accordion";
 export * from "./components/avatar";
 export * from "./components/badge";
 export * from "./components/button";
@@ -22,6 +23,7 @@ export * from "./components/progress";
 export * from "./components/radio";
 export * from "./components/select";
 export * from "./components/switch";
+export * from "./components/tabs";
 export * from "./components/textarea";
 export * from "./components/tooltip";
 export * from "./tokens";

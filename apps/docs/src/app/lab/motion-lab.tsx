@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  Accordion,
+  AccordionItem,
   Avatar,
   AvatarGroup,
   Badge,
@@ -36,6 +38,10 @@ import {
   Select,
   SelectItem,
   Switch,
+  Tab,
+  TabList,
+  TabPanel,
+  Tabs,
   Textarea,
   Tooltip,
   TooltipTrigger,
@@ -189,6 +195,13 @@ export function MotionLab() {
             note="Aç, Tab ile gez, Esc ile kapat: odak içeride kalır ve kapanınca açan düğmeye döner."
           >
             <DialogLab />
+          </Section>
+
+          <Section
+            title="Tabs, Accordion"
+            note="Sekmeler arasında gez: gösterge yayla kayıp ezilir. Ok tuşları da çalışır. Accordion'da yükseklik yayla açılır."
+          >
+            <StructureLab />
           </Section>
 
           <Section
@@ -631,6 +644,64 @@ function DialogLab() {
   );
 }
 
+function StructureLab() {
+  return (
+    <div className="grid gap-12 lg:grid-cols-2">
+      <Tabs>
+        <TabList aria-label="Proje ayarları">
+          <Tab id="general">Genel</Tab>
+          <Tab id="team">Ekip üyeleri</Tab>
+          <Tab id="billing" isDisabled>
+            Fatura
+          </Tab>
+          <Tab id="security">Güvenlik</Tab>
+        </TabList>
+        <TabPanel id="general">
+          <Card title="Genel">
+            <div className="grid gap-4">
+              <Input label="Proje adı" defaultValue="Plonk docs" />
+              <Switch label="Herkese açık" defaultChecked />
+            </div>
+          </Card>
+        </TabPanel>
+        <TabPanel id="team">
+          <Card
+            title="Ekip üyeleri"
+            actions={<Badge variant="secondary">6</Badge>}
+          >
+            <AvatarGroup max={5} aria-label="Ekip">
+              {TEAM.map((n) => (
+                <Avatar key={n} name={n} />
+              ))}
+            </AvatarGroup>
+          </Card>
+        </TabPanel>
+        <TabPanel id="billing">Fatura</TabPanel>
+        <TabPanel id="security">
+          <Card title="Güvenlik">
+            <Checkbox label="İki adımlı doğrulama" defaultChecked />
+          </Card>
+        </TabPanel>
+      </Tabs>
+
+      <Accordion defaultExpandedKeys={["free"]}>
+        <AccordionItem id="free" title="Plonk ücretli mi?">
+          Hayır. Açık kaynak ve ücretsiz; bir portfolyo projesi olduğu için
+          aktif destek verilmiyor.
+        </AccordionItem>
+        <AccordionItem id="personalities" title="Kaç kişilik var?">
+          Şimdilik iki: Sticker ve Eski Bilgisayar. Çizgi Roman ve Atari Salonu
+          sırada.
+        </AccordionItem>
+        <AccordionItem id="fonts" title="Kendi fontumu kullanabilir miyim?">
+          Evet. --plonk-font-display ve --plonk-font-body token&apos;larını
+          değiştirmen yeterli; bizim fontlar o zaman hiç indirilmez.
+        </AccordionItem>
+      </Accordion>
+    </div>
+  );
+}
+
 const CITIES = [
   "Adana",
   "Ankara",
@@ -670,7 +741,7 @@ function SelectionLab() {
 
   return (
     <div className="grid gap-10 lg:grid-cols-2">
-      <div className="grid content-start gap-6">
+      <div className="grid content-start justify-items-start gap-6">
         <div className="flex flex-wrap items-center gap-4">
           <MenuTrigger>
             <Button variant="neutral" iconEnd={<Icon d="m6 9 6 6 6-6" />}>

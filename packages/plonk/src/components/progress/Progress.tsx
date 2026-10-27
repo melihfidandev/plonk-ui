@@ -51,7 +51,7 @@ export function Progress({
   const text = indeterminate ? undefined : formatValue(clamped, max);
 
   return (
-    <div className={cn("grid gap-1.5", className)}>
+    <div className={cn("flex flex-col gap-1.5", className)}>
       {(label != null || (showValue && text)) && (
         <div className="flex items-baseline justify-between gap-3 text-sm font-bold">
           {label != null && <span id={labelId}>{label}</span>}

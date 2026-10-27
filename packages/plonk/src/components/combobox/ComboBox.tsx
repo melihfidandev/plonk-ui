@@ -60,7 +60,7 @@ export function ComboBox<T extends object>({
       allowsEmptyCollection
       {...props}
       isInvalid={invalid || props.isInvalid}
-      className={cn("grid gap-1.5", className)}
+      className={cn("flex flex-col gap-1.5", className)}
     >
       {label != null && (
         <Label className="text-sm font-bold text-plonk-ink">

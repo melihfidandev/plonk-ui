@@ -37,7 +37,7 @@ export function Switch({
   };
 
   return (
-    <div className={cn("grid gap-1", className)}>
+    <div className={cn("flex flex-col gap-1", className)}>
       <div className="flex items-start gap-3">
         <span className="group relative inline-flex h-8 w-14 shrink-0">
           <input
