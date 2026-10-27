@@ -2075,6 +2075,275 @@
     }
   }
 
+  /* ---------- Komut paleti ---------- */
+
+  /*
+   * Pencere katmanı Dialog'unki (plonk-dialog + plonk-card): Retro'nun zoom
+   * çerçeveleri ve başlık çubuğu, hareket azaltma kuralları oradan gelir.
+   * Sticker'da palet yukarıdan masaya düşen bir not; yere jöleyle oturur.
+   */
+  .plonk-command {
+    transform-origin: 50% 0;
+  }
+  .plonk-command[data-entering] {
+    animation:
+      plonk-command-drop 280ms cubic-bezier(0.5, 0, 0.85, 0.4),
+      plonk-toast-land var(--plonk-jelly-duration) ease-out 280ms;
+  }
+  .plonk-command-title {
+    display: none;
+  }
+  .plonk-command-search {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1rem;
+    border-bottom: var(--plonk-border-width) dashed var(--plonk-color-ink);
+  }
+  .plonk-command-search-icon {
+    flex: none;
+    width: 1.15rem;
+    height: 1.15rem;
+    color: var(--plonk-color-ink-muted);
+  }
+  .plonk-command-input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: none;
+    background: none;
+    color: var(--plonk-color-ink);
+    font-size: 1.0625rem;
+    font-weight: 700;
+  }
+  .plonk-command-input::placeholder {
+    color: var(--plonk-color-ink-muted);
+    font-weight: 600;
+  }
+  .plonk-command-crumb {
+    flex: none;
+    padding: 0.3rem 0.6rem 0.15rem;
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-radius: var(--plonk-radius-pill);
+    background: var(--plonk-color-primary);
+    color: var(--plonk-color-on-primary);
+    font-family: var(--plonk-font-display);
+    font-size: 0.8rem;
+    font-weight: 800;
+    rotate: calc(var(--plonk-tilt) * -2);
+    animation: plonk-tooltip-in var(--plonk-motion-spring-duration)
+      var(--plonk-motion-spring-easing);
+  }
+
+  .plonk-command-list {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    padding: 0.4rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  /* Alt sayfaya geçiş: liste sayfa gibi döner. */
+  .plonk-command-list[data-turn="in"] {
+    animation: plonk-command-page-in var(--plonk-motion-spring-duration)
+      var(--plonk-motion-spring-easing);
+  }
+  .plonk-command-list[data-turn="out"] {
+    animation: plonk-command-page-out var(--plonk-motion-spring-duration)
+      var(--plonk-motion-spring-easing);
+  }
+  /* Seçili satırın vurgusu: satırdan satıra yayla kayar, yolda ezilir. */
+  .plonk-command-indicator {
+    position: absolute;
+    top: 0;
+    inset-inline: 0.4rem;
+    height: var(--plonk-command-h, 0);
+    translate: 0 var(--plonk-command-y, 0);
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-radius: var(--plonk-radius-md);
+    background: var(--plonk-color-primary);
+    box-shadow: calc(var(--plonk-shadow-x) * 0.5)
+      calc(var(--plonk-shadow-y) * 0.5) 0 var(--plonk-shadow-color);
+    opacity: 0;
+    pointer-events: none;
+    transition-property: translate, height;
+    transition-timing-function: var(--plonk-motion-spring-easing);
+    transition-duration: var(--plonk-motion-spring-duration);
+  }
+  .plonk-command-indicator[data-visible] {
+    opacity: 1;
+  }
+  .plonk-command-indicator[data-squish] {
+    animation: plonk-command-squish 420ms ease-out;
+  }
+  .plonk-command-group + .plonk-command-group {
+    margin-top: 0.25rem;
+  }
+  .plonk-command-heading {
+    padding: 0.6rem 0.65rem 0.3rem;
+    color: var(--plonk-color-ink-muted);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .plonk-command-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 2.6rem;
+    padding: 0.45rem 0.65rem;
+    border-radius: var(--plonk-radius-md);
+    font-weight: 700;
+    user-select: none;
+    cursor: pointer;
+  }
+  .plonk-command-item[data-active] {
+    color: var(--plonk-color-on-primary);
+  }
+  .plonk-command-item[aria-disabled="true"] {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .plonk-command-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.25rem;
+  }
+  .plonk-command-icon > svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+  .plonk-command-label mark {
+    background: none;
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 2.5px;
+    text-underline-offset: 3px;
+  }
+  .plonk-command-description {
+    color: var(--plonk-color-ink-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .plonk-command-item[data-active] .plonk-command-description {
+    color: color-mix(in oklab, currentColor 75%, transparent);
+  }
+  .plonk-command-shortcut {
+    flex: none;
+    padding: 0 0.35rem;
+    border: 2px solid currentColor;
+    border-bottom-width: 3px;
+    border-radius: var(--plonk-radius-sm);
+    font-family: var(--plonk-font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .plonk-command-chevron {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+  }
+  .plonk-command-loading,
+  .plonk-command-empty {
+    padding: 1rem 0.65rem;
+    color: var(--plonk-color-ink-muted);
+    font-weight: 600;
+    text-align: center;
+  }
+  .plonk-command-loading {
+    animation: plonk-command-pulse 1s ease-in-out infinite alternate;
+  }
+  .plonk-command-empty {
+    display: none;
+  }
+  .plonk-command-list:not(:has([role="option"], [data-loading]))
+    .plonk-command-empty {
+    display: block;
+  }
+  .plonk-command-trigger:hover {
+    color: var(--plonk-color-ink);
+  }
+  .plonk-command-trigger:focus-visible {
+    outline: 3px solid var(--plonk-color-focus);
+    outline-offset: 2px;
+  }
+
+  /*
+   * Retro: "Çalıştır…" penceresi. Arama kutusu çerçeveli, imleç blok;
+   * seçim ters renkli bir şerit ve adım adım atlar.
+   */
+  [data-plonk-personality="retro"] {
+    .plonk-command-title {
+      display: flex;
+    }
+    .plonk-command-search {
+      margin: 0.6rem 0.6rem 0;
+      padding: 0.5rem 0.6rem;
+      border: var(--plonk-border-width) solid var(--plonk-color-ink);
+      background: var(--plonk-color-sunken);
+    }
+    .plonk-command-input {
+      font-size: 0.95rem;
+      font-weight: 600;
+      caret-color: var(--plonk-color-ink);
+      caret-shape: block;
+    }
+    .plonk-command-crumb {
+      padding: 0.2rem 0.4rem;
+      border: 0;
+      background: var(--plonk-color-ink);
+      color: var(--plonk-color-surface);
+      font-weight: 400;
+      text-transform: uppercase;
+      rotate: none;
+      animation: none;
+    }
+    .plonk-command-list[data-turn] {
+      animation: none;
+    }
+    .plonk-command-indicator {
+      border: 0;
+      background: var(--plonk-color-ink);
+      box-shadow: none;
+    }
+    .plonk-command-heading {
+      margin: 0 0.25rem 0.25rem;
+      padding-left: 0.25rem;
+      border-bottom: var(--plonk-border-width) solid var(--plonk-color-ink);
+      color: var(--plonk-color-ink);
+      font-family: var(--plonk-font-display);
+      font-weight: 400;
+    }
+    .plonk-command-item {
+      font-weight: 600;
+    }
+    .plonk-command-item[data-active],
+    .plonk-command-item[data-active] .plonk-command-description {
+      color: var(--plonk-color-surface);
+    }
+    .plonk-command-loading {
+      animation: plonk-dot-blink 1s steps(2, jump-none) infinite;
+    }
+  }
+
+  [data-plonk-motion="reduce"] {
+    .plonk-command-list[data-turn],
+    .plonk-command-loading {
+      animation: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-plonk-personality] {
+      .plonk-command-list[data-turn],
+      .plonk-command-loading {
+        animation: none;
+      }
+    }
+  }
+
   /* ---------- Avatar grubu: üst üste biner, üzerine gelince kalkar ---------- */
 
   .plonk-avatar-group > .plonk-avatar {
@@ -2622,5 +2891,48 @@
 @keyframes plonk-slider-hop {
   from {
     translate: 0 -2px;
+  }
+}
+
+@keyframes plonk-command-drop {
+  from {
+    opacity: 0;
+    translate: 0 -3rem;
+    rotate: -4deg;
+    scale: 1.08;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+@keyframes plonk-command-squish {
+  30% {
+    scale: calc(1 + 0.04 * var(--plonk-jelly-amount))
+      calc(1 - 0.14 * var(--plonk-jelly-amount));
+  }
+  60% {
+    scale: calc(1 - 0.01 * var(--plonk-jelly-amount))
+      calc(1 + 0.04 * var(--plonk-jelly-amount));
+  }
+}
+
+@keyframes plonk-command-page-in {
+  from {
+    opacity: 0;
+    transform: perspective(600px) rotateY(55deg);
+  }
+}
+
+@keyframes plonk-command-page-out {
+  from {
+    opacity: 0;
+    transform: perspective(600px) rotateY(-55deg);
+  }
+}
+
+@keyframes plonk-command-pulse {
+  to {
+    opacity: 0.45;
   }
 }

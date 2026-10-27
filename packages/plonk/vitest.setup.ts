@@ -30,3 +30,13 @@ if (
     value: () => {},
   });
 }
+
+// jsdom'da kaydırma yok; komut paleti etkin satırı görünür alana kaydırıyor.
+if (
+  typeof Element !== "undefined" &&
+  !("scrollIntoView" in Element.prototype)
+) {
+  Object.defineProperty(Element.prototype, "scrollIntoView", {
+    value: () => {},
+  });
+}

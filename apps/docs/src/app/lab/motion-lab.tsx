@@ -11,6 +11,11 @@ import {
   Card,
   Checkbox,
   cn,
+  CommandGroup,
+  CommandItem,
+  CommandPage,
+  CommandPalette,
+  CommandPaletteTrigger,
   ComboBox,
   ComboBoxItem,
   contrastRatio,
@@ -62,7 +67,7 @@ import {
   type PersonalityName,
   type ToastPlacement,
 } from "plonk";
-import { useState, useSyncExternalStore } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
 
 // Tailwind'in sınıfları görebilmesi için tam adlarıyla.
 const MOTION_CLASS: Record<MotionToken, string> = {
@@ -203,6 +208,18 @@ export function MotionLab() {
             </h2>
             <p className="mt-3 max-w-prose text-lg">{p.description}</p>
           </section>
+
+          <Section
+            title="Komut paleti"
+            note="⌘K / Ctrl+K ya da arama kutusuna tıkla. Yaz (bulanık arama: “yfat”), ok tuşlarıyla gez, Enter. “Tema değiştir” alt sayfa açar: Backspace ya da Esc ile geri. 2+ harf yazınca müşteri araması (sahte sunucu) gelir."
+          >
+            <div className="max-w-sm">
+              <CommandPaletteTrigger>
+                Komut ya da müşteri ara…
+              </CommandPaletteTrigger>
+            </div>
+            <CommandLab onPersonality={choose} />
+          </Section>
 
           <Section
             title="Slider"
@@ -594,6 +611,117 @@ function FormLab() {
         />
       </div>
     </div>
+  );
+}
+
+const CUSTOMERS = [
+  "Acme Ltd.",
+  "Atlas Lojistik",
+  "Ayşe Yılmaz",
+  "Bora Tekstil",
+  "Çınar Gıda",
+  "Deniz Yapı",
+  "İpek Kozmetik",
+  "Işık Elektrik",
+];
+
+function CommandLab({
+  onPersonality,
+}: {
+  onPersonality: (n: PersonalityName) => void;
+}) {
+  const [results, setResults] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const request = useRef(0);
+
+  // Sahte sunucu: 600 ms sonra eşleşen müşteriler.
+  const searchCustomers = (search: string) => {
+    const id = ++request.current;
+    if (search.trim().length < 2) {
+      setLoading(false);
+      setResults([]);
+      return;
+    }
+    setLoading(true);
+    setTimeout(() => {
+      if (id !== request.current) return;
+      const q = search.toLocaleLowerCase("tr");
+      setResults(
+        CUSTOMERS.filter((c) => c.toLocaleLowerCase("tr").includes(q)),
+      );
+      setLoading(false);
+    }, 600);
+  };
+  const done = (what: string) => () => toast.success(what, { label: "Tamam" });
+
+  return (
+    <CommandPalette
+      title="Çalıştır…"
+      placeholder="Ne yapmak istiyorsun?"
+      emptyLabel="Sonuç yok"
+      onSearchChange={searchCustomers}
+    >
+      <CommandGroup heading="Sayfalar">
+        <CommandItem icon="📊" onAction={done("Panel açıldı")}>
+          Panel
+        </CommandItem>
+        <CommandItem icon="🧾" onAction={done("Faturalar açıldı")}>
+          Faturalar
+        </CommandItem>
+        <CommandItem
+          icon="👥"
+          keywords={["kişiler", "rehber"]}
+          onAction={done("Müşteriler açıldı")}
+        >
+          Müşteriler
+        </CommandItem>
+        <CommandItem
+          icon="⚙️"
+          description="Hesap, ekip, faturalandırma"
+          keywords={["tercihler"]}
+          onAction={done("Ayarlar açıldı")}
+        >
+          Ayarlar
+        </CommandItem>
+      </CommandGroup>
+      <CommandGroup heading="İşlemler">
+        <CommandItem icon="➕" shortcut="⌘N" onAction={done("Yeni fatura")}>
+          Yeni fatura
+        </CommandItem>
+        <CommandItem icon="🙋" onAction={done("Müşteri eklendi")}>
+          Müşteri ekle
+        </CommandItem>
+        <CommandItem icon="📤" isDisabled>
+          Faturaları dışa aktar
+        </CommandItem>
+        <CommandItem icon="🎨" page="theme">
+          Tema değiştir
+        </CommandItem>
+      </CommandGroup>
+      {(loading || results.length > 0) && (
+        <CommandGroup
+          heading="Müşteriler"
+          filter={false}
+          isLoading={loading}
+          loadingLabel="Aranıyor…"
+        >
+          {results.map((c) => (
+            <CommandItem key={c} icon="🏢" onAction={done(`${c} açıldı`)}>
+              {c}
+            </CommandItem>
+          ))}
+        </CommandGroup>
+      )}
+      <CommandPage id="theme">
+        <CommandGroup heading="Tema">
+          {PERSONALITY_NAMES.map((n) => (
+            <CommandItem key={n} onAction={() => onPersonality(n)}>
+              {personalities[n].label}
+            </CommandItem>
+          ))}
+        </CommandGroup>
+      </CommandPage>
+    </CommandPalette>
   );
 }
 
