@@ -1,6 +1,7 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useSyncExternalStore, type ReactNode } from "react";
+import { CalendarDate } from "@internationalized/date";
 import {
   Button as AriaButton,
   DateInput,
@@ -22,6 +23,52 @@ import { useShakeOnInvalid } from "../../motion/jelly";
 import type { FieldProps } from "../field/Field";
 import { Calendar, RangeCalendar, type CalendarPreset } from "./Calendar";
 
+const noop = () => () => {};
+/** Sunucu render'ında React Aria "bugün"ü okumasın diye sabit yer tutucu. */
+const SERVER_PLACEHOLDER = new CalendarDate(2000, 1, 1);
+
+const useIsClient = () =>
+  useSyncExternalStore(
+    noop,
+    () => true,
+    () => false,
+  );
+
+/*
+ * Sunucu ön-render'ı ve "şu an": React Aria değer yokken yer tutucu için
+ * "bugün"ü okuyor (Date.now), her tarih parçası da ÖÖ/ÖS adını bulmak için
+ * koşulsuz new Date() çağırıyor. Next 16 (Cache Components) bunları ön-render'da
+ * görünce build'i durduruyor. Bu yüzden sunucuda ve hidrasyonda sabit bir yer
+ * tutucu tarih verilir ve parçalar çizilmez (aynı boyda boş alan); hemen
+ * ardından tarayıcıda gerçekleri gelir.
+ */
+function useHydrationPlaceholder(placeholder: DateValue | null | undefined) {
+  const isClient = useIsClient();
+  return placeholder ?? (isClient ? undefined : SERVER_PLACEHOLDER);
+}
+
+function Segments({
+  slot,
+  className,
+}: {
+  slot?: "start" | "end";
+  className?: string;
+}) {
+  const isClient = useIsClient();
+  if (!isClient) {
+    return (
+      <span aria-hidden="true" className={cn("plonk-date-input", className)}>
+        {"\u00a0"}
+      </span>
+    );
+  }
+  return (
+    <DateInput slot={slot} className={cn("plonk-date-input", className)}>
+      {(segment) => <DateSegment segment={segment} className="plonk-segment" />}
+    </DateInput>
+  );
+}
+
 export interface DatePickerProps<T extends DateValue>
   extends
     Omit<AriaDatePickerProps<T>, "children" | "className" | "style">,
@@ -42,9 +89,11 @@ export function DatePicker<T extends DateValue>({
   ...props
 }: DatePickerProps<T>) {
   const invalid = hasError(error);
+  const placeholderValue = useHydrationPlaceholder(props.placeholderValue);
   return (
     <AriaDatePicker
       {...props}
+      placeholderValue={placeholderValue as T | undefined}
       isInvalid={invalid || props.isInvalid}
       className={cn("flex flex-col gap-1.5", className)}
     >
@@ -52,11 +101,7 @@ export function DatePicker<T extends DateValue>({
         <>
           <FieldLabel label={label} required={props.isRequired} />
           <FieldGroup invalid={isInvalid}>
-            <DateInput className="plonk-date-input">
-              {(segment) => (
-                <DateSegment segment={segment} className="plonk-segment" />
-              )}
-            </DateInput>
+            <Segments />
             <CalendarButton />
           </FieldGroup>
           <FieldFooter description={description} error={error} />
@@ -88,9 +133,11 @@ export function DateRangePicker<T extends DateValue>({
   ...props
 }: DateRangePickerProps<T>) {
   const invalid = hasError(error);
+  const placeholderValue = useHydrationPlaceholder(props.placeholderValue);
   return (
     <AriaDateRangePicker
       {...props}
+      placeholderValue={placeholderValue as T | undefined}
       isInvalid={invalid || props.isInvalid}
       className={cn("flex flex-col gap-1.5", className)}
     >
@@ -98,19 +145,11 @@ export function DateRangePicker<T extends DateValue>({
         <>
           <FieldLabel label={label} required={props.isRequired} />
           <FieldGroup invalid={isInvalid}>
-            <DateInput slot="start" className="plonk-date-input flex-none">
-              {(segment) => (
-                <DateSegment segment={segment} className="plonk-segment" />
-              )}
-            </DateInput>
+            <Segments slot="start" className="flex-none" />
             <span aria-hidden="true" className="text-plonk-ink-muted">
               –
             </span>
-            <DateInput slot="end" className="plonk-date-input">
-              {(segment) => (
-                <DateSegment segment={segment} className="plonk-segment" />
-              )}
-            </DateInput>
+            <Segments slot="end" />
             <CalendarButton />
           </FieldGroup>
           <FieldFooter description={description} error={error} />

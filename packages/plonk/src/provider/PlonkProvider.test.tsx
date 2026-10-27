@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { PlonkProvider, usePersonality } from "./PlonkProvider";
+import { PlonkProvider, usePersonality, useTapeDefault } from "./PlonkProvider";
 
 function Probe() {
   return <span>{usePersonality()}</span>;
@@ -87,5 +87,25 @@ describe("PlonkProvider", () => {
     ).toBe("#ff8cc6");
     // @ts-expect-error: "primery" diye bir token yok.
     void (<PlonkProvider style={{ "--plonk-color-primery": "red" }} />);
+  });
+
+  it("tape ayarı iç içe provider'lara geçer, içteki kendi ayarını verebilir", () => {
+    function Tape({ id }: { id: string }) {
+      return <span data-testid={id}>{String(useTapeDefault())}</span>;
+    }
+    render(
+      <PlonkProvider tape={false}>
+        <Tape id="outer" />
+        <PlonkProvider personality="retro">
+          <Tape id="inherited" />
+        </PlonkProvider>
+        <PlonkProvider tape>
+          <Tape id="own" />
+        </PlonkProvider>
+      </PlonkProvider>,
+    );
+    expect(screen.getByTestId("outer")).toHaveTextContent("false");
+    expect(screen.getByTestId("inherited")).toHaveTextContent("false");
+    expect(screen.getByTestId("own")).toHaveTextContent("true");
   });
 });

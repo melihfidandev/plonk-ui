@@ -39,6 +39,8 @@
   },
   "dependencies": {
     "@internationalized/date": "^3.12.4",
+    "@tanstack/react-table": "^9.3.1",
+    "@tanstack/react-virtual": "^3.14.23",
     "clsx": "^2.1.1",
     "react-aria": "^3.53.1",
     "react-aria-components": "^1.22.1",

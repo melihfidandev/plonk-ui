@@ -179,7 +179,7 @@ describe("Toast", () => {
     act(() => toast.dismiss());
     unmount();
 
-    render(<PlonkProvider toastTape={false} />);
+    render(<PlonkProvider tape={false} />);
     show("Provider off");
     show("Opt in", { tape: true });
     expect(tape("Provider off")).toBeNull();

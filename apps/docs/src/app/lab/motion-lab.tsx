@@ -16,6 +16,8 @@ import {
   CommandPage,
   CommandPalette,
   CommandPaletteTrigger,
+  createDataTableColumns,
+  DataTable,
   ComboBox,
   ComboBoxItem,
   contrastRatio,
@@ -208,6 +210,13 @@ export function MotionLab() {
             </h2>
             <p className="mt-3 max-w-prose text-lg">{p.description}</p>
           </section>
+
+          <Section
+            title="Veri tablosu"
+            note="2.000 satır, sanal kaydırma. Başlığa tıkla: artan → azalan → sırasız (Shift ile çoklu sıralama). Ara, durum ve tarih filtresini dene, Sütunlar menüsünden gizle, başlık kenarından genişliği sürükle. Satır seç: alttan işlem çubuğu gelir."
+          >
+            <TableLab />
+          </Section>
 
           <Section
             title="Komut paleti"
@@ -610,6 +619,183 @@ function FormLab() {
           readOnly
         />
       </div>
+    </div>
+  );
+}
+
+interface Invoice {
+  id: string;
+  customer: string;
+  status: "Ödendi" | "Bekliyor" | "Gecikti";
+  amount: number;
+  date: Date;
+}
+
+const FIRMS = [
+  "Acme",
+  "Atlas",
+  "Bora",
+  "Çınar",
+  "Deniz",
+  "Ege",
+  "Fırat",
+  "Gökçe",
+  "Hilal",
+  "İpek",
+  "Işık",
+  "Kaan",
+  "Lale",
+  "Mavi",
+  "Nehir",
+  "Orkide",
+  "Pera",
+  "Rüzgar",
+  "Selin",
+  "Şahin",
+  "Toros",
+  "Umut",
+  "Üstün",
+  "Vadi",
+  "Yaşar",
+  "Zeytin",
+];
+const KINDS = [
+  "Ltd.",
+  "Lojistik",
+  "Tekstil",
+  "Gıda",
+  "Yapı",
+  "Medikal",
+  "Enerji",
+  "Tasarım",
+  "Ajans",
+  "Kafe",
+];
+const STATES: Invoice["status"][] = ["Ödendi", "Bekliyor", "Gecikti"];
+
+// Tekrarlanabilir sahte veri: her yüklemede aynı 2.000 fatura.
+const INVOICES: Invoice[] = Array.from({ length: 2000 }, (_, i) => ({
+  id: `INV-${String(i + 1).padStart(4, "0")}`,
+  customer: `${FIRMS[(i * 7) % FIRMS.length]} ${KINDS[(i * 3) % KINDS.length]}`,
+  status: STATES[(i * 5 + (i >> 3)) % 3]!,
+  amount: 250 + ((i * 7919) % 19750),
+  date: new Date(2026, (i * 13) % 10, 1 + ((i * 11) % 28)),
+}));
+
+const money = new Intl.NumberFormat("tr-TR", {
+  style: "currency",
+  currency: "TRY",
+  maximumFractionDigits: 0,
+});
+const day = new Intl.DateTimeFormat("tr-TR", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+});
+const STATUS_VARIANT = {
+  Ödendi: "success",
+  Bekliyor: "warning",
+  Gecikti: "danger",
+} as const;
+
+const col = createDataTableColumns<Invoice>();
+const INVOICE_COLUMNS = col.columns([
+  col.accessor("id", { header: "No", size: 110 }),
+  col.accessor("customer", { header: "Müşteri", size: 220 }),
+  col.accessor("status", {
+    header: "Durum",
+    size: 130,
+    filterFn: "equalsString",
+    meta: { filter: { type: "select" } },
+    cell: (info) => (
+      <Badge variant={STATUS_VARIANT[info.getValue()]}>{info.getValue()}</Badge>
+    ),
+  }),
+  col.accessor("amount", {
+    header: "Tutar",
+    size: 130,
+    meta: { align: "end" },
+    cell: (info) => money.format(info.getValue()),
+  }),
+  col.accessor("date", {
+    header: "Tarih",
+    size: 140,
+    filterFn: "inDateRange",
+    enableGlobalFilter: false,
+    meta: { align: "end", filter: { type: "dateRange" } },
+    cell: (info) => day.format(info.getValue()),
+  }),
+]);
+
+const TABLE_MESSAGES = {
+  search: "Müşteri, durum ya da numara ara…",
+  columns: "Sütunlar",
+  all: "Tümü",
+  clearFilters: "Filtreleri temizle",
+  noResults: "Eşleşen fatura yok",
+  loading: "Yükleniyor…",
+  selected: "seçili",
+  clearSelection: "Seçimi temizle",
+  selectAll: "Tümünü seç",
+  selectRow: "Satırı seç",
+  rowCount: (shown: number, total: number) =>
+    shown === total
+      ? `${total.toLocaleString("tr-TR")} kayıt`
+      : `${shown.toLocaleString("tr-TR")} / ${total.toLocaleString("tr-TR")} kayıt`,
+};
+
+function TableLab() {
+  const [rows, setRows] = useState(INVOICES);
+  const [loading, setLoading] = useState(false);
+  return (
+    <div className="flex flex-col gap-4">
+      <Switch
+        label="Yükleniyor durumu"
+        checked={loading}
+        onChange={(e) => setLoading(e.target.checked)}
+      />
+      <DataTable
+        aria-label="Faturalar"
+        data={rows}
+        columns={INVOICE_COLUMNS}
+        getRowId={(r) => r.id}
+        selectable
+        isLoading={loading}
+        height="30rem"
+        messages={TABLE_MESSAGES}
+        bulkActions={({ ids, clear }) => (
+          <>
+            <Button
+              size="sm"
+              variant="neutral"
+              onPress={() => {
+                const set = new Set(ids);
+                setRows((all) =>
+                  all.map((r) =>
+                    set.has(r.id) ? { ...r, status: "Ödendi" } : r,
+                  ),
+                );
+                toast.success(`${ids.length} fatura ödendi`, {
+                  label: "Tamam",
+                });
+              }}
+            >
+              Ödendi yap
+            </Button>
+            <Button
+              size="sm"
+              variant="danger"
+              onPress={() => {
+                const set = new Set(ids);
+                setRows((all) => all.filter((r) => !set.has(r.id)));
+                clear();
+              }}
+            >
+              Sil
+            </Button>
+          </>
+        )}
+      />
     </div>
   );
 }

@@ -26,7 +26,7 @@ export interface ToastOptions {
    */
   label?: ReactNode;
   /**
-   * Sticker'da üstteki bant. Varsayılan açık (provider'ın `toastTape`'i);
+   * Sticker'da üstteki bant. Varsayılan açık (provider'ın `tape` ayarı);
    * Retro'da görünmez.
    */
   tape?: boolean;
@@ -64,7 +64,7 @@ export function setDefaultToastTimeout(ms: number) {
   defaultTimeout = ms;
 }
 
-/** Provider'ın `toastTape` ayarı buraya yazılır. */
+/** Provider'ın `tape` ayarı buraya yazılır (toast React dışından da açılır). */
 export function setDefaultToastTape(tape: boolean) {
   defaultTape = tape;
 }

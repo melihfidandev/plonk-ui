@@ -25,6 +25,8 @@ import type { PlonkStyle } from "../tokens/variables";
 const PersonalityContext = createContext<PersonalityName>(DEFAULT_PERSONALITY);
 /** Yukarıda bildirim bölgesi açmış bir provider var mı? */
 const ToasterContext = createContext(false);
+/** Süs bantlarının varsayılanı (Toast, tablo işlem çubuğu). */
+const TapeContext = createContext(true);
 
 export interface PlonkProviderProps extends Omit<
   HTMLAttributes<HTMLDivElement>,
@@ -60,10 +62,11 @@ export interface PlonkProviderProps extends Omit<
    */
   toastTimeout?: number;
   /**
-   * Sticker toast'larının üstündeki bant (varsayılan açık). Tek bir toast
-   * için `toast("…", { tape: false })`.
+   * Sticker'daki süs bantları: varsayılanı açık olan her yerde (Toast, tablo
+   * işlem çubuğu) kapatır ya da açar. Bileşenin kendi ayarı her zaman önceliklidir
+   * (`toast("…", { tape: true })`). Verilmezse dıştaki provider'ınki.
    */
-  toastTape?: boolean;
+  tape?: boolean;
   /**
    * Dil ve bölge, ör. `"tr-TR"`. Tarih biçimi, ay adları, haftanın ilk günü
    * ve React Aria'nın ekran okuyucu metinleri buna göre. Verilmezse tarayıcının dili.
@@ -100,12 +103,13 @@ export function PlonkProvider({
   toaster = true,
   toastPlacement = "bottom-end",
   toastTimeout,
-  toastTape = true,
+  tape: tapeProp,
   locale,
   children,
   ...props
 }: PlonkProviderProps) {
   const hasToaster = use(ToasterContext);
+  const tape = tapeProp ?? use(TapeContext);
   const ownsToaster = toaster && !hasToaster;
   const [layer, setLayer] = useState<HTMLDivElement | null>(null);
   // Sunucuda body yok; kap sadece tarayıcıda açılır.
@@ -122,8 +126,8 @@ export function PlonkProvider({
   }, [ownsToaster, toastTimeout]);
 
   useEffect(() => {
-    if (ownsToaster) setDefaultToastTape(toastTape);
-  }, [ownsToaster, toastTape]);
+    if (ownsToaster) setDefaultToastTape(tape);
+  }, [ownsToaster, tape]);
 
   const motionAttr = motion === "reduce" ? "reduce" : undefined;
   const fullStyle: PlonkStyle | undefined =
@@ -133,20 +137,22 @@ export function PlonkProvider({
 
   const tree = (
     <PersonalityContext value={personality}>
-      <ToasterContext value={hasToaster || ownsToaster}>
-        <UNSAFE_PortalProvider getContainer={() => layer}>
-          <div
-            lang={locale}
-            {...props}
-            data-plonk-personality={personality}
-            data-plonk-motion={motionAttr}
-            style={fullStyle}
-            className={cn("plonk", className)}
-          >
-            {children}
-          </div>
-        </UNSAFE_PortalProvider>
-      </ToasterContext>
+      <TapeContext value={tape}>
+        <ToasterContext value={hasToaster || ownsToaster}>
+          <UNSAFE_PortalProvider getContainer={() => layer}>
+            <div
+              lang={locale}
+              {...props}
+              data-plonk-personality={personality}
+              data-plonk-motion={motionAttr}
+              style={fullStyle}
+              className={cn("plonk", className)}
+            >
+              {children}
+            </div>
+          </UNSAFE_PortalProvider>
+        </ToasterContext>
+      </TapeContext>
       {ownsToaster && <Toaster container={layer} placement={toastPlacement} />}
       {isClient &&
         createPortal(
@@ -166,6 +172,11 @@ export function PlonkProvider({
 
   // Dil verildiyse React Aria'nın bütün bileşenleri (tarih, toast) ona uyar.
   return locale ? <I18nProvider locale={locale}>{tree}</I18nProvider> : tree;
+}
+
+/** Süs bantları varsayılan olarak açık mı (en yakın provider'ın `tape` ayarı). */
+export function useTapeDefault(): boolean {
+  return use(TapeContext);
 }
 
 /** En yakın `PlonkProvider`'ın kişiliği. Provider yoksa varsayılan kişilik. */

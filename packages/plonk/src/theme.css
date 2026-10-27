@@ -2344,6 +2344,434 @@
     }
   }
 
+  /* ---------- Veri tablosu ---------- */
+
+  /*
+   * Sticker: sıralanınca satırlar yeni yerlerine kayar (hareketi JS oynatır,
+   * türünü --plonk-table-reorder seçer), seçilen satır fosforlu kalemle hücre
+   * hücre boyanır, toplu işlem çubuğu alttan bantla yapışır.
+   */
+  .plonk-table-frame {
+    --plonk-table-head: 2.75rem;
+    position: relative;
+  }
+  .plonk-table-scroll {
+    position: relative;
+    overflow: auto;
+    overscroll-behavior: contain;
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-radius: var(--plonk-radius-lg);
+    background: var(--plonk-color-surface);
+    box-shadow: var(--plonk-shadow-x) var(--plonk-shadow-y) 0
+      var(--plonk-shadow-color);
+  }
+  .plonk-table-grid {
+    --plonk-table-reorder: flip;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.9rem;
+  }
+  .plonk-table-head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    height: var(--plonk-table-head);
+    padding: 0 0.75rem;
+    border-bottom: var(--plonk-border-width) solid var(--plonk-color-ink);
+    background: var(--plonk-color-surface);
+    font-family: var(--plonk-font-display);
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-align: start;
+    white-space: nowrap;
+  }
+  .plonk-table-head[data-align="end"],
+  .plonk-table-cell[data-align="end"] {
+    text-align: end;
+  }
+  .plonk-table-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    max-width: 100%;
+    margin-inline: -0.55rem;
+    padding: 0.2rem 0.55rem;
+    border: 0;
+    border-radius: var(--plonk-radius-pill);
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+    transition: background-color var(--plonk-motion-press-duration)
+      var(--plonk-motion-press-easing);
+  }
+  .plonk-table-sort:hover {
+    background: color-mix(in oklab, var(--plonk-color-ink) 8%, transparent);
+  }
+  .plonk-table-sort:focus-visible {
+    outline: 3px solid var(--plonk-color-focus);
+    outline-offset: 2px;
+  }
+  .plonk-table-head[data-sorted] .plonk-table-sort {
+    background: var(--plonk-color-primary);
+    color: var(--plonk-color-on-primary);
+  }
+  .plonk-table-arrow {
+    flex: none;
+    width: 0.875rem;
+    height: 0.875rem;
+    opacity: 0.3;
+    transition-property: rotate, opacity;
+    transition-timing-function: var(--plonk-motion-spring-easing);
+    transition-duration: var(--plonk-motion-spring-duration);
+  }
+  .plonk-table-arrow:is([data-dir="asc"], [data-dir="desc"]) {
+    opacity: 1;
+  }
+  .plonk-table-arrow[data-dir="asc"] {
+    rotate: 180deg;
+  }
+  .plonk-table-sort-index {
+    display: grid;
+    place-items: center;
+    min-width: 1rem;
+    height: 1rem;
+    border-radius: var(--plonk-radius-pill);
+    background: var(--plonk-color-ink);
+    color: var(--plonk-color-surface);
+    font-family: var(--plonk-font-mono);
+    font-size: 0.65rem;
+  }
+  /* Sütun genişliği: başlığın sağ kenarındaki tutamaç. */
+  .plonk-table-resize {
+    position: absolute;
+    top: 0;
+    right: -0.35rem;
+    z-index: 3;
+    width: 0.7rem;
+    height: 100%;
+    cursor: col-resize;
+    touch-action: none;
+  }
+  .plonk-table-resize::after {
+    content: "";
+    position: absolute;
+    inset: 0.5rem 0.2rem;
+    border-radius: var(--plonk-radius-pill);
+    background: var(--plonk-color-focus);
+    opacity: 0;
+    transition: opacity var(--plonk-motion-press-duration);
+  }
+  .plonk-table-resize:is(:hover, [data-resizing])::after {
+    opacity: 1;
+  }
+
+  .plonk-table-cell {
+    height: var(--plonk-table-row);
+    padding: 0 0.75rem;
+    overflow: hidden;
+    border-bottom: 1.5px dashed
+      color-mix(in oklab, var(--plonk-color-ink) 18%, transparent);
+    background-image: linear-gradient(
+      color-mix(in oklab, var(--plonk-color-primary) 78%, transparent),
+      color-mix(in oklab, var(--plonk-color-primary) 78%, transparent)
+    );
+    background-repeat: no-repeat;
+    background-size: 0% 100%;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .plonk-table-row:hover > .plonk-table-cell {
+    background-color: color-mix(
+      in oklab,
+      var(--plonk-color-ink) 4%,
+      transparent
+    );
+  }
+  /* Kalem soldan sağa: her hücre bir öncekinden biraz sonra boyanır. */
+  .plonk-table-row[data-selected] > .plonk-table-cell {
+    background-size: 100% 100%;
+    transition: background-size 90ms linear;
+  }
+  .plonk-table-row[data-selected] > .plonk-table-cell:nth-child(2) {
+    transition-delay: 70ms;
+  }
+  .plonk-table-row[data-selected] > .plonk-table-cell:nth-child(3) {
+    transition-delay: 140ms;
+  }
+  .plonk-table-row[data-selected] > .plonk-table-cell:nth-child(4) {
+    transition-delay: 210ms;
+  }
+  .plonk-table-row[data-selected] > .plonk-table-cell:nth-child(5) {
+    transition-delay: 280ms;
+  }
+  .plonk-table-row[data-selected] > .plonk-table-cell:nth-child(n + 6) {
+    transition-delay: 350ms;
+  }
+  .plonk-table-spacer > td {
+    padding: 0;
+    border: 0;
+  }
+  .plonk-table-empty > td {
+    height: 8rem;
+    color: var(--plonk-color-ink-muted);
+    font-weight: 700;
+    text-align: center;
+  }
+  .plonk-table-skeleton span {
+    display: block;
+    width: 70%;
+    height: 0.7rem;
+    border-radius: var(--plonk-radius-pill);
+    background: color-mix(in oklab, var(--plonk-color-ink) 12%, transparent);
+    animation: plonk-table-shimmer 900ms ease-in-out infinite alternate;
+    animation-delay: calc(var(--plonk-skeleton-i, 0) * 90ms);
+  }
+  .plonk-table-skeleton > td:nth-child(even) span {
+    width: 45%;
+  }
+  .plonk-table-loading {
+    position: absolute;
+    top: calc(var(--plonk-table-head) + var(--plonk-border-width));
+    inset-inline: var(--plonk-border-width);
+    z-index: 3;
+    height: 3px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--plonk-color-primary) 0 1rem,
+      transparent 1rem 2rem
+    );
+    background-size: 2rem 100%;
+    animation: plonk-table-loading 500ms linear infinite;
+  }
+
+  .plonk-table-bulk {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: calc(100% - 2rem);
+    padding: 0.45rem 0.45rem 0.45rem 0.9rem;
+    translate: -50% 0;
+    border-radius: var(--plonk-radius-lg);
+    background: var(--plonk-color-ink);
+    color: var(--plonk-color-surface);
+    box-shadow: var(--plonk-shadow-x) var(--plonk-shadow-y) 0
+      color-mix(in oklab, var(--plonk-shadow-color) 35%, transparent);
+    font-family: var(--plonk-font-display);
+    font-size: 0.95rem;
+    font-weight: 800;
+    white-space: nowrap;
+    animation: plonk-table-bulk-in var(--plonk-motion-spring-duration)
+      var(--plonk-motion-spring-easing);
+  }
+  .plonk-table-bulk[data-exiting] {
+    pointer-events: none;
+    animation: plonk-table-bulk-out 220ms cubic-bezier(0.5, 0, 0.75, 0) forwards;
+  }
+  .plonk-table-bulk[data-tape]::before {
+    content: "";
+    position: absolute;
+    top: -0.7rem;
+    left: 50%;
+    width: 4.5rem;
+    height: 1.3rem;
+    translate: -50% 0;
+    rotate: -4deg;
+    transform-origin: 0 50%;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        color-mix(in oklab, var(--plonk-color-surface) 22%, transparent) 0 1px,
+        transparent 1px 5px
+      ),
+      color-mix(
+        in oklab,
+        var(--plonk-color-primary) 70%,
+        var(--plonk-color-surface)
+      );
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      96% 25%,
+      100% 50%,
+      96% 75%,
+      100% 100%,
+      0 100%,
+      4% 75%,
+      0 50%,
+      4% 25%
+    );
+    animation: plonk-toast-tape 420ms var(--plonk-motion-spring-easing) 220ms
+      backwards;
+  }
+  .plonk-table-bulk-grip {
+    display: none;
+  }
+  .plonk-table-bulk-n {
+    display: inline-block;
+    font-variant-numeric: tabular-nums;
+    animation: plonk-table-count var(--plonk-motion-spring-duration)
+      var(--plonk-motion-spring-easing);
+  }
+  .plonk-table-bulk-clear {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    border-radius: var(--plonk-radius-pill);
+    background: none;
+    color: inherit;
+    cursor: pointer;
+  }
+  .plonk-table-bulk-clear:hover {
+    background: color-mix(
+      in oklab,
+      var(--plonk-color-surface) 18%,
+      transparent
+    );
+  }
+  .plonk-table-bulk-clear:focus-visible {
+    outline: 3px solid var(--plonk-color-focus);
+    outline-offset: 1px;
+  }
+  .plonk-table-bulk-clear > svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /*
+   * Retro: başlık çizgili bir çubuk, satırlar kademeli belirir, seçim ters
+   * renk, işlem çubuğu kademeli açılan bir durum çubuğu.
+   */
+  [data-plonk-personality="retro"] {
+    .plonk-table-grid {
+      --plonk-table-reorder: steps;
+    }
+    .plonk-table-head {
+      font-weight: 400;
+    }
+    .plonk-table-head + .plonk-table-head {
+      border-inline-start: var(--plonk-border-width) solid
+        var(--plonk-color-ink);
+    }
+    .plonk-table-head[data-sorted] {
+      background:
+        repeating-linear-gradient(
+            to bottom,
+            var(--plonk-color-ink) 0 1px,
+            transparent 1px 3px
+          )
+          content-box,
+        var(--plonk-color-surface);
+    }
+    .plonk-table-head[data-sorted] .plonk-table-sort {
+      background: var(--plonk-color-surface);
+      color: var(--plonk-color-ink);
+    }
+    .plonk-table-cell {
+      border-bottom: 1px solid
+        color-mix(in oklab, var(--plonk-color-ink) 25%, transparent);
+      background-image: none;
+      font-weight: 500;
+    }
+    .plonk-table-row[data-selected] > .plonk-table-cell {
+      background-color: var(--plonk-color-ink);
+      color: var(--plonk-color-surface);
+    }
+    .plonk-table-skeleton span {
+      animation: plonk-dot-blink 1s steps(2, jump-none) infinite;
+    }
+    .plonk-table-bulk {
+      gap: 0.4rem;
+      padding: 0 0.4rem 0 0;
+      border: var(--plonk-border-width) solid var(--plonk-color-ink);
+      background: var(--plonk-color-surface);
+      color: var(--plonk-color-ink);
+      box-shadow: var(--plonk-shadow-x) var(--plonk-shadow-y) 0
+        var(--plonk-shadow-color);
+      font-family: var(--plonk-font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      animation: plonk-table-wipe-in 160ms steps(4, end);
+    }
+    .plonk-table-bulk[data-exiting] {
+      animation: plonk-table-wipe-out 100ms steps(2, end) forwards;
+    }
+    .plonk-table-bulk[data-tape]::before {
+      display: none;
+    }
+    .plonk-table-bulk-grip {
+      display: block;
+      align-self: stretch;
+      width: 0.875rem;
+      border-inline-end: var(--plonk-border-width) solid var(--plonk-color-ink);
+      background: repeating-linear-gradient(
+        to bottom,
+        var(--plonk-color-ink) 0 1px,
+        transparent 1px 3px
+      );
+    }
+    .plonk-table-bulk-count {
+      padding: 0.6rem 0.4rem;
+    }
+    .plonk-table-bulk-n {
+      animation: none;
+    }
+    .plonk-table-bulk-clear:hover {
+      background: var(--plonk-color-danger);
+      color: var(--plonk-color-on-danger);
+    }
+  }
+
+  /* Hareket azaltılınca: satırlar sadece belirir, çubuk solarak gelip gider. */
+  [data-plonk-motion="reduce"] {
+    .plonk-table-grid {
+      --plonk-table-reorder: fade;
+    }
+    .plonk-table-bulk {
+      animation: plonk-fade-in 150ms ease-out;
+    }
+    .plonk-table-bulk[data-exiting] {
+      animation: plonk-fade-out 100ms ease-in forwards;
+    }
+    .plonk-table-bulk-n,
+    .plonk-table-bulk[data-tape]::before {
+      animation: none;
+    }
+    .plonk-table-row[data-selected] > .plonk-table-cell {
+      transition: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-plonk-personality] {
+      .plonk-table-grid {
+        --plonk-table-reorder: fade;
+      }
+      .plonk-table-bulk {
+        animation: plonk-fade-in 150ms ease-out;
+      }
+      .plonk-table-bulk[data-exiting] {
+        animation: plonk-fade-out 100ms ease-in forwards;
+      }
+      .plonk-table-bulk-n,
+      .plonk-table-bulk[data-tape]::before {
+        animation: none;
+      }
+      .plonk-table-row[data-selected] > .plonk-table-cell {
+        transition: none;
+      }
+    }
+  }
+
   /* ---------- Avatar grubu: üst üste biner, üzerine gelince kalkar ---------- */
 
   .plonk-avatar-group > .plonk-avatar {
@@ -2934,5 +3362,55 @@
 @keyframes plonk-command-pulse {
   to {
     opacity: 0.45;
+  }
+}
+
+@keyframes plonk-table-shimmer {
+  from {
+    opacity: 0.4;
+  }
+}
+
+@keyframes plonk-table-loading {
+  to {
+    background-position: 2rem 0;
+  }
+}
+
+@keyframes plonk-table-bulk-in {
+  from {
+    opacity: 0;
+    translate: -50% 160%;
+    rotate: -6deg;
+  }
+  25% {
+    opacity: 1;
+  }
+}
+
+@keyframes plonk-table-bulk-out {
+  to {
+    opacity: 0;
+    translate: -50% 140%;
+    rotate: 3deg;
+  }
+}
+
+@keyframes plonk-table-count {
+  30% {
+    translate: 0 -0.25rem;
+    scale: calc(1 + 0.5 * var(--plonk-jelly-amount));
+  }
+}
+
+@keyframes plonk-table-wipe-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes plonk-table-wipe-out {
+  to {
+    clip-path: inset(0 100% 0 0);
   }
 }
