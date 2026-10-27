@@ -21,6 +21,7 @@ export function DialogFrame({
   footer,
   hideClose,
   closeLabel,
+  countdown,
   children,
 }: {
   close: () => void;
@@ -30,6 +31,8 @@ export function DialogFrame({
   footer?: RenderSlot;
   hideClose: boolean;
   closeLabel: string;
+  /** Açıklamanın altında, içerikten önce (Dialog'un geri sayımı). */
+  countdown?: ReactNode;
   children?: RenderSlot;
 }) {
   const hasHeader = title != null || !hideClose;
@@ -67,6 +70,7 @@ export function DialogFrame({
           {description}
         </p>
       )}
+      {countdown}
       {children != null && (
         <div className="plonk-card-body min-h-0 flex-1 overflow-y-auto px-5 py-4">
           {render(children, close)}

@@ -274,7 +274,7 @@ export function MotionLab() {
 
           <Section
             title="Drawer, Popover, Tooltip"
-            note="Drawer kenardan yayla gelir. Popover tıklanan noktadan büyür. Tooltip için simgelerin üzerine gel ya da Tab ile odaklan."
+            note="Drawer kenardan yayla gelir. Popover tıklanan noktadan büyür (Çizgi Roman'da konuşma balonu). Tooltip için simgelerin üzerine gel ya da Tab ile odaklan."
           >
             <LayersLab />
           </Section>
@@ -1194,6 +1194,33 @@ function DialogLab() {
                 }}
               >
                 Sil
+              </Button>
+            </>
+          )}
+        />
+      </DialogTrigger>
+
+      <DialogTrigger>
+        <Button variant="secondary">Oturum uyarısı (geri sayım)</Button>
+        <Dialog
+          role="alertdialog"
+          size="sm"
+          title="Oturumun kapanmak üzere"
+          description="Bir süredir işlem yapmadın. Devam etmezsen güvenliğin için çıkış yapacağız."
+          countdown={20}
+          countdownLabel="Devam?"
+          countdownMessage={(s) => `${s} saniye kaldı`}
+          onCountdownEnd={({ close }) => {
+            close();
+            toast.warning("Oturum kapatıldı");
+          }}
+          footer={({ close }) => (
+            <>
+              <Button variant="ghost" onPress={close}>
+                Çıkış yap
+              </Button>
+              <Button onPress={close} autoFocus>
+                Devam et
               </Button>
             </>
           )}

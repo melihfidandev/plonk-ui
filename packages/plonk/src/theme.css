@@ -460,6 +460,59 @@
       var(--plonk-motion-exit-easing) forwards;
   }
 
+  /*
+   * Geri sayım (Dialog `countdown`). Sticker: köşesi eğik yapışmış bir sayı
+   * sticker'ı; her saniye jöleyle yeniden yapışır, son 3 saniyede kırmızı.
+   */
+  .plonk-countdown {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1.25rem 0;
+  }
+  .plonk-countdown-label {
+    color: var(--plonk-color-ink-muted);
+  }
+  .plonk-countdown-n {
+    display: inline-grid;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    padding: 0 0.4rem;
+    place-items: center;
+    rotate: calc(var(--plonk-tilt) * -2);
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-radius: var(--plonk-radius-pill);
+    background: var(--plonk-color-accent);
+    box-shadow: 2px 2px 0 var(--plonk-color-ink);
+    color: var(--plonk-color-on-accent);
+    font-size: 1.25rem;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    animation: plonk-pop var(--plonk-jelly-duration) ease-out;
+  }
+  .plonk-countdown[data-urgent] .plonk-countdown-n {
+    background: var(--plonk-color-danger);
+    color: var(--plonk-color-on-danger);
+  }
+  /* Retro: ters renkli sayaç kutusu; son saniyelerde yanıp söner. */
+  [data-plonk-personality="retro"] {
+    .plonk-countdown-n {
+      min-width: 2.25rem;
+      height: 1.75rem;
+      rotate: none;
+      border-radius: 0;
+      background: var(--plonk-color-ink);
+      box-shadow: none;
+      color: var(--plonk-color-surface);
+      font-family: var(--plonk-font-mono);
+      font-size: 1rem;
+      animation: none;
+    }
+    .plonk-countdown[data-urgent] .plonk-countdown-n {
+      animation: plonk-blink 500ms steps(1, end) infinite;
+    }
+  }
+
   /* Büyüyen çerçeveler sadece Retro'da. */
   .plonk-zoom {
     display: none;
@@ -640,6 +693,320 @@
       .plonk-popover[data-entering],
       .plonk-tooltip[data-entering] {
         animation: plonk-fade-in 150ms ease-out;
+      }
+    }
+  }
+
+  /* ---------- Çizgi Roman ve Atari: katmanlar ---------- */
+
+  /* Popover kuyruğu sadece Çizgi Roman'da. */
+  .plonk-popover-arrow {
+    display: none;
+  }
+
+  [data-plonk-personality="comic"] {
+    /* Arka plan: koyu baskı tramı. */
+    .plonk-dialog-overlay {
+      background:
+        radial-gradient(
+            circle,
+            color-mix(in oklab, var(--plonk-color-ink) 45%, transparent) 1.6px,
+            transparent 2.1px
+          )
+          0 0 / 8px 8px,
+        color-mix(in oklab, var(--plonk-color-ink) 28%, transparent);
+    }
+
+    /*
+     * Dialog bir konuşma balonu: yuvarlak köşeler, sol altta kuyruk. Kuyruk
+     * iki üçgen: mürekkep çerçeve ve onun içinde balonun zemini (balonun alt
+     * çizgisini kuyruğun ağzında örter). Balon kuyruğundan şişerek açılır.
+     * Komut paleti de bir dialog ama balon değil.
+     */
+    .plonk-dialog:not(.plonk-command) {
+      --plonk-dialog-radius: 1.75rem;
+      transform-origin: 18% 115%;
+    }
+    /* Arka plan zaten tramlı; balonun ve çekmecenin içi düz kalsın. */
+    .plonk-dialog > .plonk-card,
+    .plonk-drawer > .plonk-card {
+      background-image: none;
+    }
+    .plonk-dialog:not(.plonk-command)::before,
+    .plonk-dialog:not(.plonk-command)::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+    .plonk-dialog:not(.plonk-command)::before {
+      top: calc(100% - var(--plonk-border-width));
+      left: calc(18% - 0.3rem);
+      width: 3.5rem;
+      height: 3.25rem;
+      background: var(--plonk-color-ink);
+      clip-path: polygon(0 0, 100% 0, 6% 100%);
+    }
+    .plonk-dialog:not(.plonk-command)::after {
+      top: calc(100% - var(--plonk-border-width) * 3);
+      left: 18%;
+      width: 2.75rem;
+      height: 2.8rem;
+      background: var(--plonk-color-surface);
+      clip-path: polygon(0 0, 100% 0, 8% 88%);
+    }
+    .plonk-dialog:not(.plonk-command)[data-entering] {
+      animation: plonk-balloon-in var(--plonk-motion-enter-duration)
+        var(--plonk-motion-enter-easing);
+    }
+    .plonk-dialog:not(.plonk-command)[data-exiting] {
+      animation: plonk-balloon-out var(--plonk-motion-exit-duration)
+        var(--plonk-motion-exit-easing) forwards;
+    }
+
+    /* Popover küçük bir konuşma balonu; kuyruğu tetikleyiciyi gösterir. */
+    .plonk-popover-panel {
+      --plonk-popover-radius: 1.1rem;
+    }
+    .plonk-popover-arrow {
+      display: block;
+    }
+    .plonk-popover-arrow > svg {
+      display: block;
+      overflow: visible;
+      fill: var(--plonk-color-surface);
+      stroke: var(--plonk-color-ink);
+      stroke-width: var(--plonk-border-width);
+      stroke-linejoin: round;
+    }
+    /*
+     * React Aria kuyruğu çerçevenin iç kenarına koyar; kuyruk çerçeveye biner
+     * ve zemini ağzındaki çizgiyi örter. Sadece yönü çevrilir.
+     */
+    .plonk-popover-arrow[data-placement="bottom"] > svg {
+      rotate: 180deg;
+    }
+    .plonk-popover-arrow[data-placement="left"] > svg {
+      rotate: -90deg;
+    }
+    .plonk-popover-arrow[data-placement="right"] > svg {
+      rotate: 90deg;
+    }
+
+    /* Tooltip sarı bir anlatıcı kutusu. */
+    .plonk-tooltip {
+      --plonk-color-ink: var(--plonk-color-accent);
+      --plonk-color-surface: var(--plonk-color-on-accent);
+      border: 2px solid var(--plonk-color-on-accent);
+      box-shadow: 2px 2px 0 var(--plonk-color-on-accent);
+    }
+
+    /* Geri sayım: sayı bir patlama yıldızının içinde, her saniye "BAM". */
+    .plonk-countdown-label {
+      color: var(--plonk-color-ink);
+      font-size: 1.25rem;
+    }
+    .plonk-countdown-n {
+      position: relative;
+      isolation: isolate;
+      width: 3.5rem;
+      height: 3.5rem;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: var(--plonk-color-ink);
+      box-shadow: none;
+      color: var(--plonk-color-primary);
+      font-size: 1.45rem;
+      -webkit-text-stroke: 1px var(--plonk-color-ink);
+      paint-order: stroke fill;
+      clip-path: polygon(
+        50% 0%,
+        58.5% 13%,
+        71.7% 5%,
+        71.2% 23.4%,
+        89.1% 18.8%,
+        84.2% 33.5%,
+        98.7% 38.9%,
+        84% 50%,
+        98.7% 61.1%,
+        84.2% 66.5%,
+        89.1% 81.2%,
+        71.2% 76.6%,
+        71.7% 95%,
+        58.5% 87%,
+        50% 100%,
+        42.4% 83.1%,
+        28.3% 95%,
+        26.3% 79.7%,
+        10.9% 81.2%,
+        19.4% 64.8%,
+        1.3% 61.1%,
+        12% 50%,
+        1.3% 38.9%,
+        19.4% 35.2%,
+        10.9% 18.8%,
+        26.3% 20.3%,
+        28.3% 5%,
+        42.4% 16.9%
+      );
+      animation: plonk-countdown-bam var(--plonk-motion-spring-duration)
+        var(--plonk-motion-spring-easing);
+    }
+    .plonk-countdown-n::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: var(--plonk-border-width);
+      background: var(--plonk-color-accent);
+      clip-path: polygon(
+        50% 0%,
+        58.5% 13%,
+        71.7% 5%,
+        71.2% 23.4%,
+        89.1% 18.8%,
+        84.2% 33.5%,
+        98.7% 38.9%,
+        84% 50%,
+        98.7% 61.1%,
+        84.2% 66.5%,
+        89.1% 81.2%,
+        71.2% 76.6%,
+        71.7% 95%,
+        58.5% 87%,
+        50% 100%,
+        42.4% 83.1%,
+        28.3% 95%,
+        26.3% 79.7%,
+        10.9% 81.2%,
+        19.4% 64.8%,
+        1.3% 61.1%,
+        12% 50%,
+        1.3% 38.9%,
+        19.4% 35.2%,
+        10.9% 18.8%,
+        26.3% 20.3%,
+        28.3% 5%,
+        42.4% 16.9%
+      );
+    }
+    .plonk-countdown[data-urgent] .plonk-countdown-n {
+      background: var(--plonk-color-ink);
+      color: var(--plonk-color-accent);
+    }
+    .plonk-countdown[data-urgent] .plonk-countdown-n::before {
+      background: var(--plonk-color-primary);
+    }
+  }
+
+  [data-plonk-personality="arcade"] {
+    /* Arka plan: kararan ekran ve tarama çizgileri. */
+    .plonk-dialog-overlay {
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgb(0 0 0 / 0.3) 0 1px,
+          transparent 1px 3px
+        ),
+        color-mix(in oklab, var(--plonk-color-canvas) 78%, transparent);
+    }
+    /* Dialog oyun ekranı gibi kademeli büyür, kademeli küçülür. */
+    .plonk-dialog:not(.plonk-command)[data-entering] {
+      animation: plonk-arcade-zoom-in var(--plonk-motion-enter-duration)
+        var(--plonk-motion-enter-easing);
+    }
+    .plonk-dialog:not(.plonk-command)[data-exiting] {
+      animation: plonk-arcade-zoom-out var(--plonk-motion-exit-duration)
+        var(--plonk-motion-exit-easing) forwards;
+    }
+
+    /* Tooltip: koyu ekran, neon çerçeve, sarı yazı. */
+    .plonk-tooltip {
+      --plonk-color-ink: var(--plonk-color-sunken);
+      --plonk-color-surface: var(--plonk-color-accent);
+      border: 2px solid var(--plonk-color-secondary);
+      box-shadow: 0 0 0.9rem -0.1rem var(--plonk-color-secondary);
+      font-family: var(--plonk-font-display);
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      text-transform: var(--plonk-font-display-case);
+    }
+
+    /* Geri sayım: dev "DEVAM? 9"; her saniye büyüyüp oturur. */
+    .plonk-countdown {
+      justify-content: center;
+      align-items: baseline;
+      gap: 0.75rem;
+      padding: 1.25rem 1.25rem 0.25rem;
+    }
+    .plonk-countdown-label {
+      color: var(--plonk-color-ink);
+      font-size: 1.15rem;
+    }
+    .plonk-countdown-n {
+      min-width: 0;
+      height: auto;
+      padding: 0;
+      rotate: none;
+      border: 0;
+      background: none;
+      box-shadow: none;
+      color: var(--plonk-color-primary);
+      font-size: 3.6rem;
+      text-shadow: 4px 4px 0 var(--plonk-color-secondary);
+      animation: plonk-countdown-tick 300ms ease-out;
+    }
+    .plonk-countdown[data-urgent] .plonk-countdown-n {
+      background: none;
+      color: var(--plonk-color-accent);
+    }
+    .plonk-countdown[data-urgent] .plonk-countdown-label {
+      animation: plonk-blink 500ms steps(1, end) infinite;
+    }
+  }
+
+  /*
+   * Hareket azaltılınca: balon ve ekran sadece belirir, sayaç atmaz. Kişilik
+   * kurallarını ezebilmek için onlardan yüksek ya da eşit özgüllükte. Dialog
+   * kuralları sadece bu iki kişilik için: Sticker ve Retro'nunki yukarıda.
+   */
+  :is(
+    [data-plonk-motion="reduce"] [data-plonk-personality="comic"],
+    [data-plonk-motion="reduce"] [data-plonk-personality="arcade"],
+    [data-plonk-personality="comic"][data-plonk-motion="reduce"],
+    [data-plonk-personality="arcade"][data-plonk-motion="reduce"]
+  ) {
+    .plonk-dialog:not(.plonk-command)[data-entering] {
+      animation: plonk-fade-in 150ms ease-out;
+    }
+    .plonk-dialog:not(.plonk-command)[data-exiting] {
+      animation: plonk-fade-out 100ms ease-in forwards;
+    }
+  }
+  :is(
+    [data-plonk-motion="reduce"] [data-plonk-personality],
+    [data-plonk-personality][data-plonk-motion="reduce"]
+  ) {
+    .plonk-countdown-n,
+    .plonk-countdown[data-urgent] .plonk-countdown-n,
+    .plonk-countdown[data-urgent] .plonk-countdown-label {
+      animation: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :is([data-plonk-personality="comic"], [data-plonk-personality="arcade"]) {
+      .plonk-dialog:not(.plonk-command)[data-entering] {
+        animation: plonk-fade-in 150ms ease-out;
+      }
+      .plonk-dialog:not(.plonk-command)[data-exiting] {
+        animation: plonk-fade-out 100ms ease-in forwards;
+      }
+    }
+    [data-plonk-personality] {
+      .plonk-countdown-n,
+      .plonk-countdown[data-urgent] .plonk-countdown-n,
+      .plonk-countdown[data-urgent] .plonk-countdown-label {
+        animation: none;
       }
     }
   }
@@ -2947,7 +3314,7 @@
       letter-spacing: 0.08em;
       text-shadow: 1px 1px 0 var(--plonk-color-primary);
       clip-path: none;
-      animation: plonk-arcade-blink 1600ms steps(1, end) infinite;
+      animation: plonk-blink 1600ms steps(1, end) infinite;
     }
 
     /* Kubbe: üst yarıda plastik parlaklık. */
@@ -3011,7 +3378,7 @@
     /* Etiketin üzerine gelince "INSERT COIN" gibi yanıp söner. */
     @media (hover: hover) {
       .plonk-badge:hover {
-        animation: plonk-arcade-blink 400ms steps(1, end) 3;
+        animation: plonk-blink 400ms steps(1, end) 3;
       }
     }
   }
@@ -3866,8 +4233,50 @@
   }
 }
 
-@keyframes plonk-arcade-blink {
+@keyframes plonk-blink {
   50% {
     opacity: 0.25;
+  }
+}
+
+@keyframes plonk-balloon-in {
+  from {
+    opacity: 0;
+    scale: 0.2;
+    rotate: -10deg;
+  }
+}
+
+@keyframes plonk-balloon-out {
+  to {
+    opacity: 0;
+    scale: 0.3;
+    rotate: 6deg;
+  }
+}
+
+@keyframes plonk-arcade-zoom-in {
+  from {
+    scale: 0.15;
+  }
+}
+
+@keyframes plonk-arcade-zoom-out {
+  to {
+    opacity: 0;
+    scale: 0.15;
+  }
+}
+
+@keyframes plonk-countdown-bam {
+  from {
+    scale: 0.4;
+    rotate: -20deg;
+  }
+}
+
+@keyframes plonk-countdown-tick {
+  from {
+    scale: 1.4;
   }
 }

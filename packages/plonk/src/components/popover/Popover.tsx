@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import {
   Dialog as AriaDialog,
   Heading,
+  OverlayArrow,
   Popover as AriaPopover,
   type PopoverProps as AriaPopoverProps,
 } from "react-aria-components";
@@ -31,7 +32,8 @@ export interface PopoverProps extends Pick<
 
 /**
  * Tetikleyicinin yanında açılan küçük panel. `DialogTrigger` ile kullanılır.
- * Tetikleyiciye tıklanan noktadan büyüyerek çıkar.
+ * Tetikleyiciye tıklanan noktadan büyüyerek çıkar. Çizgi Roman'da bir
+ * konuşma balonu: kuyruğu tetikleyiciyi gösterir.
  */
 export function Popover({
   title,
@@ -46,10 +48,16 @@ export function Popover({
       {...props}
       offset={offset}
       className={cn(
-        "plonk-popover max-w-[min(22rem,calc(100vw-1.5rem))] rounded-plonk-md bg-plonk-surface text-plonk-ink plonk-shadow plonk-border",
+        "plonk-popover plonk-popover-panel max-w-[min(22rem,calc(100vw-1.5rem))] rounded-[var(--plonk-popover-radius,var(--plonk-radius-md))] bg-plonk-surface text-plonk-ink plonk-shadow plonk-border",
         className,
       )}
     >
+      {/* Kuyruk: yerini React Aria hesaplar, kişilik CSS'i gösterip gizler. */}
+      <OverlayArrow className="plonk-popover-arrow">
+        <svg aria-hidden="true" width={18} height={13} viewBox="0 0 18 13">
+          <path d="M0 0 9 12 18 0" />
+        </svg>
+      </OverlayArrow>
       <AriaDialog aria-label={ariaLabel} className="p-4 outline-none">
         {({ close }) => (
           <>

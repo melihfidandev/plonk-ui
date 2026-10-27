@@ -10,6 +10,7 @@ import {
   type ModalOverlayProps,
 } from "react-aria-components";
 import { cn } from "../../lib/cn";
+import { Countdown } from "./Countdown";
 import { DialogFrame, type RenderSlot } from "./DialogFrame";
 
 export { DialogTrigger, type DialogTriggerProps };
@@ -39,10 +40,23 @@ export interface DialogProps extends Pick<
   hideClose?: boolean;
   /** Kapatma kutusunun ekran okuyucu adı. */
   closeLabel?: string;
+  /**
+   * Saniye cinsinden geri sayım (ör. "Oturumun kapanacak, devam?"). Bitince
+   * `onCountdownEnd` çağrılır; verilmemişse dialog kapanır. Kullanıcıya yetecek
+   * süre ver (WCAG: en az 20 sn) ve süreyi uzatan bir düğme koy.
+   */
+  countdown?: number;
+  onCountdownEnd?: (api: { close: () => void }) => void;
+  /** Sayının yanındaki yazı. Varsayılan: "Continue?". */
+  countdownLabel?: ReactNode;
+  /** Ekran okuyucuya 10 ve 5 saniye kala söylenen metin (yerelleştirme için). */
+  countdownMessage?: (seconds: number) => string;
   /** Görünür başlık yoksa zorunlu. */
   "aria-label"?: string;
   className?: string;
 }
+
+const defaultCountdownMessage = (seconds: number) => `${seconds} seconds left`;
 
 const SIZES: Record<DialogSize, string> = {
   sm: "max-w-sm",
@@ -55,7 +69,8 @@ const SIZES: Record<DialogSize, string> = {
  * kapanınca odak açan düğmeye döner (React Aria).
  *
  * Sticker'da fırlatılmış gibi gelip jöleyle oturur. Retro'da eski Mac'teki
- * gibi ortadan büyüyen çerçevelerle açılır.
+ * gibi ortadan büyüyen çerçevelerle açılır. Çizgi Roman'da konuşma balonu
+ * kuyruğundan şişer, Atari'de ekran gibi kademeli büyür.
  */
 export function Dialog({
   title,
@@ -67,6 +82,10 @@ export function Dialog({
   isDismissable = role === "dialog",
   hideClose = role === "alertdialog",
   closeLabel = "Close",
+  countdown,
+  onCountdownEnd,
+  countdownLabel = "Continue?",
+  countdownMessage = defaultCountdownMessage,
   "aria-label": ariaLabel,
   className,
   ...overlayProps
@@ -90,7 +109,8 @@ export function Dialog({
           aria-label={ariaLabel}
           aria-describedby={description != null ? descriptionId : undefined}
           className={cn(
-            "plonk-card flex max-h-[calc(var(--visual-viewport-height)-2rem)] flex-col rounded-plonk-lg bg-plonk-surface text-plonk-ink plonk-shadow-lg outline-none plonk-border",
+            // Köşe kişilikten ezilebilir: Çizgi Roman'da dialog bir konuşma balonu.
+            "plonk-card flex max-h-[calc(var(--visual-viewport-height)-2rem)] flex-col rounded-[var(--plonk-dialog-radius,var(--plonk-radius-lg))] bg-plonk-surface text-plonk-ink plonk-shadow-lg outline-none plonk-border",
             className,
           )}
         >
@@ -103,6 +123,19 @@ export function Dialog({
               footer={footer}
               hideClose={hideClose}
               closeLabel={closeLabel}
+              countdown={
+                countdown != null && (
+                  <Countdown
+                    key={countdown}
+                    seconds={countdown}
+                    label={countdownLabel}
+                    message={countdownMessage}
+                    onEnd={() =>
+                      onCountdownEnd ? onCountdownEnd({ close }) : close()
+                    }
+                  />
+                )
+              }
             >
               {children}
             </DialogFrame>
