@@ -98,6 +98,100 @@
     --plonk-jelly-duration: 0ms;
   }
 
+  [data-plonk-personality="comic"] {
+    --plonk-color-canvas: #FFF6DA;
+    --plonk-color-surface: #FFFFFF;
+    --plonk-color-sunken: #FFFDF3;
+    --plonk-color-ink: #111111;
+    --plonk-color-ink-muted: #5A554B;
+    --plonk-color-primary: #E3170A;
+    --plonk-color-on-primary: #FFFFFF;
+    --plonk-color-accent: #FFD400;
+    --plonk-color-on-accent: #111111;
+    --plonk-color-secondary: #1E88FF;
+    --plonk-color-on-secondary: #111111;
+    --plonk-color-success: #2BC66A;
+    --plonk-color-on-success: #111111;
+    --plonk-color-warning: #FF9F1C;
+    --plonk-color-on-warning: #111111;
+    --plonk-color-danger: #A3160E;
+    --plonk-color-on-danger: #FFFFFF;
+    --plonk-color-focus: #1E88FF;
+    --plonk-border-width: 3px;
+    --plonk-shadow-x: 5px;
+    --plonk-shadow-y: 5px;
+    --plonk-shadow-color: var(--plonk-color-ink);
+    --plonk-radius-sm: 2px;
+    --plonk-radius-md: 3px;
+    --plonk-radius-lg: 4px;
+    --plonk-radius-pill: 999px;
+    --plonk-font-display: "Bangers", "Impact", system-ui, sans-serif;
+    --plonk-font-body: "Kalam", "Comic Sans MS", system-ui, sans-serif;
+    --plonk-font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+    --plonk-font-display-case: uppercase;
+    --plonk-font-display-tracking: 0.04em;
+    --plonk-tilt: 0.8deg;
+    --plonk-motion-press-easing: cubic-bezier(0.2, 0.9, 0.3, 1);
+    --plonk-motion-press-duration: 60ms;
+    --plonk-motion-spring-easing: linear(0, 0.003 0.63%, 0.012 1.25%, 0.044 2.5%, 0.095 3.75%, 0.159 5%, 0.316 7.5%, 0.753 13.75%, 0.902 16.25%, 0.996 18.13%, 1.072 20%, 1.13 21.88%, 1.17 23.75%, 1.195 25.62%, 1.203 26.88%, 1.205 28.13%, 1.203 29.38%, 1.191 31.25%, 1.157 34.38%, 1.059 41.25%, 1.013 45%, 0.981 48.75%, 0.97 50.63%, 0.961 53.13%, 0.958 56.25%, 0.961 59.38%, 0.996 72.5%, 1.007 79.38%, 1.008 86.88%, 1);
+    --plonk-motion-spring-duration: 638ms;
+    --plonk-motion-snap-easing: linear(0, 0.002 0.63%, 0.01 1.25%, 0.036 2.5%, 0.078 3.75%, 0.131 5%, 0.262 7.5%, 0.712 15%, 0.842 17.5%, 0.926 19.38%, 0.997 21.25%, 1.07 23.75%, 1.11 25.62%, 1.145 28.13%, 1.155 29.38%, 1.162 31.25%, 1.162 33.13%, 1.155 35%, 1.127 38.75%, 1.048 46.88%, 1.017 50.63%, 0.992 55%, 0.978 59.38%, 0.974 62.5%, 0.974 66.25%, 1 85.63%, 1.004 92.5%, 1);
+    --plonk-motion-snap-duration: 649ms;
+    --plonk-motion-enter-easing: linear(0, 0.002 0.63%, 0.01 1.25%, 0.036 2.5%, 0.078 3.75%, 0.131 5%, 0.262 7.5%, 0.712 15%, 0.842 17.5%, 0.926 19.38%, 0.997 21.25%, 1.07 23.75%, 1.11 25.62%, 1.145 28.13%, 1.155 29.38%, 1.162 31.25%, 1.162 33.13%, 1.155 35%, 1.127 38.75%, 1.048 46.88%, 1.017 50.63%, 0.992 55%, 0.978 59.38%, 0.974 62.5%, 0.974 66.25%, 1 85.63%, 1.004 92.5%, 1);
+    --plonk-motion-enter-duration: 721ms;
+    --plonk-motion-exit-easing: cubic-bezier(0.5, 0, 1, 1);
+    --plonk-motion-exit-duration: 110ms;
+    --plonk-jelly-amount: 0.45;
+    --plonk-jelly-duration: 420ms;
+  }
+
+  [data-plonk-personality="arcade"] {
+    --plonk-color-canvas: #1A1238;
+    --plonk-color-surface: #2A1F5C;
+    --plonk-color-sunken: #120C2B;
+    --plonk-color-ink: #F4F0FF;
+    --plonk-color-ink-muted: #B8AEE0;
+    --plonk-color-primary: #E0006F;
+    --plonk-color-on-primary: #FFFFFF;
+    --plonk-color-accent: #FFE600;
+    --plonk-color-on-accent: #0B0820;
+    --plonk-color-secondary: #23E5FF;
+    --plonk-color-on-secondary: #0B0820;
+    --plonk-color-success: #39FF88;
+    --plonk-color-on-success: #0B0820;
+    --plonk-color-warning: #FF9F1C;
+    --plonk-color-on-warning: #0B0820;
+    --plonk-color-danger: #FF4D5E;
+    --plonk-color-on-danger: #0B0820;
+    --plonk-color-focus: #FFE600;
+    --plonk-border-width: 3px;
+    --plonk-shadow-x: 0px;
+    --plonk-shadow-y: 5px;
+    --plonk-shadow-color: #23E5FF;
+    --plonk-radius-sm: 6px;
+    --plonk-radius-md: 12px;
+    --plonk-radius-lg: 18px;
+    --plonk-radius-pill: 999px;
+    --plonk-font-display: "Bungee", "Impact", system-ui, sans-serif;
+    --plonk-font-body: "Rubik", system-ui, sans-serif;
+    --plonk-font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+    --plonk-font-display-case: uppercase;
+    --plonk-font-display-tracking: 0.02em;
+    --plonk-tilt: 0deg;
+    --plonk-motion-press-easing: cubic-bezier(0, 0, 0.2, 1);
+    --plonk-motion-press-duration: 90ms;
+    --plonk-motion-spring-easing: linear(0, 0.002 0.63%, 0.01 1.25%, 0.036 2.5%, 0.078 3.75%, 0.131 5%, 0.262 7.5%, 0.712 15%, 0.842 17.5%, 0.926 19.38%, 0.997 21.25%, 1.07 23.75%, 1.11 25.62%, 1.145 28.13%, 1.155 29.38%, 1.162 31.25%, 1.162 33.13%, 1.155 35%, 1.127 38.75%, 1.048 46.88%, 1.017 50.63%, 0.992 55%, 0.978 59.38%, 0.974 62.5%, 0.974 66.25%, 1 85.63%, 1.004 92.5%, 1);
+    --plonk-motion-spring-duration: 685ms;
+    --plonk-motion-snap-easing: steps(5, end);
+    --plonk-motion-snap-duration: 240ms;
+    --plonk-motion-enter-easing: steps(5, end);
+    --plonk-motion-enter-duration: 300ms;
+    --plonk-motion-exit-easing: steps(3, end);
+    --plonk-motion-exit-duration: 150ms;
+    --plonk-jelly-amount: 0;
+    --plonk-jelly-duration: 0ms;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     :root,
     [data-plonk-personality] {

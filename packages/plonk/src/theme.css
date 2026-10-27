@@ -1749,6 +1749,8 @@
     .plonk-cal-dow {
       border-bottom: var(--plonk-border-width) solid var(--plonk-color-ink);
       font-family: var(--plonk-font-display);
+      text-transform: var(--plonk-font-display-case);
+      letter-spacing: var(--plonk-font-display-tracking);
       font-weight: 400;
     }
     .plonk-cal-cell {
@@ -1952,6 +1954,8 @@
       calc(var(--plonk-shadow-y) * 0.5) 0 var(--plonk-shadow-color);
     color: var(--plonk-color-ink);
     font-family: var(--plonk-font-display);
+    text-transform: var(--plonk-font-display-case);
+    letter-spacing: var(--plonk-font-display-tracking);
     font-size: 0.875rem;
     font-weight: 800;
     line-height: 1;
@@ -2128,6 +2132,8 @@
     background: var(--plonk-color-primary);
     color: var(--plonk-color-on-primary);
     font-family: var(--plonk-font-display);
+    text-transform: var(--plonk-font-display-case);
+    letter-spacing: var(--plonk-font-display-tracking);
     font-size: 0.8rem;
     font-weight: 800;
     rotate: calc(var(--plonk-tilt) * -2);
@@ -2315,6 +2321,8 @@
       border-bottom: var(--plonk-border-width) solid var(--plonk-color-ink);
       color: var(--plonk-color-ink);
       font-family: var(--plonk-font-display);
+      text-transform: var(--plonk-font-display-case);
+      letter-spacing: var(--plonk-font-display-tracking);
       font-weight: 400;
     }
     .plonk-command-item {
@@ -2381,6 +2389,8 @@
     border-bottom: var(--plonk-border-width) solid var(--plonk-color-ink);
     background: var(--plonk-color-surface);
     font-family: var(--plonk-font-display);
+    text-transform: var(--plonk-font-display-case);
+    letter-spacing: var(--plonk-font-display-tracking);
     font-size: 0.85rem;
     font-weight: 800;
     text-align: start;
@@ -2566,6 +2576,8 @@
     box-shadow: var(--plonk-shadow-x) var(--plonk-shadow-y) 0
       color-mix(in oklab, var(--plonk-shadow-color) 35%, transparent);
     font-family: var(--plonk-font-display);
+    text-transform: var(--plonk-font-display-case);
+    letter-spacing: var(--plonk-font-display-tracking);
     font-size: 0.95rem;
     font-weight: 800;
     white-space: nowrap;

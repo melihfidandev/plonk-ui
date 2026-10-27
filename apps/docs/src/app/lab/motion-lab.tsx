@@ -132,7 +132,7 @@ export function MotionLab() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
           <div className="mr-auto">
             <p className="text-[11px] font-bold tracking-widest uppercase opacity-50">
-              Aşama 4 · komut paleti, slider, veri tablosu
+              Aşama 4.5 · Çizgi Roman + Atari Salonu
             </p>
             <h1 className="text-xl font-black tracking-tight">Laboratuvar</h1>
           </div>
