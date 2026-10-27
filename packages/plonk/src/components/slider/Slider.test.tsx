@@ -70,6 +70,31 @@ describe("Slider", () => {
     expect(onChange).toHaveBeenLastCalledWith([60, 60]);
   });
 
+  it("minGap ile tutamaçlar birbirine bu kadardan fazla yaklaşamaz", async () => {
+    const onChange = vi.fn();
+    render(
+      <Slider
+        label="Price"
+        defaultValue={[300, 1200]}
+        max={2000}
+        step={50}
+        minGap={100}
+        thumbLabels={["Min price", "Max price"]}
+        onChange={onChange}
+      />,
+    );
+    const low = screen.getByRole("slider", { name: /min price/i });
+    const high = screen.getByRole("slider", { name: /max price/i });
+    expect(low).toHaveAttribute("aria-valuemax", "1100");
+    expect(high).toHaveAttribute("aria-valuemin", "400");
+    low.focus();
+    await userEvent.keyboard("{End}");
+    expect(onChange).toHaveBeenLastCalledWith([1100, 1200]);
+    high.focus();
+    await userEvent.keyboard("{Home}");
+    expect(high).toHaveAttribute("aria-valuenow", "1200");
+  });
+
   it("fareyle tıklanan noktaya en yakın tutamaç gider", () => {
     const spy = mockTrack();
     const onChangeEnd = vi.fn();

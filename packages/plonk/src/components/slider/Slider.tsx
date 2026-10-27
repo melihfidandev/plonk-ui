@@ -40,6 +40,11 @@ export interface SliderProps<T extends SliderValue = number> extends Omit<
   min?: number;
   max?: number;
   step?: number;
+  /**
+   * Aralıkta iki tutamaç arasında kalması gereken en küçük fark, ör. fiyatta
+   * `100`. `step`'in katı olmalı. Varsayılan 0: tutamaçlar aynı değere gelebilir.
+   */
+  minGap?: number;
   /** Sayı biçimi (`Intl.NumberFormat`), ör. `{ style: "currency", currency: "TRY" }`. */
   formatOptions?: Intl.NumberFormatOptions;
   /** Biçimi tamamen sen ver: `(v) => ["Low", "Mid", "High"][v]`. */
@@ -82,6 +87,7 @@ export function Slider<T extends SliderValue = number>({
   min = 0,
   max = 100,
   step = 1,
+  minGap = 0,
   formatOptions,
   formatValue,
   marks,
@@ -132,7 +138,12 @@ export function Slider<T extends SliderValue = number>({
   const commit = (i: number, raw: number, end: boolean) => {
     const next = [...latest.current];
     let v = snap(raw);
-    if (range) v = i === 0 ? Math.min(v, next[1]!) : Math.max(v, next[0]!);
+    if (range) {
+      v =
+        i === 0
+          ? Math.min(v, next[1]! - minGap)
+          : Math.max(v, next[0]! + minGap);
+    }
     const changed = v !== next[i];
     next[i] = v;
     const out = (range ? [next[0]!, next[1]!] : next[0]!) as T;
@@ -289,8 +300,8 @@ export function Slider<T extends SliderValue = number>({
             <div
               role="slider"
               tabIndex={isDisabled ? undefined : 0}
-              aria-valuemin={range && i === 1 ? values[0] : min}
-              aria-valuemax={range && i === 0 ? values[1] : max}
+              aria-valuemin={range && i === 1 ? values[0]! + minGap : min}
+              aria-valuemax={range && i === 0 ? values[1]! - minGap : max}
               aria-valuenow={v}
               aria-valuetext={format(v)}
               aria-orientation="horizontal"

@@ -737,6 +737,8 @@ function SliderLab() {
         min={0}
         max={2000}
         step={50}
+        minGap={100}
+        description="İki tutamaç arasında en az ₺100 fark kalır (minGap)."
         formatOptions={{
           style: "currency",
           currency: "TRY",
