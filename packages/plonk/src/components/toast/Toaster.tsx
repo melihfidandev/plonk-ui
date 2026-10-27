@@ -476,7 +476,9 @@ function ToastItem({
         onPointerUp={onPointerEnd}
         onPointerCancel={onPointerEnd}
       >
-        <span aria-hidden="true" className="plonk-toast-tape" />
+        {content.tape && (
+          <span aria-hidden="true" className="plonk-toast-tape" />
+        )}
         <div aria-hidden="true" className="plonk-toast-bar">
           <span className="plonk-toast-label font-plonk-display">{label}</span>
         </div>

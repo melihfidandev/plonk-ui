@@ -649,6 +649,18 @@ function ToastLab({
         <Button variant="neutral" onPress={undo}>
           Geri al (süresiz)
         </Button>
+        <Button
+          variant="neutral"
+          onPress={() =>
+            toast("Bantsız sticker", {
+              description: "toast(…, { tape: false })",
+              label: "Bilgi",
+              tape: false,
+            })
+          }
+        >
+          Bantsız
+        </Button>
         <Button variant="primary" onPress={rain}>
           5’li yağmur
         </Button>

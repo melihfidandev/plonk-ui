@@ -25,6 +25,11 @@ export interface ToastOptions {
    * ("Notice", "Success", "Warning", "Error").
    */
   label?: ReactNode;
+  /**
+   * Sticker'da üstteki bant. Varsayılan açık (provider'ın `toastTape`'i);
+   * Retro'da görünmez.
+   */
+  tape?: boolean;
   /** Kapandığında çağrılır: kullanıcı kapatınca ya da süre dolunca. */
   onClose?: () => void;
 }
@@ -36,6 +41,7 @@ export interface ToastContent {
   variant: ToastVariant;
   action?: ToastAction;
   label?: ReactNode;
+  tape: boolean;
 }
 
 export const MIN_TIMEOUT = 5000;
@@ -51,10 +57,16 @@ export const toastQueue = new ToastQueue<ToastContent>({
 });
 
 let defaultTimeout = MIN_TIMEOUT;
+let defaultTape = true;
 
 /** Provider'ın `toastTimeout` ayarı buraya yazılır. */
 export function setDefaultToastTimeout(ms: number) {
   defaultTimeout = ms;
+}
+
+/** Provider'ın `toastTape` ayarı buraya yazılır. */
+export function setDefaultToastTape(tape: boolean) {
+  defaultTape = tape;
 }
 
 function show(
@@ -64,13 +76,14 @@ function show(
     variant = "info",
     action,
     label,
+    tape = defaultTape,
     timeout,
     onClose,
   }: ToastOptions = {},
 ) {
   const ms = timeout ?? (action ? 0 : defaultTimeout);
   return toastQueue.add(
-    { title, description, variant, action, label },
+    { title, description, variant, action, label, tape },
     { timeout: ms > 0 ? Math.max(ms, MIN_TIMEOUT) : undefined, onClose },
   );
 }

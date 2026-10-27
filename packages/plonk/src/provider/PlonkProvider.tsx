@@ -10,7 +10,10 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { UNSAFE_PortalProvider } from "react-aria";
-import { setDefaultToastTimeout } from "../components/toast/queue";
+import {
+  setDefaultToastTape,
+  setDefaultToastTimeout,
+} from "../components/toast/queue";
 import { Toaster, type ToastPlacement } from "../components/toast/Toaster";
 import { cn } from "../lib/cn";
 import {
@@ -56,6 +59,11 @@ export interface PlonkProviderProps extends Omit<
    * Tek bir toast için `toast("…", { timeout })`.
    */
   toastTimeout?: number;
+  /**
+   * Sticker toast'larının üstündeki bant (varsayılan açık). Tek bir toast
+   * için `toast("…", { tape: false })`.
+   */
+  toastTape?: boolean;
 }
 
 const subscribeNothing = () => () => {};
@@ -87,6 +95,7 @@ export function PlonkProvider({
   toaster = true,
   toastPlacement = "bottom-end",
   toastTimeout,
+  toastTape = true,
   children,
   ...props
 }: PlonkProviderProps) {
@@ -105,6 +114,10 @@ export function PlonkProvider({
       setDefaultToastTimeout(toastTimeout);
     }
   }, [ownsToaster, toastTimeout]);
+
+  useEffect(() => {
+    if (ownsToaster) setDefaultToastTape(toastTape);
+  }, [ownsToaster, toastTape]);
 
   const motionAttr = motion === "reduce" ? "reduce" : undefined;
   const fullStyle: PlonkStyle | undefined =

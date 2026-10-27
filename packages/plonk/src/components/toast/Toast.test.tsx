@@ -9,12 +9,18 @@ import {
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { PlonkProvider } from "../../provider/PlonkProvider";
-import { MIN_TIMEOUT, setDefaultToastTimeout, toast } from "./queue";
+import {
+  MIN_TIMEOUT,
+  setDefaultToastTape,
+  setDefaultToastTimeout,
+  toast,
+} from "./queue";
 
 // Kuyruk modül düzeyinde; testler birbirine bulaşmasın.
 afterEach(() => {
   act(() => toast.dismiss());
   setDefaultToastTimeout(MIN_TIMEOUT);
+  setDefaultToastTape(true);
   vi.useRealTimers();
 });
 
@@ -158,6 +164,26 @@ describe("Toast", () => {
     expect(item.style.getPropertyValue("--plonk-toast-drag-x")).toBe("");
     drag(200);
     expect(screen.queryByRole("alertdialog")).toBeNull();
+  });
+
+  it("bant varsayılan açık; toast ya da provider ayarıyla kapanır", () => {
+    const tape = (name: string) =>
+      screen
+        .getByRole("alertdialog", { name })
+        .querySelector(".plonk-toast-tape");
+    const { unmount } = render(<PlonkProvider />);
+    show("Default");
+    show("Plain", { tape: false });
+    expect(tape("Default")).not.toBeNull();
+    expect(tape("Plain")).toBeNull();
+    act(() => toast.dismiss());
+    unmount();
+
+    render(<PlonkProvider toastTape={false} />);
+    show("Provider off");
+    show("Opt in", { tape: true });
+    expect(tape("Provider off")).toBeNull();
+    expect(tape("Opt in")).not.toBeNull();
   });
 
   it("iç içe provider'larda tek bölge açılır; toaster={false} açmaz", () => {
