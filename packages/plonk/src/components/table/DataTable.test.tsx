@@ -147,6 +147,17 @@ describe("DataTable", () => {
     expect(onShip).toHaveBeenCalledWith(["2", "4"]);
   });
 
+  it("Shift ile tıklanınca iki satır arası hep birlikte seçilir", async () => {
+    render(<Table selectable />);
+    const boxes = screen.getAllByRole("checkbox", { name: "Select row" });
+    await userEvent.click(boxes[0]!);
+    // user-event Shift'i tıklamaya aktarmıyor; tarayıcıda gerçek Shift-tıklama denendi.
+    fireEvent.click(boxes[3]!, { shiftKey: true });
+    expect(
+      screen.getByRole("toolbar", { name: "4 selected" }),
+    ).toBeInTheDocument();
+  });
+
   it("tümünü seç ve temizle; çubuk çıkar", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     render(<Table selectable />);
