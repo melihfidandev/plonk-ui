@@ -1858,6 +1858,223 @@
     }
   }
 
+  /* ---------- Slider ---------- */
+
+  /*
+   * Sticker: tutamaç yuvarlak bir sticker. Sürüklerken hız yönünde uzar
+   * (--plonk-slider-stretch), gerçek konumun biraz gerisinden gelir
+   * (--plonk-slider-lag); değer etiketi bir yay daha geriden izleyip eğilir
+   * (--plonk-slider-trail, --plonk-slider-sway). Değerleri JS yazar.
+   */
+  .plonk-slider {
+    --plonk-slider-thumb: 1.875rem;
+    position: relative;
+    height: 2rem;
+    touch-action: none;
+    user-select: none;
+    cursor: pointer;
+  }
+  .plonk-slider[data-bubble="always"] {
+    margin-top: 2.25rem;
+  }
+  .plonk-slider:has(.plonk-slider-marks) {
+    margin-bottom: 1.25rem;
+  }
+  .plonk-slider-field[data-disabled] .plonk-slider {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  .plonk-slider-track {
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    height: 0.75rem;
+    overflow: hidden;
+    translate: 0 -50%;
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-radius: var(--plonk-radius-pill);
+    background: var(--plonk-color-surface);
+  }
+  .plonk-slider-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: var(--plonk-color-primary);
+  }
+  .plonk-slider-thumb {
+    position: absolute;
+    top: 50%;
+    width: 0;
+    height: 0;
+    translate: var(--plonk-slider-lag, 0px) 0;
+  }
+  .plonk-slider-knob {
+    position: absolute;
+    top: calc(var(--plonk-slider-thumb) / -2);
+    left: calc(var(--plonk-slider-thumb) / -2);
+    width: var(--plonk-slider-thumb);
+    height: var(--plonk-slider-thumb);
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-radius: var(--plonk-radius-pill);
+    background: var(--plonk-color-accent);
+    box-shadow: calc(var(--plonk-shadow-x) * 0.5)
+      calc(var(--plonk-shadow-y) * 0.5) 0 var(--plonk-shadow-color);
+    outline: none;
+    transform: scale(
+      calc(1 + var(--plonk-slider-stretch, 0)),
+      calc(1 - var(--plonk-slider-stretch, 0) * 0.55)
+    );
+    transition: scale var(--plonk-motion-spring-duration)
+      var(--plonk-motion-spring-easing);
+    cursor: grab;
+  }
+  .plonk-slider-thumb[data-active] .plonk-slider-knob {
+    scale: 1.18;
+    cursor: grabbing;
+  }
+  .plonk-slider-knob:focus-visible:not([data-pointer]) {
+    box-shadow:
+      0 0 0 3px var(--plonk-color-surface),
+      0 0 0 6px var(--plonk-color-focus);
+  }
+  .plonk-slider-bubble {
+    position: absolute;
+    bottom: calc(var(--plonk-slider-thumb) / 2 + 0.6rem);
+    left: 0;
+    padding: 0.3rem 0.55rem 0.2rem;
+    translate: calc(-50% + var(--plonk-slider-trail, 0px)) 0;
+    rotate: var(--plonk-slider-sway, 0deg);
+    transform-origin: 50% 140%;
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-radius: var(--plonk-radius-sm);
+    background: var(--plonk-color-surface);
+    box-shadow: calc(var(--plonk-shadow-x) * 0.5)
+      calc(var(--plonk-shadow-y) * 0.5) 0 var(--plonk-shadow-color);
+    color: var(--plonk-color-ink);
+    font-family: var(--plonk-font-display);
+    font-size: 0.875rem;
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+    pointer-events: none;
+    transition-property: opacity, scale;
+    transition-timing-function: var(--plonk-motion-spring-easing);
+    transition-duration: var(--plonk-motion-spring-duration);
+  }
+  .plonk-slider-bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -0.4rem;
+    left: 50%;
+    width: 0.6rem;
+    height: 0.6rem;
+    translate: -50% 0;
+    rotate: 45deg;
+    border-right: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-bottom: var(--plonk-border-width) solid var(--plonk-color-ink);
+    background: var(--plonk-color-surface);
+  }
+  /* Sadece kullanılırken: sürüklerken, klavye odağında ya da üstündeyken. */
+  .plonk-slider[data-bubble="active"] .plonk-slider-bubble {
+    opacity: 0;
+    scale: 0.6;
+  }
+  .plonk-slider[data-bubble="active"]
+    .plonk-slider-thumb:is(
+      [data-active],
+      :has(.plonk-slider-knob:is(:focus-visible:not([data-pointer]), :hover))
+    )
+    .plonk-slider-bubble {
+    opacity: 1;
+    scale: 1;
+  }
+  .plonk-slider-marks {
+    position: absolute;
+    inset-inline: 0;
+    top: calc(100% + 0.25rem);
+    color: var(--plonk-color-ink-muted);
+    font-size: 0.75rem;
+  }
+  .plonk-slider-mark {
+    position: absolute;
+    translate: -50% 0;
+    white-space: nowrap;
+  }
+  .plonk-slider-mark:dir(rtl) {
+    translate: 50% 0;
+  }
+  .plonk-slider-mark[data-edge="start"] {
+    translate: 0 0;
+  }
+  .plonk-slider-mark[data-edge="end"] {
+    translate: -100% 0;
+  }
+  .plonk-slider-mark[data-edge="end"]:dir(rtl) {
+    translate: 100% 0;
+  }
+
+  /*
+   * Retro: ray bir cetvel, dolu kısım noktalı desen. Tutamaç tırtıklı bir
+   * blok; her adımda bir piksel zıplar. Değer küçük bir pencere kutusunda.
+   */
+  [data-plonk-personality="retro"] {
+    .plonk-slider-track {
+      height: 0.65rem;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          var(--plonk-color-ink) 0 1px,
+          transparent 1px 10%
+        ),
+        var(--plonk-color-surface);
+    }
+    .plonk-slider-fill {
+      background: repeating-conic-gradient(
+          var(--plonk-color-ink) 0 25%,
+          transparent 0 50%
+        )
+        0 0 / 2px 2px;
+    }
+    .plonk-slider-knob {
+      top: -0.8125rem;
+      left: -0.4375rem;
+      width: 0.875rem;
+      height: 1.625rem;
+      background: var(--plonk-color-surface);
+    }
+    .plonk-slider-knob::after {
+      content: "";
+      position: absolute;
+      inset: 0.3rem 0.15rem;
+      background: repeating-linear-gradient(
+        to bottom,
+        var(--plonk-color-ink) 0 1px,
+        transparent 1px 3px
+      );
+    }
+    .plonk-slider-knob[data-hop] {
+      animation: plonk-slider-hop 60ms step-end;
+    }
+    .plonk-slider-thumb[data-active] .plonk-slider-knob {
+      scale: none;
+    }
+    .plonk-slider-knob:focus-visible:not([data-pointer]) {
+      outline: 2px dashed var(--plonk-color-ink);
+      outline-offset: 3px;
+      box-shadow: calc(var(--plonk-shadow-x) * 0.5)
+        calc(var(--plonk-shadow-y) * 0.5) 0 var(--plonk-shadow-color);
+    }
+    .plonk-slider-bubble {
+      padding: 0.25rem 0.4rem;
+      font-family: var(--plonk-font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .plonk-slider-bubble::after {
+      display: none;
+    }
+  }
+
   /* ---------- Avatar grubu: üst üste biner, üzerine gelince kalkar ---------- */
 
   .plonk-avatar-group > .plonk-avatar {
@@ -2399,5 +2616,11 @@
 @keyframes plonk-cal-in-prev {
   from {
     translate: -100% 0;
+  }
+}
+
+@keyframes plonk-slider-hop {
+  from {
+    translate: 0 -2px;
   }
 }

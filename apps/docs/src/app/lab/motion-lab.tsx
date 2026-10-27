@@ -42,6 +42,7 @@ import {
   sampleEasing,
   Select,
   SelectItem,
+  Slider,
   Switch,
   Tab,
   TabList,
@@ -124,7 +125,7 @@ export function MotionLab() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
           <div className="mr-auto">
             <p className="text-[11px] font-bold tracking-widest uppercase opacity-50">
-              Aşama 3 · etkileşimli bileşenler
+              Aşama 4 · komut paleti, slider, veri tablosu
             </p>
             <h1 className="text-xl font-black tracking-tight">Laboratuvar</h1>
           </div>
@@ -202,6 +203,13 @@ export function MotionLab() {
             </h2>
             <p className="mt-3 max-w-prose text-lg">{p.description}</p>
           </section>
+
+          <Section
+            title="Slider"
+            note="Hızlı ve yavaş sürükle: Sticker'da tutamaç uzar, etiket yaylı gecikmeyle izler. Retro'da tutamaç adım adım zıplar. Tab ile tutamaca gel; oklar, PageUp/PageDown, Home/End."
+          >
+            <SliderLab />
+          </Section>
 
           <Section
             title="Toast"
@@ -585,6 +593,49 @@ function FormLab() {
           readOnly
         />
       </div>
+    </div>
+  );
+}
+
+const DENSITY = ["Çok seyrek", "Seyrek", "Normal", "Sık", "Çok sık"];
+
+function SliderLab() {
+  return (
+    <div className="grid gap-x-12 gap-y-10 md:grid-cols-2">
+      <Slider label="Ses" defaultValue={64} formatValue={(v) => `%${v}`} />
+      <Slider
+        label="Fiyat aralığı"
+        defaultValue={[300, 1200]}
+        min={0}
+        max={2000}
+        step={50}
+        formatOptions={{
+          style: "currency",
+          currency: "TRY",
+          maximumFractionDigits: 0,
+        }}
+        marks={[0, 500, 1000, 1500, 2000]}
+        thumbLabels={["En düşük", "En yüksek"]}
+      />
+      <Slider
+        label="Yoğunluk"
+        defaultValue={3}
+        min={1}
+        max={5}
+        formatValue={(v) => DENSITY[v - 1] ?? String(v)}
+        marks={[1, 2, 3, 4, 5].map((v) => ({ value: v, label: String(v) }))}
+      />
+      <Slider
+        label="Saydamlık"
+        description="Etiket sadece sürüklerken ya da odaktayken görünür."
+        defaultValue={0.4}
+        min={0}
+        max={1}
+        step={0.05}
+        valueBubble="active"
+        formatOptions={{ style: "percent" }}
+      />
+      <Slider label="Kilitli" defaultValue={30} isDisabled />
     </div>
   );
 }
