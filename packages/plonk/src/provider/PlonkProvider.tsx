@@ -9,7 +9,7 @@ import {
   type HTMLAttributes,
 } from "react";
 import { createPortal } from "react-dom";
-import { UNSAFE_PortalProvider } from "react-aria";
+import { I18nProvider, UNSAFE_PortalProvider } from "react-aria";
 import {
   setDefaultToastTape,
   setDefaultToastTimeout,
@@ -64,6 +64,11 @@ export interface PlonkProviderProps extends Omit<
    * için `toast("…", { tape: false })`.
    */
   toastTape?: boolean;
+  /**
+   * Dil ve bölge, ör. `"tr-TR"`. Tarih biçimi, ay adları, haftanın ilk günü
+   * ve React Aria'nın ekran okuyucu metinleri buna göre. Verilmezse tarayıcının dili.
+   */
+  locale?: string;
 }
 
 const subscribeNothing = () => () => {};
@@ -96,6 +101,7 @@ export function PlonkProvider({
   toastPlacement = "bottom-end",
   toastTimeout,
   toastTape = true,
+  locale,
   children,
   ...props
 }: PlonkProviderProps) {
@@ -125,11 +131,12 @@ export function PlonkProvider({
       ? style
       : { ...style, "--plonk-jelly-amount": String(jelly) };
 
-  return (
+  const tree = (
     <PersonalityContext value={personality}>
       <ToasterContext value={hasToaster || ownsToaster}>
         <UNSAFE_PortalProvider getContainer={() => layer}>
           <div
+            lang={locale}
             {...props}
             data-plonk-personality={personality}
             data-plonk-motion={motionAttr}
@@ -145,6 +152,7 @@ export function PlonkProvider({
         createPortal(
           <div
             ref={setLayer}
+            lang={locale}
             data-plonk-layer=""
             data-plonk-personality={personality}
             data-plonk-motion={motionAttr}
@@ -155,6 +163,9 @@ export function PlonkProvider({
         )}
     </PersonalityContext>
   );
+
+  // Dil verildiyse React Aria'nın bütün bileşenleri (tarih, toast) ona uyar.
+  return locale ? <I18nProvider locale={locale}>{tree}</I18nProvider> : tree;
 }
 
 /** En yakın `PlonkProvider`'ın kişiliği. Provider yoksa varsayılan kişilik. */

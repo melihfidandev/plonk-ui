@@ -224,6 +224,9 @@ importers:
 
   packages/plonk:
     dependencies:
+      '@internationalized/date':
+        specifier: ^3.12.4
+        version: 3.12.4
       clsx:
         specifier: ^2.1.1
         version: 2.1.1

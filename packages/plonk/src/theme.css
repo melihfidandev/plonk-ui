@@ -1332,6 +1332,532 @@
     }
   }
 
+  /* ---------- Date Picker ve takvim ---------- */
+
+  /* Alan: gün, ay, yıl ayrı parçalar. Odaktaki parça vurgulanır. */
+  .plonk-date-input {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .plonk-segment {
+    padding: 0.05rem 0.1rem;
+    border-radius: var(--plonk-radius-sm);
+    outline: none;
+    caret-color: transparent;
+  }
+  .plonk-segment[data-type="literal"] {
+    padding-inline: 0.05rem;
+    color: var(--plonk-color-ink-muted);
+  }
+  .plonk-segment[data-placeholder] {
+    color: var(--plonk-color-ink-muted);
+  }
+  .plonk-segment[data-focused] {
+    background: var(--plonk-color-primary);
+    color: var(--plonk-color-on-primary);
+  }
+  .plonk-cal-trigger {
+    color: var(--plonk-color-ink);
+    transition: background-color var(--plonk-motion-press-duration)
+      var(--plonk-motion-press-easing);
+  }
+  .plonk-cal-trigger[data-hovered] {
+    background: color-mix(in oklab, var(--plonk-color-ink) 8%, transparent);
+  }
+  .plonk-cal-trigger[data-pressed] {
+    background: color-mix(in oklab, var(--plonk-color-ink) 14%, transparent);
+  }
+  .plonk-cal-trigger[data-focus-visible] {
+    outline: 3px solid var(--plonk-color-focus);
+    outline-offset: 1px;
+  }
+
+  /*
+   * Sticker: masa takvimi. Üstte spiral halkalar; ileri giderken yaprak
+   * koparılıp düşer, seçilen gün sticker olarak yapışır, bugün kalemle
+   * halkalanır, aralık fosforlu kalemle çizilir.
+   */
+  .plonk-calendar {
+    --plonk-cal-size: 2.4rem;
+    --plonk-cal-dow-h: 1.75rem;
+    position: relative;
+    display: flex;
+    gap: 1rem;
+    width: fit-content;
+    padding: 1rem 0.9rem 0.9rem;
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-radius: var(--plonk-radius-lg);
+    background: var(--plonk-color-surface);
+    color: var(--plonk-color-ink);
+    box-shadow: var(--plonk-shadow-x) var(--plonk-shadow-y) 0
+      var(--plonk-shadow-color);
+    rotate: calc(var(--plonk-tilt) * -0.5);
+  }
+  .plonk-cal-presets {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+    padding-top: calc(2rem + 0.6rem + var(--plonk-cal-dow-h));
+  }
+  .plonk-cal-preset:nth-child(odd) {
+    rotate: calc(var(--plonk-tilt) * -0.8);
+  }
+  .plonk-cal-preset:nth-child(even) {
+    rotate: calc(var(--plonk-tilt) * 0.6);
+  }
+  @media (max-width: 30rem) {
+    .plonk-calendar-presets {
+      flex-direction: column;
+    }
+    .plonk-cal-presets {
+      flex-flow: row wrap;
+      order: 1;
+      padding-top: 0;
+    }
+  }
+
+  .plonk-cal-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+  }
+  .plonk-cal-heading {
+    flex: 1;
+    font-size: 1.3rem;
+    line-height: 1.2;
+    text-align: center;
+  }
+  .plonk-cal-rings {
+    position: absolute;
+    top: -1.65rem;
+    inset-inline: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+  .plonk-cal-rings > i {
+    width: 0.5rem;
+    height: 1.25rem;
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-radius: 0.4rem;
+    background: var(--plonk-color-canvas);
+  }
+  .plonk-cal-nav {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-radius: var(--plonk-radius-pill);
+    background: var(--plonk-color-surface);
+    color: var(--plonk-color-ink);
+    box-shadow: calc(var(--plonk-shadow-x) * 0.5)
+      calc(var(--plonk-shadow-y) * 0.5) 0 var(--plonk-shadow-color);
+    outline: none;
+    cursor: pointer;
+    transition-property: translate, box-shadow;
+    transition-timing-function: var(--plonk-motion-spring-easing);
+    transition-duration: var(--plonk-motion-spring-duration);
+  }
+  .plonk-cal-nav > svg {
+    width: 1rem;
+    height: 1rem;
+  }
+  .plonk-cal-nav[data-pressed] {
+    translate: calc(var(--plonk-shadow-x) * 0.5)
+      calc(var(--plonk-shadow-y) * 0.5);
+    box-shadow: none;
+    transition-timing-function: var(--plonk-motion-press-easing);
+    transition-duration: var(--plonk-motion-press-duration);
+  }
+  .plonk-cal-nav[data-focus-visible] {
+    outline: 3px solid var(--plonk-color-focus);
+    outline-offset: 2px;
+  }
+  .plonk-cal-nav[data-disabled] {
+    box-shadow: none;
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .plonk-cal-stage {
+    position: relative;
+  }
+  .plonk-cal-grid {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  .plonk-cal-grid :is(td, th) {
+    padding: 0;
+  }
+  .plonk-cal-dow {
+    height: var(--plonk-cal-dow-h);
+    color: var(--plonk-color-ink-muted);
+    font-size: 0.75rem;
+    font-weight: 800;
+  }
+  .plonk-cal-cell {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: var(--plonk-cal-size);
+    height: var(--plonk-cal-size);
+    border-radius: var(--plonk-radius-pill);
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    outline: none;
+    cursor: pointer;
+  }
+  .plonk-cal-num {
+    position: relative;
+    z-index: 1;
+  }
+  .plonk-cal-cell[data-hovered]:not([data-selected]) {
+    background: color-mix(in oklab, var(--plonk-color-ink) 8%, transparent);
+  }
+  .plonk-cal-cell[data-focus-visible] {
+    outline: 3px solid var(--plonk-color-focus);
+    outline-offset: -2px;
+  }
+  .plonk-cal-cell[data-outside-month] {
+    opacity: 0.3;
+    cursor: default;
+  }
+  .plonk-cal-cell[data-disabled]:not([data-outside-month]) {
+    color: var(--plonk-color-ink-muted);
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  /* Seçilemeyen gün: üstü kalemle karalanmış. */
+  .plonk-cal-cell[data-unavailable] {
+    color: var(--plonk-color-ink-muted);
+    cursor: not-allowed;
+  }
+  .plonk-cal-cell[data-unavailable] .plonk-cal-num::after {
+    content: "";
+    position: absolute;
+    inset-inline: -0.3rem;
+    top: 50%;
+    height: 2.5px;
+    border-radius: 2px;
+    background: var(--plonk-color-danger);
+    rotate: -18deg;
+  }
+
+  /* Seçilen gün: yuvarlak bir sticker "pat" diye yapışır. */
+  .plonk-cal-dot {
+    position: absolute;
+    inset: 0.15rem;
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-radius: var(--plonk-radius-pill);
+    background: var(--plonk-color-primary);
+    box-shadow: calc(var(--plonk-shadow-x) * 0.5)
+      calc(var(--plonk-shadow-y) * 0.5) 0 var(--plonk-shadow-color);
+    rotate: calc((var(--plonk-cal-col, 3) - 3) * var(--plonk-tilt));
+    animation: plonk-cal-pop 560ms ease-out;
+  }
+  .plonk-cal-cell:has(.plonk-cal-dot:not([data-pending])) .plonk-cal-num {
+    color: var(--plonk-color-on-primary);
+  }
+  .plonk-calendar-range .plonk-cal-dot {
+    background: var(--plonk-color-accent);
+  }
+  .plonk-calendar-range
+    .plonk-cal-cell:has(.plonk-cal-dot:not([data-pending]))
+    .plonk-cal-num {
+    color: var(--plonk-color-on-accent);
+  }
+  /* Aralığın ikinci ucu henüz seçilmedi: uç yapışmamış, kesik çizgili. */
+  .plonk-cal-dot[data-pending] {
+    border-style: dashed;
+    background: var(--plonk-color-surface);
+    box-shadow: none;
+    animation: none;
+  }
+
+  /* Aralık: fosforlu kalem, her satırda soldan sağa çizilir. */
+  .plonk-cal-hl {
+    position: absolute;
+    inset-inline: -1px;
+    top: 50%;
+    height: 1.45rem;
+    translate: 0 -50%;
+    background: color-mix(
+      in oklab,
+      var(--plonk-color-primary) 80%,
+      transparent
+    );
+    mix-blend-mode: multiply;
+    transform-origin: left center;
+    animation: plonk-cal-draw 90ms linear calc(var(--plonk-cal-col, 0) * 32ms)
+      backwards;
+  }
+  .plonk-cal-grid td:first-child .plonk-cal-hl,
+  .plonk-cal-cell[data-selection-start] .plonk-cal-hl {
+    inset-inline-start: 0.2rem;
+    border-start-start-radius: 0.7rem 0.5rem;
+    border-end-start-radius: 0.5rem 0.7rem;
+  }
+  .plonk-cal-grid td:last-child .plonk-cal-hl,
+  .plonk-cal-cell[data-selection-end] .plonk-cal-hl {
+    inset-inline-end: 0.2rem;
+    border-start-end-radius: 0.5rem 0.7rem;
+    border-end-end-radius: 0.7rem 0.5rem;
+  }
+
+  /* Bugün: elle çizilmiş bir kalem halkası. */
+  .plonk-cal-today {
+    position: absolute;
+    top: -0.1rem;
+    left: -0.2rem;
+    z-index: 1;
+    width: calc(100% + 0.4rem);
+    height: calc(100% + 0.2rem);
+    overflow: visible;
+    pointer-events: none;
+  }
+  .plonk-cal-today > path {
+    stroke: var(--plonk-color-focus);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    animation: plonk-cal-scribble 600ms ease-out 200ms backwards;
+  }
+
+  /*
+   * Ay değişimi. Eski sayfanın kopyası (JS koyar) yeni sayfanın üstünde durur.
+   * İleri: yırtık kenarıyla koparılıp düşer. Geri: önceki sayfa yukarıdan
+   * gelip yapışır.
+   */
+  .plonk-cal-old {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    pointer-events: none;
+  }
+  .plonk-cal-old thead {
+    visibility: hidden;
+  }
+  .plonk-cal-old tbody {
+    background: var(--plonk-color-surface);
+  }
+  /*
+   * Zemin tablonun kendisinde: WebKit mutlak konumlu tablonun tbody zeminini
+   * boyamıyor, yaprak yarı saydam kalıyordu. Başlık kısmı zaten kırpılıyor.
+   */
+  .plonk-cal-old[data-dir="next"] {
+    background: var(--plonk-color-surface);
+    transform-origin: 15% var(--plonk-cal-dow-h);
+    clip-path: polygon(
+      0 calc(var(--plonk-cal-dow-h) + 4px),
+      6% var(--plonk-cal-dow-h),
+      12% calc(var(--plonk-cal-dow-h) + 4px),
+      18% var(--plonk-cal-dow-h),
+      24% calc(var(--plonk-cal-dow-h) + 4px),
+      30% var(--plonk-cal-dow-h),
+      36% calc(var(--plonk-cal-dow-h) + 4px),
+      42% var(--plonk-cal-dow-h),
+      48% calc(var(--plonk-cal-dow-h) + 4px),
+      54% var(--plonk-cal-dow-h),
+      60% calc(var(--plonk-cal-dow-h) + 4px),
+      66% var(--plonk-cal-dow-h),
+      72% calc(var(--plonk-cal-dow-h) + 4px),
+      78% var(--plonk-cal-dow-h),
+      84% calc(var(--plonk-cal-dow-h) + 4px),
+      90% var(--plonk-cal-dow-h),
+      96% calc(var(--plonk-cal-dow-h) + 4px),
+      100% var(--plonk-cal-dow-h),
+      100% 100%,
+      0 100%
+    );
+    animation: plonk-cal-tear 620ms cubic-bezier(0.45, 0, 0.75, 0.4) forwards;
+  }
+  .plonk-cal-old[data-dir="prev"] {
+    display: none;
+  }
+  .plonk-cal-grid[data-turn="prev"] tbody {
+    animation: plonk-cal-drop var(--plonk-motion-spring-duration)
+      var(--plonk-motion-spring-easing);
+  }
+
+  /*
+   * Retro: takvim bir pencere, başlık çubuğunda ay ve oklar. Seçim ters renk,
+   * aralığın içi noktalı desenle blok blok dolar, sayfa kademeli kayar.
+   */
+  [data-plonk-personality="retro"] {
+    .plonk-calendar {
+      --plonk-cal-size: 2.25rem;
+      gap: 0;
+      padding: 0;
+    }
+    .plonk-cal-rings,
+    .plonk-cal-today {
+      display: none;
+    }
+    .plonk-cal-presets {
+      padding: calc(2.4rem + var(--plonk-cal-dow-h)) 0.6rem 0.6rem;
+      border-inline-end: var(--plonk-border-width) solid var(--plonk-color-ink);
+    }
+    .plonk-cal-header {
+      margin: 0;
+      padding: 0.3rem 0.5rem;
+      border-bottom: var(--plonk-border-width) solid var(--plonk-color-ink);
+      background: repeating-linear-gradient(
+          to bottom,
+          var(--plonk-color-ink) 0 1px,
+          transparent 1px 3px
+        )
+        content-box;
+    }
+    .plonk-cal-heading {
+      flex: none;
+      margin-inline: auto;
+      padding-inline: 0.6rem;
+      background: var(--plonk-color-surface);
+      font-size: 0.95rem;
+      line-height: 1.5rem;
+    }
+    .plonk-cal-nav {
+      width: 1.5rem;
+      height: 1.25rem;
+      box-shadow: none;
+      outline: 3px solid var(--plonk-color-surface);
+    }
+    .plonk-cal-nav[data-pressed] {
+      translate: none;
+      background: var(--plonk-color-ink);
+      color: var(--plonk-color-surface);
+    }
+    .plonk-cal-nav[data-focus-visible] {
+      outline-color: var(--plonk-color-focus);
+    }
+    .plonk-cal-stage {
+      margin: 0.5rem 0.6rem 0.6rem;
+      overflow: hidden;
+    }
+    .plonk-cal-dow {
+      border-bottom: var(--plonk-border-width) solid var(--plonk-color-ink);
+      font-family: var(--plonk-font-display);
+      font-weight: 400;
+    }
+    .plonk-cal-cell {
+      font-weight: 600;
+    }
+    .plonk-cal-cell[data-hovered]:not([data-selected]) {
+      background: none;
+      outline: 2px solid var(--plonk-color-ink);
+      outline-offset: -4px;
+    }
+    .plonk-cal-cell[data-today] {
+      outline: 2px dashed var(--plonk-color-ink);
+      outline-offset: -4px;
+    }
+    .plonk-cal-cell[data-unavailable] {
+      background: repeating-linear-gradient(
+        45deg,
+        color-mix(in oklab, var(--plonk-color-ink) 35%, transparent) 0 1px,
+        transparent 1px 4px
+      );
+    }
+    .plonk-cal-cell[data-unavailable] .plonk-cal-num::after {
+      display: none;
+    }
+    .plonk-cal-dot,
+    .plonk-calendar-range .plonk-cal-dot {
+      inset: 2px;
+      border: 0;
+      background: var(--plonk-color-ink);
+      box-shadow: none;
+      rotate: none;
+      animation: plonk-cal-blink 120ms steps(2, jump-none);
+    }
+    .plonk-cal-dot[data-pending] {
+      border: 2px solid var(--plonk-color-ink);
+      background: none;
+      animation: none;
+    }
+    .plonk-cal-cell:has(.plonk-cal-dot:not([data-pending])) .plonk-cal-num,
+    .plonk-calendar-range
+      .plonk-cal-cell:has(.plonk-cal-dot:not([data-pending]))
+      .plonk-cal-num {
+      color: var(--plonk-color-surface);
+    }
+    .plonk-cal-grid .plonk-cal-cell .plonk-cal-hl {
+      inset: 0;
+      height: auto;
+      translate: none;
+      border-radius: 0;
+      background: repeating-conic-gradient(
+          color-mix(in oklab, var(--plonk-color-ink) 38%, transparent) 0 25%,
+          transparent 0 50%
+        )
+        0 0 / 2px 2px;
+      mix-blend-mode: normal;
+      animation: plonk-cal-dither 1ms calc(var(--plonk-cal-col, 0) * 16ms)
+        backwards;
+    }
+    .plonk-cal-cell[data-selected]:not(:has(.plonk-cal-dot)) .plonk-cal-num {
+      padding-inline: 0.15rem;
+      background: var(--plonk-color-surface);
+    }
+    .plonk-cal-old[data-dir] {
+      display: table;
+      background: none;
+      clip-path: none;
+      animation: plonk-cal-out-next 180ms steps(3, end) forwards;
+    }
+    .plonk-cal-old[data-dir="prev"] {
+      animation-name: plonk-cal-out-prev;
+    }
+    .plonk-cal-grid[data-turn] tbody {
+      animation: plonk-cal-in-next 180ms steps(3, end);
+    }
+    .plonk-cal-grid[data-turn="prev"] tbody {
+      animation-name: plonk-cal-in-prev;
+    }
+  }
+
+  /* Hareket azaltılınca: sayfa sadece belirir; sticker, kalem, yaprak yok. */
+  [data-plonk-motion="reduce"] {
+    .plonk-cal-old[data-dir] {
+      display: none;
+    }
+    .plonk-cal-grid[data-turn] tbody {
+      animation: plonk-fade-in 150ms ease-out;
+    }
+    .plonk-cal-dot,
+    .plonk-cal-hl,
+    .plonk-cal-today > path {
+      animation: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-plonk-personality] {
+      .plonk-cal-old[data-dir] {
+        display: none;
+      }
+      .plonk-cal-grid[data-turn] tbody {
+        animation: plonk-fade-in 150ms ease-out;
+      }
+      .plonk-cal-dot,
+      .plonk-cal-grid .plonk-cal-cell .plonk-cal-hl,
+      .plonk-cal-today > path {
+        animation: none;
+      }
+    }
+  }
+
   /* ---------- Avatar grubu: üst üste biner, üzerine gelince kalkar ---------- */
 
   .plonk-avatar-group > .plonk-avatar {
@@ -1770,5 +2296,108 @@
   to {
     opacity: 0;
     scale: 0.08;
+  }
+}
+
+@keyframes plonk-cal-pop {
+  from {
+    opacity: 0;
+    translate: 0 -0.8rem;
+    scale: 1.6;
+    box-shadow: 0.5rem 0.6rem 0
+      color-mix(in oklab, var(--plonk-shadow-color) 15%, transparent);
+  }
+  35% {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+  50% {
+    scale: calc(1 + 0.18 * var(--plonk-jelly-amount))
+      calc(1 - 0.18 * var(--plonk-jelly-amount));
+  }
+  68% {
+    scale: calc(1 - 0.06 * var(--plonk-jelly-amount))
+      calc(1 + 0.06 * var(--plonk-jelly-amount));
+  }
+  84% {
+    scale: calc(1 + 0.03 * var(--plonk-jelly-amount))
+      calc(1 - 0.03 * var(--plonk-jelly-amount));
+  }
+}
+
+@keyframes plonk-cal-draw {
+  from {
+    scale: 0 1;
+  }
+}
+
+@keyframes plonk-cal-scribble {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+/* Yaprak düşerken opak kalır, ancak uzaklaşınca solar: alttaki ay içinden görünmesin. */
+@keyframes plonk-cal-tear {
+  20% {
+    translate: 0 -0.35rem;
+    rotate: -4deg;
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    translate: -3.5rem 18rem;
+    rotate: -38deg;
+  }
+}
+
+@keyframes plonk-cal-drop {
+  from {
+    opacity: 0;
+    translate: 0 -3rem;
+    rotate: 5deg;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+@keyframes plonk-cal-blink {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes plonk-cal-dither {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes plonk-cal-out-next {
+  to {
+    translate: -100% 0;
+  }
+}
+
+@keyframes plonk-cal-out-prev {
+  to {
+    translate: 100% 0;
+  }
+}
+
+@keyframes plonk-cal-in-next {
+  from {
+    translate: 100% 0;
+  }
+}
+
+@keyframes plonk-cal-in-prev {
+  from {
+    translate: -100% 0;
   }
 }

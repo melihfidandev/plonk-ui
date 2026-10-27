@@ -7,16 +7,20 @@ import {
   AvatarGroup,
   Badge,
   Button,
+  Calendar,
   Card,
   Checkbox,
   cn,
   ComboBox,
   ComboBoxItem,
   contrastRatio,
+  DateRangePicker,
+  DatePicker,
   DEFAULT_PERSONALITY,
   Dialog,
   DialogTrigger,
   Drawer,
+  getLocalTimeZone,
   Input,
   Kbd,
   Menu,
@@ -33,6 +37,7 @@ import {
   Progress,
   Radio,
   RadioGroup,
+  RangeCalendar,
   resolveEasing,
   sampleEasing,
   Select,
@@ -44,11 +49,14 @@ import {
   Tabs,
   Textarea,
   toast,
+  today,
   Tooltip,
   TooltipTrigger,
   type ButtonSize,
   type ButtonVariant,
+  type CalendarPreset,
   type ColorToken,
+  type DateValue,
   type MotionToken,
   type PersonalityName,
   type ToastPlacement,
@@ -184,6 +192,7 @@ export function MotionLab() {
         motion={reduce ? "reduce" : "system"}
         jelly={jelly ?? undefined}
         toastPlacement={placement}
+        locale="tr-TR"
         className="flex-1 bg-plonk-canvas"
       >
         <div className="mx-auto grid max-w-6xl gap-16 px-4 py-14">
@@ -199,6 +208,13 @@ export function MotionLab() {
             note="Sticker yapışır ve köşeden soyulur, Retro pencere olarak belirip başlık çubuğuna katlanır. Üstüne gel: süreler durur. Sağa ya da sola sürükle: kapanır. F6 ile bildirimlere atla."
           >
             <ToastLab placement={placement} onPlacement={setPlacement} />
+          </Section>
+
+          <Section
+            title="Date Picker"
+            note="Gün, ay ve yılı yaz ya da ok tuşlarıyla değiştir; takvim düğmesiyle aç. Takvimde ok tuşları günler, PageUp/PageDown aylar arasında gezer. Pazar günleri kapalı örneği."
+          >
+            <DateLab />
           </Section>
 
           <Section
@@ -680,6 +696,80 @@ function ToastLab({
             </SelectItem>
           ))}
         </Select>
+      </div>
+    </div>
+  );
+}
+
+const TZ = getLocalTimeZone();
+const isSunday = (date: DateValue) => date.toDate(TZ).getDay() === 0;
+
+const PRESETS: CalendarPreset[] = [
+  {
+    label: "Son 7 gün",
+    range: () => ({ start: today(TZ).subtract({ days: 6 }), end: today(TZ) }),
+  },
+  {
+    label: "Bu ay",
+    range: () => {
+      const first = today(TZ).set({ day: 1 });
+      return {
+        start: first,
+        end: first.add({ months: 1 }).subtract({ days: 1 }),
+      };
+    },
+  },
+  {
+    label: "Geçen ay",
+    range: () => {
+      const first = today(TZ).set({ day: 1 }).subtract({ months: 1 });
+      return {
+        start: first,
+        end: first.add({ months: 1 }).subtract({ days: 1 }),
+      };
+    },
+  },
+];
+
+const subscribeNothing = () => () => {};
+
+function DateLab() {
+  // "Bugün" sunucuda ön-render sırasında sabitlenmesin (Next 16 Cache
+  // Components): tarihli örnekler sadece tarayıcıda çizilir.
+  const isClient = useSyncExternalStore(
+    subscribeNothing,
+    () => true,
+    () => false,
+  );
+  if (!isClient) return <div className="h-96" />;
+  return (
+    <div className="flex flex-col gap-10">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <DatePicker
+          label="Teslim tarihi"
+          description="Bugünden önce olamaz."
+          minValue={today(TZ)}
+          isDateUnavailable={isSunday}
+        />
+        <DateRangePicker
+          label="Rapor aralığı"
+          presets={PRESETS}
+          isDateUnavailable={isSunday}
+        />
+        <DatePicker
+          label="Hatalı örnek"
+          defaultValue={today(TZ).subtract({ days: 3 })}
+          minValue={today(TZ)}
+          error="Geçmiş bir tarih seçilemez."
+        />
+      </div>
+      <div className="flex flex-wrap items-start gap-10 pt-4">
+        <Calendar aria-label="Takvim" defaultValue={today(TZ)} />
+        <RangeCalendar
+          aria-label="Aralık takvimi"
+          presets={PRESETS}
+          isDateUnavailable={isSunday}
+        />
       </div>
     </div>
   );
