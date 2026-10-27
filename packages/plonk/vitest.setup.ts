@@ -20,3 +20,13 @@ if (typeof globalThis.ResizeObserver === "undefined") {
     disconnect() {}
   } as unknown as typeof ResizeObserver;
 }
+
+// jsdom'da işaretçi yakalama yok; Toast'u sürükleyip kapatma bunu kullanıyor.
+if (
+  typeof Element !== "undefined" &&
+  !("setPointerCapture" in Element.prototype)
+) {
+  Object.defineProperty(Element.prototype, "setPointerCapture", {
+    value: () => {},
+  });
+}

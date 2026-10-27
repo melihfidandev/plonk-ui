@@ -3,22 +3,30 @@
 import {
   createContext,
   use,
+  useEffect,
   useState,
   useSyncExternalStore,
-  type CSSProperties,
   type HTMLAttributes,
 } from "react";
 import { createPortal } from "react-dom";
 import { UNSAFE_PortalProvider } from "react-aria";
+import { setDefaultToastTimeout } from "../components/toast/queue";
+import { Toaster, type ToastPlacement } from "../components/toast/Toaster";
 import { cn } from "../lib/cn";
 import {
   DEFAULT_PERSONALITY,
   type PersonalityName,
 } from "../tokens/personalities";
+import type { PlonkStyle } from "../tokens/variables";
 
 const PersonalityContext = createContext<PersonalityName>(DEFAULT_PERSONALITY);
+/** Yukarıda bildirim bölgesi açmış bir provider var mı? */
+const ToasterContext = createContext(false);
 
-export interface PlonkProviderProps extends HTMLAttributes<HTMLDivElement> {
+export interface PlonkProviderProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  "style"
+> {
   /** Bileşenlerin görünüşü ve hareket dili. */
   personality?: PersonalityName;
   /**
@@ -31,16 +39,33 @@ export interface PlonkProviderProps extends HTMLAttributes<HTMLDivElement> {
    * Hareket azaltıldığında her durumda 0 olur.
    */
   jelly?: number;
+  /**
+   * Normal stiller ve `--plonk-*` token'ları. Token'lar katmanlara (Dialog,
+   * Toast…) da taşınır: `style={{ "--plonk-color-focus": "#ff8cc6" }}`.
+   */
+  style?: PlonkStyle;
+  /**
+   * Bildirim bölgesini aç (varsayılan). Sadece en dıştaki provider açar;
+   * iç içe provider'lar onu kullanır. `false`: bu provider açmaz.
+   */
+  toaster?: boolean;
+  /** Bildirimlerin ekrandaki köşesi. Varsayılan `bottom-end` (sağ alt). */
+  toastPlacement?: ToastPlacement;
+  /**
+   * Bildirimlerin varsayılan ekranda kalma süresi (ms). En az 5000.
+   * Tek bir toast için `toast("…", { timeout })`.
+   */
+  toastTimeout?: number;
 }
 
 const subscribeNothing = () => () => {};
 
 /** Sadece CSS değişkenlerini (`--…`) alır; kenar boşluğu gibi yerleşim stilleri taşınmaz. */
-function customProperties(style: CSSProperties | undefined) {
+function customProperties(style: PlonkStyle | undefined) {
   if (!style) return undefined;
   const entries = Object.entries(style).filter(([key]) => key.startsWith("--"));
   return entries.length
-    ? (Object.fromEntries(entries) as CSSProperties)
+    ? (Object.fromEntries(entries) as PlonkStyle)
     : undefined;
 }
 
@@ -51,6 +76,7 @@ function customProperties(style: CSSProperties | undefined) {
  * Dialog, menü gibi katmanlar sayfanın en altına (body) açılır. Kişilik
  * değişkenlerinin dışında kalmasınlar diye her provider, body'de kendi
  * kişiliğini taşıyan bir katman kabı açar ve katmanları oraya yönlendirir.
+ * En dıştaki provider, `toast()` bildirimlerinin bölgesini de aynı kaba açar.
  */
 export function PlonkProvider({
   personality = DEFAULT_PERSONALITY,
@@ -58,9 +84,14 @@ export function PlonkProvider({
   jelly,
   className,
   style,
+  toaster = true,
+  toastPlacement = "bottom-end",
+  toastTimeout,
   children,
   ...props
 }: PlonkProviderProps) {
+  const hasToaster = use(ToasterContext);
+  const ownsToaster = toaster && !hasToaster;
   const [layer, setLayer] = useState<HTMLDivElement | null>(null);
   // Sunucuda body yok; kap sadece tarayıcıda açılır.
   const isClient = useSyncExternalStore(
@@ -69,25 +100,34 @@ export function PlonkProvider({
     () => false,
   );
 
+  useEffect(() => {
+    if (ownsToaster && toastTimeout !== undefined) {
+      setDefaultToastTimeout(toastTimeout);
+    }
+  }, [ownsToaster, toastTimeout]);
+
   const motionAttr = motion === "reduce" ? "reduce" : undefined;
-  const fullStyle =
+  const fullStyle: PlonkStyle | undefined =
     jelly === undefined
       ? style
-      : ({ ...style, "--plonk-jelly-amount": String(jelly) } as CSSProperties);
+      : { ...style, "--plonk-jelly-amount": String(jelly) };
 
   return (
     <PersonalityContext value={personality}>
-      <UNSAFE_PortalProvider getContainer={() => layer}>
-        <div
-          {...props}
-          data-plonk-personality={personality}
-          data-plonk-motion={motionAttr}
-          style={fullStyle}
-          className={cn("plonk", className)}
-        >
-          {children}
-        </div>
-      </UNSAFE_PortalProvider>
+      <ToasterContext value={hasToaster || ownsToaster}>
+        <UNSAFE_PortalProvider getContainer={() => layer}>
+          <div
+            {...props}
+            data-plonk-personality={personality}
+            data-plonk-motion={motionAttr}
+            style={fullStyle}
+            className={cn("plonk", className)}
+          >
+            {children}
+          </div>
+        </UNSAFE_PortalProvider>
+      </ToasterContext>
+      {ownsToaster && <Toaster container={layer} placement={toastPlacement} />}
       {isClient &&
         createPortal(
           <div

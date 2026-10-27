@@ -66,12 +66,26 @@ describe("PlonkProvider", () => {
     render(
       <PlonkProvider
         personality="retro"
-        style={{ padding: 20, ["--plonk-tilt" as string]: "3deg" }}
+        style={{ padding: 20, "--plonk-tilt": "3deg" }}
       />,
     );
     const layer = document.querySelector<HTMLElement>("[data-plonk-layer]")!;
     expect(layer).toHaveAttribute("data-plonk-personality", "retro");
     expect(layer.style.getPropertyValue("--plonk-tilt")).toBe("3deg");
     expect(layer.style.padding).toBe("");
+  });
+
+  it("style tipi token adlarını tanır, yanlış yazılanı reddeder", () => {
+    render(
+      <PlonkProvider
+        data-testid="root"
+        style={{ "--plonk-color-focus": "#ff8cc6", padding: 4 }}
+      />,
+    );
+    expect(
+      screen.getByTestId("root").style.getPropertyValue("--plonk-color-focus"),
+    ).toBe("#ff8cc6");
+    // @ts-expect-error: "primery" diye bir token yok.
+    void (<PlonkProvider style={{ "--plonk-color-primery": "red" }} />);
   });
 });

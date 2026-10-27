@@ -17,3 +17,4 @@ export {
   type Personality,
   type PersonalityName,
 } from "./personalities";
+export type { PlonkStyle, PlonkVariable } from "./variables";

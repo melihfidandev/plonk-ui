@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Heading } from "react-aria-components";
+import { CloseIcon } from "../card/CloseIcon";
 
 export type RenderSlot =
   ReactNode | ((api: { close: () => void }) => ReactNode);
@@ -43,16 +44,7 @@ export function DialogFrame({
               onClick={close}
               className="plonk-card-close grid shrink-0 cursor-pointer place-items-center outline-offset-2 focus-visible:outline-3 focus-visible:outline-plonk-focus"
             >
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 16 16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2.5}
-                strokeLinecap="round"
-              >
-                <path d="M4 4l8 8M12 4l-8 8" />
-              </svg>
+              <CloseIcon />
             </button>
           )}
           <div className="plonk-card-heading min-w-0 flex-1">

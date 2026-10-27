@@ -1,5 +1,6 @@
 import { useId, type ComponentPropsWithRef, type ReactNode } from "react";
 import { cn } from "../../lib/cn";
+import { CloseIcon } from "./CloseIcon";
 
 export interface CardProps extends Omit<
   ComponentPropsWithRef<"section">,
@@ -64,16 +65,7 @@ export function Card({
               onClick={onClose}
               className="plonk-card-close grid shrink-0 cursor-pointer place-items-center outline-offset-2 focus-visible:outline-3 focus-visible:outline-plonk-focus"
             >
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 16 16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2.5}
-                strokeLinecap="round"
-              >
-                <path d="M4 4l8 8M12 4l-8 8" />
-              </svg>
+              <CloseIcon />
             </button>
           )}
           {title != null && (

@@ -43,6 +43,7 @@ import {
   TabPanel,
   Tabs,
   Textarea,
+  toast,
   Tooltip,
   TooltipTrigger,
   type ButtonSize,
@@ -50,6 +51,7 @@ import {
   type ColorToken,
   type MotionToken,
   type PersonalityName,
+  type ToastPlacement,
 } from "plonk";
 import { useState, useSyncExternalStore } from "react";
 
@@ -98,6 +100,7 @@ export function MotionLab() {
   );
   const [reduce, setReduce] = useState(false);
   const [jelly, setJelly] = useState<number | null>(null);
+  const [placement, setPlacement] = useState<ToastPlacement>("bottom-end");
   const p = personalities[name];
   const jellyValue = jelly ?? p.jelly.amount;
 
@@ -180,6 +183,7 @@ export function MotionLab() {
         personality={name}
         motion={reduce ? "reduce" : "system"}
         jelly={jelly ?? undefined}
+        toastPlacement={placement}
         className="flex-1 bg-plonk-canvas"
       >
         <div className="mx-auto grid max-w-6xl gap-16 px-4 py-14">
@@ -189,6 +193,13 @@ export function MotionLab() {
             </h2>
             <p className="mt-3 max-w-prose text-lg">{p.description}</p>
           </section>
+
+          <Section
+            title="Toast"
+            note="Sticker yapışır ve köşeden soyulur, Retro pencere olarak belirip başlık çubuğuna katlanır. Üstüne gel: süreler durur. Sağa ya da sola sürükle: kapanır. F6 ile bildirimlere atla."
+          >
+            <ToastLab placement={placement} onPlacement={setPlacement} />
+          </Section>
 
           <Section
             title="Dialog"
@@ -557,6 +568,106 @@ function FormLab() {
           disabled
           readOnly
         />
+      </div>
+    </div>
+  );
+}
+
+const PLACEMENTS: ToastPlacement[] = [
+  "top-start",
+  "top",
+  "top-end",
+  "bottom-start",
+  "bottom",
+  "bottom-end",
+];
+
+function ToastLab({
+  placement,
+  onPlacement,
+}: {
+  placement: ToastPlacement;
+  onPlacement: (p: ToastPlacement) => void;
+}) {
+  const info = () =>
+    toast("Taslak kaydedildi", {
+      description: "Son düzenleme 2 saniye önce",
+      label: "Bilgi",
+    });
+  const success = () =>
+    toast.success("Fatura gönderildi", {
+      description: "3 alıcıya ulaştı",
+      label: "Tamam",
+    });
+  const warning = () =>
+    toast.warning("Depolama %90 dolu", {
+      description: "Eski dosyaları temizlemeyi düşün",
+      label: "Uyarı",
+    });
+  const danger = () =>
+    toast.danger("Yükleme başarısız", {
+      description: "Bağlantı koptu",
+      label: "Hata",
+      action: {
+        label: "Tekrar dene",
+        onPress: () =>
+          toast("Tekrar deneniyor…", {
+            description: "Dosya 2/3 yükleniyor",
+            label: "Bilgi",
+          }),
+      },
+    });
+  const undo = () =>
+    toast("Proje silindi", {
+      description: "“Q4 raporu” çöp kutusuna taşındı",
+      label: "Bilgi",
+      action: {
+        label: "Geri al",
+        onPress: () => toast.success("Proje geri yüklendi", { label: "Tamam" }),
+      },
+    });
+  const rain = () =>
+    [info, success, warning, danger, undo].forEach((fn, i) =>
+      setTimeout(fn, i * 150),
+    );
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-wrap items-center gap-4">
+        <Button variant="neutral" onPress={info}>
+          Bilgi
+        </Button>
+        <Button variant="secondary" onPress={success}>
+          Başarılı
+        </Button>
+        <Button variant="accent" onPress={warning}>
+          Uyarı
+        </Button>
+        <Button variant="danger" onPress={danger}>
+          Hata + aksiyon
+        </Button>
+        <Button variant="neutral" onPress={undo}>
+          Geri al (süresiz)
+        </Button>
+        <Button variant="primary" onPress={rain}>
+          5’li yağmur
+        </Button>
+        <Button variant="ghost" onPress={() => toast.dismiss()}>
+          Hepsini kapat
+        </Button>
+      </div>
+      <div className="w-64">
+        <Select
+          label="Konum"
+          selectedKey={placement}
+          onSelectionChange={(k) => onPlacement(k as ToastPlacement)}
+        >
+          {PLACEMENTS.map((p) => (
+            <SelectItem key={p} id={p}>
+              {p}
+            </SelectItem>
+          ))}
+        </Select>
       </div>
     </div>
   );

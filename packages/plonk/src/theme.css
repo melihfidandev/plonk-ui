@@ -275,6 +275,9 @@
     width: 0.875rem;
     height: 0.875rem;
   }
+  .plonk-card-close > .plonk-close-pixel {
+    display: none;
+  }
   .plonk-card-description {
     margin-top: 0.25rem;
   }
@@ -284,7 +287,8 @@
    * çerçevesi içinden görünmez ve bant gerçekten üstüne yapışmış durur.
    * Uçları yırtık kâğıt gibi tırtıklı; üstünde hafif lif dokusu var.
    */
-  .plonk-card[data-tape]::before {
+  .plonk-card[data-tape]::before,
+  .plonk-toast-tape {
     content: "";
     position: absolute;
     z-index: 1;
@@ -326,7 +330,8 @@
 
   /* Retro: her kart bir pencere. Başlık çizgili bir çubuğun ortasında. */
   [data-plonk-personality="retro"] {
-    .plonk-card[data-tape]::before {
+    .plonk-card[data-tape]::before,
+    .plonk-toast-tape {
       display: none;
     }
     .plonk-card-header {
@@ -361,11 +366,29 @@
       margin: 0 0 0 0.25rem;
       outline: 3px solid var(--plonk-color-surface);
     }
-    .plonk-card-close > svg {
-      opacity: 0;
+    /*
+     * Piksel × her zaman görünür: boş kare bugünün kullanıcısına "kapat"
+     * demiyor. Üstüne gelince kutu tehlike rengine dolar, basınca tek kare
+     * ters renkte yanar. Sürekli kırmızı değil: her pencere alarm gibi durmasın.
+     */
+    .plonk-card-close {
+      transition: none;
     }
-    .plonk-card-close:is(:hover, :focus-visible) > svg {
-      opacity: 1;
+    .plonk-card-close > .plonk-close-smooth {
+      display: none;
+    }
+    .plonk-card-close > .plonk-close-pixel {
+      display: block;
+      width: 10px;
+      height: 10px;
+    }
+    .plonk-card-close:is(:hover, :focus-visible, [data-hovered]) {
+      background: var(--plonk-color-danger);
+      color: var(--plonk-color-on-danger);
+    }
+    .plonk-card-close:is(:active, [data-pressed]) {
+      background: var(--plonk-color-ink);
+      color: var(--plonk-color-surface);
     }
     .plonk-card-actions {
       padding-inline: 0.4rem;
@@ -846,6 +869,469 @@
     }
   }
 
+  /* ---------- Toast ---------- */
+
+  /*
+   * Bildirim bölgesi. Toast'lar mutlak konumlu; her biri kenara yakın
+   * olanların yüksekliği kadar kaydırılır (--plonk-toast-offset, JS yazar).
+   * Bölgenin yüksekliği listenin toplamı: fareyle üstüne gelince süreler durur.
+   */
+  .plonk-toast-region {
+    --plonk-toast-origin-x: 100%;
+    --plonk-toast-origin-y: 100%;
+    position: fixed;
+    z-index: 60;
+    width: min(22rem, calc(100vw - 2rem));
+    /* Aralık bant payını da kapsar: bant bir öncekinin kenarına binmesin. */
+    row-gap: 1.1rem;
+  }
+  .plonk-toast-region[data-placement^="bottom"] {
+    bottom: 1rem;
+  }
+  .plonk-toast-region[data-placement^="top"] {
+    --plonk-toast-origin-y: 0%;
+    top: 1rem;
+  }
+  .plonk-toast-region[data-placement$="end"] {
+    inset-inline-end: 1rem;
+  }
+  .plonk-toast-region[data-placement$="start"] {
+    --plonk-toast-origin-x: 0%;
+    inset-inline-start: 1rem;
+  }
+  .plonk-toast-region:is([data-placement="top"], [data-placement="bottom"]) {
+    --plonk-toast-origin-x: 50%;
+    left: 50%;
+    translate: -50% 0;
+  }
+
+  .plonk-toast-slot {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    translate: 0 var(--plonk-toast-offset, 0px);
+    /* Her sticker kendi açısıyla yapışır; Retro'nun eğimi 0. */
+    rotate: calc(var(--plonk-tilt) * var(--plonk-toast-tilt, 0));
+    transform-origin: 50% 100%;
+    transition-property: translate, rotate;
+    transition-timing-function: var(--plonk-motion-spring-easing);
+    transition-duration: var(--plonk-motion-spring-duration);
+  }
+  .plonk-toast-region[data-placement^="top"] .plonk-toast-slot {
+    top: 0;
+    bottom: auto;
+    transform-origin: 50% 0;
+  }
+
+  /*
+   * Sticker: yukarıdan düşer, yere "pat" diye oturur (havadayken gölgesi uzak
+   * ve soluk), sonra jöleyle ezilip toparlanır. Bant ardından çekilir.
+   * Sürüklerken --plonk-toast-drag-* değişkenlerini JS yazar.
+   */
+  .plonk-toast {
+    --plonk-toast-bg: var(--plonk-color-surface);
+    --plonk-toast-fg: var(--plonk-color-ink);
+    --plonk-toast-tone: var(--plonk-color-secondary);
+    --plonk-toast-on-tone: var(--plonk-color-on-secondary);
+    --plonk-toast-badge: var(--plonk-toast-tone);
+    --plonk-toast-on-badge: var(--plonk-toast-on-tone);
+    --plonk-toast-drag-step: 1;
+    --plonk-toast-drag-fade: 1;
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    column-gap: 0.75rem;
+    padding: 1rem 2.75rem 1.15rem 0.9rem;
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-radius: var(--plonk-radius-lg);
+    background: var(--plonk-toast-bg);
+    color: var(--plonk-toast-fg);
+    box-shadow: var(--plonk-shadow-x) var(--plonk-shadow-y) 0
+      var(--plonk-shadow-color);
+    outline: none;
+    transform: translateX(var(--plonk-toast-drag-x, 0px))
+      rotate(calc(var(--plonk-tilt) * var(--plonk-toast-drag-turn, 0)));
+    transform-origin: 50% 100%;
+    opacity: calc(
+      1 - var(--plonk-toast-drag-progress, 0) * var(--plonk-toast-drag-fade)
+    );
+    transition-property: transform, opacity;
+    transition-timing-function: var(--plonk-motion-spring-easing);
+    transition-duration: var(--plonk-motion-spring-duration);
+    touch-action: pan-y;
+    cursor: grab;
+    animation:
+      plonk-toast-drop 270ms cubic-bezier(0.5, 0, 0.85, 0.4) backwards,
+      plonk-toast-land var(--plonk-jelly-duration) ease-out 270ms;
+  }
+  .plonk-toast:focus-visible {
+    outline: 3px solid var(--plonk-color-focus);
+    outline-offset: 3px;
+  }
+  .plonk-toast[data-dragging] {
+    transition: none;
+    cursor: grabbing;
+    user-select: none;
+  }
+  .plonk-toast[data-variant="success"] {
+    --plonk-toast-bg: var(--plonk-color-success);
+    --plonk-toast-fg: var(--plonk-color-on-success);
+    --plonk-toast-tone: var(--plonk-color-success);
+    --plonk-toast-on-tone: var(--plonk-color-on-success);
+    --plonk-toast-badge: var(--plonk-color-surface);
+    --plonk-toast-on-badge: var(--plonk-color-ink);
+  }
+  .plonk-toast[data-variant="warning"] {
+    --plonk-toast-bg: var(--plonk-color-warning);
+    --plonk-toast-fg: var(--plonk-color-on-warning);
+    --plonk-toast-tone: var(--plonk-color-warning);
+    --plonk-toast-on-tone: var(--plonk-color-on-warning);
+    --plonk-toast-badge: var(--plonk-color-surface);
+    --plonk-toast-on-badge: var(--plonk-color-ink);
+  }
+  .plonk-toast[data-variant="danger"] {
+    --plonk-toast-bg: var(--plonk-color-danger);
+    --plonk-toast-fg: var(--plonk-color-on-danger);
+    --plonk-toast-tone: var(--plonk-color-danger);
+    --plonk-toast-on-tone: var(--plonk-color-on-danger);
+    --plonk-toast-badge: var(--plonk-color-surface);
+    --plonk-toast-on-badge: var(--plonk-color-ink);
+  }
+  /* Yeni sticker yapışınca öncekiler bir an aşağı sıçrar (masa sarsılır). */
+  .plonk-toast[data-bump] {
+    animation: plonk-toast-bump 300ms ease-out 230ms;
+  }
+
+  .plonk-toast-tape {
+    rotate: var(--plonk-toast-tape, -3deg);
+    transform-origin: 0 50%;
+    animation: plonk-toast-tape 420ms var(--plonk-motion-spring-easing) 230ms
+      backwards;
+  }
+  .plonk-toast-bar,
+  .plonk-toast-zoom,
+  .plonk-toast-icon-pixel {
+    display: none;
+  }
+  .plonk-toast-icon {
+    grid-row: span 2;
+    display: grid;
+    place-items: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-radius: var(--plonk-radius-pill);
+    background: var(--plonk-toast-badge);
+    color: var(--plonk-toast-on-badge);
+  }
+  .plonk-toast-icon > svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+  .plonk-toast-content {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding-top: 0.1rem;
+  }
+  .plonk-toast-title {
+    font-size: 1.0625rem;
+    line-height: 1.2;
+  }
+  .plonk-toast-description {
+    font-size: 0.875rem;
+    color: color-mix(in oklab, currentColor 76%, transparent);
+  }
+  .plonk-toast-actions {
+    grid-column: 2;
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+  }
+  .plonk-toast-close {
+    position: absolute;
+    top: 0.45rem;
+    inset-inline-end: 0.45rem;
+    margin: 0;
+  }
+
+  /* Kalan süre: alt kenarda incelen bir şerit. Fare üstündeyken durur. */
+  .plonk-toast-timer {
+    position: absolute;
+    inset-inline: 0.9rem;
+    bottom: 0.4rem;
+    height: 3px;
+    border-radius: 3px;
+    overflow: hidden;
+    background: color-mix(in oklab, currentColor 14%, transparent);
+  }
+  .plonk-toast-timer > span {
+    display: block;
+    height: 100%;
+    background: color-mix(in oklab, currentColor 70%, transparent);
+    clip-path: inset(0);
+    animation: plonk-toast-timer var(--plonk-toast-timeout) linear forwards;
+  }
+  .plonk-toast-timer > span:dir(rtl) {
+    animation-name: plonk-toast-timer-rtl;
+  }
+  :is(.plonk-toast-region[data-paused], .plonk-toast-slot[data-exiting])
+    .plonk-toast-timer
+    > span {
+    animation-play-state: paused;
+  }
+
+  /*
+   * Soyulan köşe: kesilen üçgenin katlanma çizgisine göre yansıması, yani
+   * sticker'ın arkası. Çıkışta kart köşeden kesilirken bu üçgen büyür.
+   */
+  .plonk-toast-curl {
+    position: absolute;
+    top: calc(var(--plonk-border-width) * -1);
+    right: calc(var(--plonk-border-width) * -1);
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    filter: drop-shadow(
+      -3px 3px 0 color-mix(in oklab, var(--plonk-color-ink) 22%, transparent)
+    );
+  }
+  .plonk-toast-curl > span {
+    position: absolute;
+    inset: 0;
+    border-bottom: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-left: var(--plonk-border-width) solid var(--plonk-color-ink);
+    border-bottom-left-radius: var(--plonk-radius-lg);
+    background: linear-gradient(
+      225deg,
+      color-mix(
+          in oklab,
+          var(--plonk-color-surface) 80%,
+          var(--plonk-color-ink)
+        )
+        50%,
+      var(--plonk-color-surface) 80%,
+      color-mix(
+        in oklab,
+        var(--plonk-color-surface) 93%,
+        var(--plonk-color-ink)
+      )
+    );
+    clip-path: polygon(0 0, 0 100%, 100% 100%);
+  }
+
+  /* Çıkış: köşeden soyulur, sonra kalkıp uçar. Sürüklenerek atılan fırlar. */
+  .plonk-toast-slot[data-exiting] {
+    pointer-events: none;
+  }
+  .plonk-toast-slot[data-exiting] > .plonk-toast {
+    animation:
+      plonk-toast-peel 280ms cubic-bezier(0.3, 0.7, 0.3, 1) forwards,
+      plonk-toast-fly 360ms cubic-bezier(0.55, 0, 0.8, 0.35) 220ms forwards;
+  }
+  .plonk-toast-slot[data-exiting] .plonk-toast-curl {
+    animation: plonk-toast-curl 280ms cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
+  }
+  .plonk-toast-slot[data-exit="swipe"] > .plonk-toast {
+    animation: plonk-toast-fling 380ms cubic-bezier(0.2, 0.7, 0.4, 1) forwards;
+  }
+  .plonk-toast-slot[data-exit="swipe"] .plonk-toast-curl {
+    animation: none;
+  }
+
+  /*
+   * Retro: her toast küçük bir uyarı penceresi. Köşeden büyüyen üç zoom
+   * çerçevesinin ardından tek karede belirir ve bir an ters renkte yanar.
+   * Kapanırken başlık çubuğuna katlanır (WindowShade), çerçeveler kapatma
+   * kutusuna doğru küçülür. Sürükleme 8px'lik adımlarla.
+   */
+  [data-plonk-personality="retro"] {
+    .plonk-toast-region {
+      row-gap: 0.75rem;
+    }
+    .plonk-toast-curl {
+      display: none;
+    }
+    .plonk-toast {
+      --plonk-toast-drag-step: 8;
+      --plonk-toast-drag-fade: 0;
+      padding: 0;
+      cursor: default;
+      animation:
+        plonk-reveal 260ms step-end,
+        plonk-toast-flash 110ms step-end 260ms;
+    }
+    .plonk-toast[data-variant] {
+      --plonk-toast-bg: var(--plonk-color-surface);
+      --plonk-toast-fg: var(--plonk-color-ink);
+      --plonk-toast-badge: var(--plonk-toast-tone);
+      --plonk-toast-on-badge: var(--plonk-toast-on-tone);
+    }
+    .plonk-toast[data-variant="info"] {
+      --plonk-toast-tone: var(--plonk-color-primary);
+      --plonk-toast-on-tone: var(--plonk-color-on-primary);
+    }
+    .plonk-toast-bar {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: center;
+      padding: 0.3rem 0.5rem;
+      border-bottom: var(--plonk-border-width) solid var(--plonk-color-ink);
+      background: repeating-linear-gradient(
+          to bottom,
+          var(--plonk-color-ink) 0 1px,
+          transparent 1px 3px
+        )
+        content-box;
+    }
+    .plonk-toast-label {
+      padding-inline: 0.6rem;
+      background: var(--plonk-toast-tone);
+      color: var(--plonk-toast-on-tone);
+      font-size: 0.875rem;
+      line-height: 1.5rem;
+    }
+    .plonk-toast-close {
+      top: 0.55rem;
+      inset-inline: 0.75rem auto;
+    }
+    .plonk-toast-icon {
+      width: 1.9rem;
+      height: 1.9rem;
+      margin: 0.75rem 0 0 0.75rem;
+    }
+    .plonk-toast-icon-smooth {
+      display: none;
+    }
+    .plonk-toast-icon > .plonk-toast-icon-pixel {
+      display: block;
+      width: 10px;
+      height: 14px;
+    }
+    .plonk-toast-content {
+      padding: 0.7rem 0.75rem 0.75rem 0;
+    }
+    .plonk-toast-title {
+      font-size: 0.95rem;
+    }
+    .plonk-toast-description {
+      color: var(--plonk-color-ink-muted);
+    }
+    .plonk-toast-actions {
+      margin: 0 0.75rem 0.75rem 0;
+    }
+    /* Kalan süre: blok blok azalan bir çubuk. */
+    .plonk-toast-timer {
+      position: static;
+      grid-column: 1 / -1;
+      height: 0.8rem;
+      margin: 0 0.75rem 0.75rem;
+      padding: 1px;
+      border: var(--plonk-border-width) solid var(--plonk-color-ink);
+      border-radius: 0;
+      background: none;
+    }
+    .plonk-toast-timer > span {
+      background: repeating-linear-gradient(
+        90deg,
+        var(--plonk-color-ink) 0 6px,
+        transparent 6px 8px
+      );
+      animation-timing-function: steps(12, end);
+    }
+    .plonk-toast-zoom {
+      display: block;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .plonk-toast-zoom > span {
+      position: absolute;
+      inset: 0;
+      border: var(--plonk-border-width) solid var(--plonk-color-ink);
+      opacity: 0;
+      transform-origin: var(--plonk-toast-origin-x) var(--plonk-toast-origin-y);
+      animation: plonk-zoom-rect 200ms steps(4, jump-none) both;
+    }
+    .plonk-toast-zoom > :nth-child(2) {
+      animation-delay: 30ms;
+    }
+    .plonk-toast-zoom > :nth-child(3) {
+      animation-delay: 60ms;
+    }
+
+    .plonk-toast-slot[data-exiting] > .plonk-toast {
+      overflow: hidden;
+      animation:
+        plonk-toast-shade 150ms steps(3, end) forwards,
+        plonk-toast-vanish 1ms 150ms forwards;
+    }
+    .plonk-toast-slot[data-exiting] .plonk-toast-zoom {
+      inset: 0 0 auto;
+      height: var(--plonk-toast-bar-h);
+    }
+    .plonk-toast-slot[data-exiting] .plonk-toast-zoom > span {
+      transform-origin: 1.25rem 50%;
+      animation: plonk-toast-zoom-out 180ms steps(5, jump-none) 150ms forwards;
+    }
+    .plonk-toast-slot[data-exiting] .plonk-toast-zoom > :nth-child(2) {
+      animation-delay: 180ms;
+    }
+    .plonk-toast-slot[data-exiting] .plonk-toast-zoom > :nth-child(3) {
+      animation-delay: 210ms;
+    }
+    .plonk-toast-slot[data-exit="swipe"] > .plonk-toast {
+      overflow: visible;
+      animation: plonk-toast-fling 150ms steps(3, end) forwards;
+    }
+    .plonk-toast-slot[data-exit="swipe"] .plonk-toast-zoom > span {
+      animation: none;
+    }
+  }
+
+  /* Hareket azaltılınca: kısa bir belirme ve solma; düşüş, soyulma, çerçeve yok. */
+  [data-plonk-motion="reduce"] {
+    .plonk-toast {
+      animation: plonk-panel-in 150ms ease-out;
+    }
+    .plonk-toast-tape {
+      animation: none;
+    }
+    .plonk-toast-zoom {
+      display: none;
+    }
+    .plonk-toast-slot[data-exiting] > .plonk-toast,
+    .plonk-toast-slot[data-exit] > .plonk-toast {
+      animation: plonk-fade-out 100ms ease-in forwards;
+    }
+    .plonk-toast-slot[data-exiting] .plonk-toast-curl {
+      animation: none;
+    }
+  }
+  /* Retro kurallarını ezebilmek için aynı özgüllükte ([data-plonk-personality]). */
+  @media (prefers-reduced-motion: reduce) {
+    [data-plonk-personality] {
+      .plonk-toast {
+        animation: plonk-panel-in 150ms ease-out;
+      }
+      .plonk-toast-tape {
+        animation: none;
+      }
+      .plonk-toast-zoom {
+        display: none;
+      }
+      .plonk-toast-slot[data-exiting] > .plonk-toast,
+      .plonk-toast-slot[data-exit] > .plonk-toast {
+        animation: plonk-fade-out 100ms ease-in forwards;
+      }
+      .plonk-toast-slot[data-exiting] .plonk-toast-curl {
+        animation: none;
+      }
+    }
+  }
+
   /* ---------- Avatar grubu: üst üste biner, üzerine gelince kalkar ---------- */
 
   .plonk-avatar-group > .plonk-avatar {
@@ -1145,5 +1631,144 @@
   from {
     opacity: 0;
     scale: 1 0.75;
+  }
+}
+
+@keyframes plonk-toast-drop {
+  from {
+    opacity: 0;
+    translate: 1.75rem -4.4rem;
+    rotate: 11deg;
+    scale: 1.16;
+    box-shadow: 1.1rem 1.6rem 0
+      color-mix(in oklab, var(--plonk-shadow-color) 14%, transparent);
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+@keyframes plonk-toast-land {
+  16% {
+    scale: calc(1 + 0.08 * var(--plonk-jelly-amount))
+      calc(1 - 0.13 * var(--plonk-jelly-amount));
+  }
+  42% {
+    scale: calc(1 - 0.035 * var(--plonk-jelly-amount))
+      calc(1 + 0.05 * var(--plonk-jelly-amount));
+  }
+  68% {
+    scale: calc(1 + 0.012 * var(--plonk-jelly-amount))
+      calc(1 - 0.016 * var(--plonk-jelly-amount));
+  }
+}
+
+@keyframes plonk-toast-tape {
+  from {
+    scale: 0 1;
+  }
+}
+
+@keyframes plonk-toast-bump {
+  25% {
+    translate: 0 calc(0.25rem * var(--plonk-jelly-amount));
+  }
+}
+
+@keyframes plonk-toast-timer {
+  to {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes plonk-toast-timer-rtl {
+  to {
+    clip-path: inset(0 0 0 100%);
+  }
+}
+
+/* Katlanma çizgisi sağ üst köşeden içeri ilerler; 2rem pay gölge ve bant için. */
+@keyframes plonk-toast-peel {
+  from {
+    clip-path: polygon(
+      -2rem -2rem,
+      calc(100% - 2rem) -2rem,
+      calc(100% + 2rem) 2rem,
+      calc(100% + 2rem) calc(100% + 2rem),
+      -2rem calc(100% + 2rem)
+    );
+  }
+  to {
+    clip-path: polygon(
+      -2rem -2rem,
+      calc(100% - var(--plonk-toast-peel) - 2rem) -2rem,
+      calc(100% + 2rem) calc(var(--plonk-toast-peel) + 2rem),
+      calc(100% + 2rem) calc(100% + 2rem),
+      -2rem calc(100% + 2rem)
+    );
+  }
+}
+
+@keyframes plonk-toast-curl {
+  to {
+    width: var(--plonk-toast-peel);
+    height: var(--plonk-toast-peel);
+  }
+}
+
+@keyframes plonk-toast-fly {
+  45% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    translate: 4.5rem -8rem;
+    rotate: 18deg;
+    scale: 0.9;
+  }
+}
+
+@keyframes plonk-toast-fling {
+  to {
+    opacity: 0;
+    translate: calc(var(--plonk-toast-swipe, 1) * 110%) 0;
+    rotate: calc(var(--plonk-toast-swipe, 1) * var(--plonk-tilt) * 16);
+  }
+}
+
+@keyframes plonk-toast-flash {
+  from,
+  to {
+    filter: invert(1);
+  }
+}
+
+@keyframes plonk-toast-shade {
+  from {
+    height: var(--plonk-toast-h);
+  }
+  to {
+    height: var(--plonk-toast-bar-h);
+  }
+}
+
+@keyframes plonk-toast-vanish {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes plonk-toast-zoom-out {
+  from {
+    opacity: 1;
+    scale: 1;
+  }
+  99% {
+    opacity: 1;
+    scale: 0.08;
+  }
+  to {
+    opacity: 0;
+    scale: 0.08;
   }
 }
