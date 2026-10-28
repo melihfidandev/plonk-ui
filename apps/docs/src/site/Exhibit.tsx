@@ -24,6 +24,26 @@ export const exhibitPersonality = createStore<PersonalityName>(
   PERSONALITY_NAMES,
 );
 
+/** Kişilik seçimi: sergi çubuklarında ve token tablosunda aynı seçim. */
+export function PersonalityChips() {
+  const personality = exhibitPersonality.use();
+  return (
+    <RadioGroup
+      aria-label="Personality"
+      orientation="horizontal"
+      value={personality}
+      onChange={(value) => exhibitPersonality.set(value as PersonalityName)}
+      className="site-chips"
+    >
+      {PERSONALITY_NAMES.map((name) => (
+        <Radio key={name} value={name} className="site-chip">
+          {LABELS[name]}
+        </Radio>
+      ))}
+    </RadioGroup>
+  );
+}
+
 export interface ExhibitProps {
   /** Çubuktaki ad, ör. "Button". */
   title: string;
@@ -57,19 +77,7 @@ export function Exhibit({
       <div className="site-exhibit-bar">
         <b>{title}</b>
         <span className="live">Live</span>
-        <RadioGroup
-          aria-label="Personality"
-          orientation="horizontal"
-          value={personality}
-          onChange={(value) => exhibitPersonality.set(value as PersonalityName)}
-          className="site-chips"
-        >
-          {PERSONALITY_NAMES.map((name) => (
-            <Radio key={name} value={name} className="site-chip">
-              {LABELS[name]}
-            </Radio>
-          ))}
-        </RadioGroup>
+        <PersonalityChips />
       </div>
       <PlonkProvider
         personality={personality}

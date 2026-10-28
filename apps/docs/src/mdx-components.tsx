@@ -44,6 +44,12 @@ const components: MDXComponents = {
     ) : (
       <a href={href} {...props} />
     ),
+  // Markdown tabloları: dar ekranda kendi içinde kayar, sayfa taşmaz.
+  table: (props) => (
+    <div className="site-table">
+      <table {...props} />
+    </div>
+  ),
   // ```tsx kod çitleri: sunucuda renklendirilir, TS ise JS sekmesi eklenir.
   pre: ({ children }) => {
     const code = children as React.ReactElement<{

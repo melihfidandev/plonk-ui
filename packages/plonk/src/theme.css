@@ -1228,6 +1228,14 @@
     animation: plonk-panel-in var(--plonk-motion-enter-duration)
       var(--plonk-motion-enter-easing);
   }
+  /*
+   * Panelin çıkış hareketi yok, eskisi hemen gitmeli. React Aria çıkan panelde
+   * çalışan bir animasyon görürse bitmesini bekliyor: hızlı geçişte eski panelin
+   * yarım kalan girişini çıkış sanıp onu yenisinin üstünde tutuyordu.
+   */
+  .plonk-tab-panel[data-exiting] {
+    display: none;
+  }
 
   [data-plonk-personality="retro"] {
     .plonk-tab-indicator {

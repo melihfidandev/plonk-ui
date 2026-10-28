@@ -18,4 +18,8 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default createMDX({ extension: /\.mdx?$/ })(nextConfig);
+// remark-gfm: Markdown tabloları. Turbopack eklentileri ad (metin) olarak ister.
+export default createMDX({
+  extension: /\.mdx?$/,
+  options: { remarkPlugins: ["remark-gfm"] },
+})(nextConfig);

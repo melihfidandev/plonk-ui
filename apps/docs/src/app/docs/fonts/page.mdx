@@ -1,0 +1,122 @@
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Fonts",
+  description: "Plonk ships its fonts. Swap in your own with three variables.",
+};
+
+<PageHeader crumb="Guides" title="Fonts" number="04">
+  The fonts come with the package, so there's nothing to load. When you want
+  your own, three variables change them everywhere.
+</PageHeader>
+
+## Built in
+
+Each personality has a display font for headings, buttons and labels, and a
+body font for running text. They're bundled with Plonk as `woff2` files and
+declared in `theme.css`.
+
+| Personality | Display | Body          |
+| ----------- | ------- | ------------- |
+| Sticker     | Baloo 2 | Nunito        |
+| Retro       | Tiny5   | IBM Plex Mono |
+| Comic       | Bangers | Kalam         |
+| Arcade      | Bungee  | Rubik         |
+
+You don't pay for what you don't use. Browsers only download a font when
+something on the page is drawn with it, so an app that only uses Sticker never
+fetches Retro's pixel font.
+
+Every font covers Latin and Latin Extended, including Turkish, Polish, Czech and
+other accented alphabets. All of them are licensed under the SIL Open Font
+License; the license files ship next to the fonts.
+
+## Use your own
+
+Fonts are tokens like everything else:
+
+- `--plonk-font-display` for headings, buttons and labels
+- `--plonk-font-body` for text
+- `--plonk-font-mono` for code and keyboard keys
+
+<Example name="fonts/custom" title="Fonts · Your own" />
+
+### For every personality
+
+```css
+:root,
+[data-plonk-personality] {
+  --plonk-font-display: "Inter", system-ui, sans-serif;
+  --plonk-font-body: "Inter", system-ui, sans-serif;
+}
+```
+
+### For one personality
+
+```css
+[data-plonk-personality="retro"] {
+  --plonk-font-body: "JetBrains Mono", ui-monospace, monospace;
+}
+```
+
+### For one part of the page
+
+```tsx
+<PlonkProvider
+  personality="sticker"
+  style={{ "--plonk-font-display": "Georgia, serif" }}
+>
+  <Article />
+</PlonkProvider>
+```
+
+### Loading the font
+
+Plonk only points at a font name; loading it is up to you. With Next.js,
+`next/font` gives you a CSS variable to hand over:
+
+```tsx
+// app/layout.tsx
+import { Inter } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" className={inter.variable}>
+      <body>
+        <PlonkProvider style={{ "--plonk-font-body": "var(--font-inter)" }}>
+          {children}
+        </PlonkProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+Anywhere else, a regular `@font-face` rule or a Google Fonts link works.
+
+## Fonts with only capitals
+
+Comic's Bangers and Arcade's Bungee only draw capital letters. Plonk sets their
+text to `text-transform: uppercase` so the browser picks the right capital for
+the language: in Turkish, `i` becomes `İ`, not `I`. That only works when the
+page knows its language, which is one reason to set
+[`locale`](/docs/localization) on the provider.
+
+If you bring your own capitals-only font, tell Plonk:
+
+```css
+[data-plonk-personality="sticker"] {
+  --plonk-font-display: "Bebas Neue", sans-serif;
+  --plonk-font-display-case: uppercase;
+}
+```
+
+The reverse also works: give Comic or Arcade a font with lowercase letters and
+set `--plonk-font-display-case: none`.

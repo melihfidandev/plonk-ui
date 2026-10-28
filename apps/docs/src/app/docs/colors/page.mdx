@@ -1,0 +1,109 @@
+import { ColorLab } from "@/site/ColorLab";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Colors",
+  description: "Change Plonk's colors with plain CSS variables.",
+};
+
+<PageHeader crumb="Guides" title="Colors" number="03">
+  Every color is a CSS variable. Change a few and the whole library follows:
+  buttons, focus rings, toasts, the data table.
+</PageHeader>
+
+<ColorLab />
+
+## How colors work
+
+Each personality defines the same set of color tokens: a canvas, surfaces, ink,
+and a handful of roles like `primary`, `accent` and `danger`. Components only
+ever use these roles, never a raw color. The full list, with each
+personality's values, is on the [Tokens](/docs/tokens#colors) page.
+
+## Any CSS color works
+
+Tokens are plain CSS variables, so any color the browser understands is fine:
+
+```css
+[data-plonk-personality="sticker"] {
+  --plonk-color-primary: #7c5cff;
+  --plonk-color-accent: rgb(255 120 80);
+  --plonk-color-success: oklch(78% 0.17 150);
+  /* Or your own design tokens */
+  --plonk-color-danger: var(--brand-red);
+}
+```
+
+## Change colors in pairs
+
+Every fill color has an `on-` partner: the color of the text and icons placed on
+top of it. When you change one, check the other:
+
+```css
+[data-plonk-personality="sticker"] {
+  --plonk-color-primary: #1d4ed8;
+  /* Dark blue needs light text */
+  --plonk-color-on-primary: #ffffff;
+}
+```
+
+Aim for a contrast ratio of at least **4.5:1** between a color and its `on-`
+partner. The editor above shows the ratio as you pick.
+
+## The focus color
+
+`--plonk-color-focus` draws the keyboard focus ring and the glow around a
+focused field. Pick something that stands out against both your canvas and your
+primary color; focus has to be visible everywhere.
+
+## Three ways to apply them
+
+### 1. In your CSS
+
+The most common way. Target the personality you use:
+
+```css
+[data-plonk-personality="sticker"] {
+  --plonk-color-primary: #7c5cff;
+  --plonk-color-on-primary: #ffffff;
+}
+```
+
+Use `:root` only if your app has no provider at all. Inside a provider, the
+provider's own element defines the tokens, so `:root` never reaches it.
+[Tokens](/docs/tokens#overriding-tokens) explains why.
+
+### 2. On the provider
+
+Pass tokens through `style`. They're typed: your editor suggests the names and
+flags a typo, no casts needed. Dialogs, menus and toasts carry them along.
+
+```tsx
+<PlonkProvider
+  style={{
+    "--plonk-color-primary": "#7c5cff",
+    "--plonk-color-on-primary": "#ffffff",
+  }}
+>
+  <App />
+</PlonkProvider>
+```
+
+### 3. For one part of the page
+
+Nest a provider to recolor a single section, like a danger zone in settings:
+
+```tsx
+<PlonkProvider style={{ "--plonk-color-primary": "#ff6b6b" }}>
+  <DangerZone />
+</PlonkProvider>
+```
+
+A nested provider without `personality` falls back to Sticker. If your app uses
+another personality, pass it again.
+
+## Dark surfaces
+
+Arcade is the one dark personality: its ink is light and its canvas is dark. If
+you recolor it, keep that relationship. Light `on-` colors stay light, and fills
+stay saturated enough to read against a dark canvas.

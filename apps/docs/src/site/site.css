@@ -378,7 +378,15 @@ html:has(.site) {
     monospace;
 }
 /* Sergiler ve kod kutuları metin sütunundan geniş. */
-.site-prose > :is(.site-exhibit, .site-code, .site-api, .site-lineup) {
+.site-prose
+  > :is(
+    .site-exhibit,
+    .site-code,
+    .site-api,
+    .site-lineup,
+    .site-tokens,
+    .site-table
+  ) {
   max-width: none;
   width: min(100%, 52rem);
   margin: 1.75rem 0;
@@ -388,6 +396,40 @@ html:has(.site) {
 }
 .site-prose > :is(p, ul, ol, h2, h3) {
   max-width: 68ch;
+}
+
+/* Markdown tabloları */
+.site-table {
+  overflow-x: auto;
+  border: 1.5px solid var(--site-ink);
+  background: var(--site-panel);
+}
+.site-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.site-table th {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1.5px solid var(--site-ink);
+  font:
+    500 0.66rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.08em;
+  text-align: start;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.site-table td {
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--site-line);
+  vertical-align: top;
+}
+.site-table tr:last-child td {
+  border-bottom: 0;
+}
+.site-table td code {
+  white-space: nowrap;
 }
 
 /* ---------- Başlık listesi ---------- */
@@ -700,6 +742,122 @@ html:has(.site) {
   background: var(--site-panel);
   color: inherit;
   font: inherit;
+}
+
+/* Renk seçici: kare örnek + hex; on- eşiyle yan yana, yanında kontrast. */
+.site-colors {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+.site-color {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.5rem 0.2rem 0.2rem;
+  border: 1.5px solid var(--site-ink);
+  cursor: pointer;
+}
+.site-color input {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 1.5px solid var(--site-ink);
+  background: none;
+  cursor: pointer;
+}
+.site-color input::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.site-color input::-webkit-color-swatch {
+  border: 0;
+}
+.site-color input::-moz-color-swatch {
+  border: 0;
+}
+.site-color:has(input:focus-visible) {
+  outline: 2px solid var(--site-accent);
+  outline-offset: 2px;
+}
+.site-contrast {
+  padding: 0.2rem 0.4rem;
+  background: #d92d20;
+  color: #fff;
+}
+.site-contrast[data-pass] {
+  background: var(--site-ink);
+  color: var(--site-bg);
+}
+.site-reset {
+  align-self: flex-end;
+  padding: 0.3rem 0.6rem;
+  border: 1.5px solid var(--site-ink);
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.site-reset:hover {
+  background: color-mix(in oklab, var(--site-ink) 8%, transparent);
+}
+.site-reset:focus-visible {
+  outline: 2px solid var(--site-accent);
+  outline-offset: 2px;
+}
+.site-range {
+  width: 12rem;
+  max-width: 100%;
+  accent-color: var(--site-accent);
+}
+.site-range:disabled {
+  opacity: 0.4;
+}
+
+/* ---------- Token tablosu ---------- */
+.site-tokens {
+  border: 1.5px solid var(--site-ink);
+  background: var(--site-panel);
+}
+.site-tokens dl {
+  margin: 0;
+}
+/* Telefonda: ad, değer ve açıklama alt alta (değerler font listesi kadar uzun olabilir). */
+.site-tokens dl > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.3rem 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--site-line);
+}
+.site-tokens dl > div:last-child {
+  border-bottom: 0;
+}
+.site-tokens dt code {
+  font:
+    500 0.78rem var(--site-font-mono),
+    monospace;
+  overflow-wrap: anywhere;
+}
+.site-tokens dd {
+  margin: 0;
+}
+.site-tokens .value {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font:
+    500 0.76rem var(--site-font-mono),
+    monospace;
+}
+.site-tokens .swatch {
+  width: 0.95rem;
+  height: 0.95rem;
+  border: 1.5px solid var(--site-ink);
+}
+.site-tokens .note {
+  color: var(--site-muted);
+  font-size: 0.85rem;
 }
 
 /* ---------- Kod kutusu ---------- */
@@ -1312,6 +1470,10 @@ html:has(.site) {
   }
   .site-tocbar {
     margin: -2rem 0 2rem;
+  }
+  .site-tokens dl > div {
+    grid-template-columns: 17rem minmax(0, 12rem) minmax(0, 1fr);
+    align-items: baseline;
   }
   .site-lineup {
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -1,0 +1,104 @@
+import { PageHeader } from "@/site/PageHeader";
+import { TokenTable } from "@/site/TokenTable";
+
+export const metadata = {
+  title: "Tokens",
+  description: "Every --plonk-* variable, with each personality's values.",
+};
+
+<PageHeader crumb="Guides" title="Tokens" number="05">
+  A token is a named design decision: "the primary color", "how thick a border
+  is", "how a dialog arrives". Plonk's tokens are CSS variables, and a
+  personality is just a set of values for them.
+</PageHeader>
+
+## Colors
+
+<TokenTable group="color" />
+
+## Shape
+
+<TokenTable group="shape" />
+
+## Type
+
+<TokenTable group="font" />
+
+## Motion
+
+<TokenTable group="motion" />
+
+What these do is covered in [Motion](/docs/motion).
+
+## Overriding tokens
+
+Target a personality with its attribute:
+
+```css
+[data-plonk-personality="sticker"] {
+  --plonk-border-width: 3px;
+  --plonk-radius-md: 4px;
+}
+```
+
+Or every personality at once:
+
+```css
+[data-plonk-personality] {
+  --plonk-shadow-x: 6px;
+  --plonk-shadow-y: 6px;
+}
+```
+
+### Why not `:root`?
+
+Each `PlonkProvider` renders an element that defines all the tokens for its
+personality. Variables set on `:root` are inherited only until that element
+redefines them, so inside a provider your `:root` values never show up. The
+attribute selector lands on the provider's element itself, so it wins.
+
+Plonk's own values sit in the `base` cascade layer. Any CSS you write without
+a layer comes later and beats them, no `!important` needed.
+
+### In TypeScript
+
+The provider's `style` accepts every token by name. Your editor completes them
+and a typo is a type error:
+
+```tsx
+<PlonkProvider style={{ "--plonk-radius-md": "4px" }}>
+  <App />
+</PlonkProvider>
+```
+
+The type is exported as `PlonkStyle` if you build your own wrapper.
+
+## Advanced: component hooks
+
+A few components read extra variables for adjustments that don't fit a global
+token. Plonk styles its components with Tailwind classes, and Tailwind's
+utilities beat any regular stylesheet rule aimed at those components. These
+variables are the way in.
+
+| Variable                    | Changes                                                   |
+| --------------------------- | --------------------------------------------------------- |
+| `--plonk-button-radius`     | Button corners                                            |
+| `--plonk-dialog-radius`     | Dialog corners                                            |
+| `--plonk-popover-radius`    | Popover corners                                           |
+| `--plonk-tabs-radius`       | Tab bar and indicator corners                             |
+| `--plonk-shadow-glow`       | An extra shadow after the hard one (Arcade's neon)        |
+| `--plonk-item-on-bg`        | Highlighted list item background (Menu, Select, ComboBox) |
+| `--plonk-item-on-ink`       | Highlighted list item text                                |
+| `--plonk-item-on-shadow`    | Highlighted list item shadow                              |
+| `--plonk-item-on-transform` | Highlighted list item transform                           |
+| `--plonk-press-effect`      | `none` turns off Comic and Arcade press effects           |
+
+```css
+/* Pill-shaped buttons in Sticker */
+[data-plonk-personality="sticker"] {
+  --plonk-button-radius: 999px;
+}
+```
+
+Hooks are less stable than tokens: they follow the components' internals and
+may change between minor versions.

@@ -4,6 +4,7 @@ import ButtonIcons from "./button/icons";
 import ButtonLoading from "./button/loading";
 import ButtonSizes from "./button/sizes";
 import ButtonVariants from "./button/variants";
+import FontsCustom from "./fonts/custom";
 import InstallationFirst from "./installation/first";
 import PersonalitiesMoments from "./personalities/moments";
 import PersonalitiesTape from "./personalities/tape";
@@ -22,6 +23,7 @@ export const EXAMPLES = {
   "button/icons": ButtonIcons,
   "button/loading": ButtonLoading,
   "button/form": ButtonForm,
+  "fonts/custom": FontsCustom,
   "installation/first": InstallationFirst,
   "personalities/moments": PersonalitiesMoments,
   "personalities/tape": PersonalitiesTape,

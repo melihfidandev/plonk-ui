@@ -1,0 +1,107 @@
+import { MotionLab } from "@/site/MotionLab";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Motion",
+  description:
+    "Five motion tokens, a jelly dial and reduced motion that still feels alive.",
+};
+
+<PageHeader crumb="Guides" title="Motion" number="06">
+  Motion is half of a personality. Every component moves with the same five
+  tokens, so the whole library feels like one thing, and turning motion down is
+  one setting.
+</PageHeader>
+
+<MotionLab />
+
+## Five motion tokens
+
+| Token    | Used for                                             |
+| -------- | ---------------------------------------------------- |
+| `press`  | Going down under the finger. Short, never bouncy.    |
+| `spring` | Coming back after a press, and general returns.      |
+| `snap`   | Indicators moving to a new spot: tabs, switch knobs. |
+| `enter`  | Dialogs, popovers and menus arriving.                |
+| `exit`   | Overlays leaving. Short and plain.                   |
+
+Each token is a pair of variables, `--plonk-motion-<token>-easing` and
+`--plonk-motion-<token>-duration`. Sticker and Comic use real springs: Plonk
+simulates a damped spring and turns it into a CSS `linear()` curve, so the
+overshoot happens in pure CSS. Retro and Arcade use `steps()` for their
+frame-by-frame feel. See every value on the [Tokens](/docs/tokens#motion) page.
+
+To change one, override its variables:
+
+```css
+[data-plonk-personality="sticker"] {
+  --plonk-motion-enter-easing: cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  --plonk-motion-enter-duration: 320ms;
+}
+```
+
+## Jelly
+
+When you release a button, check a box or flip a switch in Sticker or Comic, it
+wobbles like jelly. `jelly` sets how much: `0` is off, `1` is full jelly.
+
+```tsx
+<PlonkProvider jelly={0.4}>
+  <App />
+</PlonkProvider>
+```
+
+It's a token too, so CSS can set it for one part of the page:
+
+```css
+.data-entry {
+  --plonk-jelly-amount: 0.2;
+}
+```
+
+Retro and Arcade don't wobble: their motion is stepped, frame by frame, and
+jelly would break the illusion.
+
+## Reduced motion
+
+Plonk follows the operating system's "reduce motion" setting. You can also turn
+it on for your app or one part of it:
+
+```tsx
+<PlonkProvider motion="reduce">
+  <App />
+</PlonkProvider>
+```
+
+Reduced motion means **less motion, not zero**. Feedback stays, so the interface
+still feels responsive:
+
+- Presses still go down and come back.
+- Springs, snaps and entrances become a short 150ms ease-out; exits take 100ms.
+- Jelly is off.
+- Comic and Arcade press effects fade in place instead of flying.
+- Decorative loops, like Arcade's blinking plates, stop.
+
+Reduced motion always wins. The `jelly` prop, inline styles and your own
+`--plonk-jelly-amount` can't turn jelly back on. If you override motion tokens
+in your CSS, put them behind a media query so they don't override the reduced
+values:
+
+```css
+@media (prefers-reduced-motion: no-preference) {
+  [data-plonk-personality="sticker"] {
+    --plonk-motion-enter-duration: 320ms;
+  }
+}
+```
+
+The same goes for `motion="reduce"`: it sets `data-plonk-motion="reduce"` on the
+provider, which you can use as a selector.
+
+## 60fps
+
+Plonk animates almost entirely with `transform`, `opacity` and `clip-path`,
+which the browser can run off the main thread, so motion stays smooth on
+low-end phones. Physics that need JavaScript, like the slider's lag and
+stretch, run only while something is moving and write to CSS variables instead
+of re-rendering React.

@@ -31,10 +31,10 @@ export const NAV: NavSection[] = [
   {
     title: "Guides",
     pages: [
-      { title: "Colors", href: "/docs/colors" },
-      { title: "Fonts", href: "/docs/fonts" },
-      { title: "Tokens", href: "/docs/tokens" },
-      { title: "Motion", href: "/docs/motion" },
+      { title: "Colors", href: "/docs/colors", ready: true },
+      { title: "Fonts", href: "/docs/fonts", ready: true },
+      { title: "Tokens", href: "/docs/tokens", ready: true },
+      { title: "Motion", href: "/docs/motion", ready: true },
       { title: "Localization", href: "/docs/localization" },
       { title: "Accessibility", href: "/docs/accessibility" },
     ],
