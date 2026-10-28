@@ -1,0 +1,91 @@
+import ButtonPlayground from "@/examples/button/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Button",
+  description: "A button that presses like it means it, in four personalities.",
+};
+
+<PageHeader crumb="Components / Actions" title="Button" number="04">
+  Presses like it means it. It squashes and springs back in Sticker, snaps in
+  Retro, goes POW in Comic and scores points in Arcade. Same props, four
+  personalities.
+</PageHeader>
+
+<ButtonPlayground />
+
+## Usage
+
+```tsx
+import { Button } from "plonk";
+
+export function Invite() {
+  return <Button onPress={() => sendInvite()}>Send invite</Button>;
+}
+```
+
+Use `onPress` for actions. It fires once for mouse, touch and keyboard, and ignores
+the press if the pointer leaves the button before release. `onClick` still works,
+so existing code keeps running while you migrate:
+
+```tsx
+<Button onClick={(event: React.MouseEvent) => track(event)}>Track</Button>
+```
+
+### Variants
+
+`primary` is the main action on a screen. Use `danger` for destructive actions and
+`ghost` for quiet ones, like toolbars.
+
+<Example name="button/variants" title="Button · Variants" />
+
+### Sizes
+
+<Example name="button/sizes" title="Button · Sizes" />
+
+### With icons
+
+Icons are hidden from screen readers; the label names the button. A button with
+only an icon needs an `aria-label`.
+
+<Example name="button/icons" title="Button · Icons" />
+
+### Loading
+
+Pass `loading` while work is in flight. The button can't be pressed again, keeps
+its width and focus, and screen readers hear that it's busy.
+
+<Example name="button/loading" title="Button · Loading" />
+
+### In a form
+
+`type="submit"` submits the surrounding form, just like a native button.
+
+<Example name="button/form" title="Button · Form" />
+
+## Personalities
+
+Every personality has its own press. Sticker squashes and springs back like jelly,
+Retro snaps instantly, Comic shouts a sound effect where you clicked, and Arcade
+throws points into the air. To keep a button quiet, turn the effect off:
+
+```css
+/* No POW! or +100 for these buttons */
+.quiet {
+  --plonk-press-effect: none;
+}
+```
+
+## Accessibility
+
+- Built on React Aria's button: Enter and Space press it, and focus is only shown
+  for keyboard users.
+- `loading` keeps the button focusable and announces the busy state.
+- Icons are decorative. Give icon-only buttons an `aria-label`.
+- Reduced motion keeps the press feedback but drops jelly and effects.
+
+## API
+
+<ApiTable component="Button" />

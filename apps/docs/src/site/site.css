@@ -1,0 +1,1307 @@
+/*
+ * Docs sitesinin kendi tasarımı: "Atölye". Teknik çizim havası, milimetrik
+ * ızgara, mürekkep çizgiler, tek vurgu mavi. Plonk bileşenleri sayfada
+ * sergilenen eserdir; site onlarla yapılmaz.
+ *
+ * Mobil öncelikli: temel kurallar telefon içindir; tablet (52rem) ve geniş
+ * ekran (75rem) min-width ile eklenir (dosyanın sonunda).
+ *
+ * Değişkenler --site-* önekli: Plonk'un --plonk-* değişkenleriyle ve eserlerin
+ * içindekilerle çakışmasın. Koyu mod aynı tasarımın ikinci değer seti.
+ */
+:root {
+  --site-bg: #ecedef;
+  --site-ink: #0f1115;
+  --site-muted: #5b606c;
+  --site-panel: #ffffff;
+  --site-grid: #0f11150c;
+  --site-line: #0f111526;
+  --site-accent: #2f5bff;
+  --site-on-accent: #ffffff;
+  --site-code-bg: #0f1115;
+  --site-code-ink: #e6e8ee;
+  --site-code-muted: #7d8496;
+  /* Yan menü: açık modda başlıklar ve maddeler daha koyu (kullanıcı isteği). */
+  --site-nav-heading: #2a2e37;
+  --site-nav-link: 0.92;
+  --site-nav-soon: 0.5;
+  --site-header-h: 3.75rem;
+  --site-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+:root[data-mode="dark"] {
+  --site-bg: #0c0d10;
+  --site-ink: #e9eaee;
+  --site-muted: #9298a6;
+  --site-panel: #15171c;
+  --site-grid: #ffffff0b;
+  --site-line: #ffffff24;
+  --site-accent: #7c97ff;
+  --site-on-accent: #0c0d10;
+  --site-code-bg: #050608;
+  --site-code-ink: #e6e8ee;
+  --site-code-muted: #6b7183;
+  --site-nav-heading: #9298a6;
+  --site-nav-link: 0.8;
+  --site-nav-soon: 0.35;
+  color-scheme: dark;
+}
+html:has(.site) {
+  background: var(--site-bg);
+}
+
+.site {
+  min-height: 100vh;
+  background-color: var(--site-bg);
+  background-image:
+    linear-gradient(var(--site-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--site-grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--site-ink);
+  font-family: var(--site-font-sans), system-ui, sans-serif;
+  transition:
+    background-color 320ms ease,
+    color 320ms ease;
+}
+.site ::selection {
+  background: var(--site-accent);
+  color: var(--site-on-accent);
+}
+.site :focus-visible {
+  outline: 2px solid var(--site-accent);
+  outline-offset: 2px;
+}
+.site-mono {
+  font-family: var(--site-font-mono), ui-monospace, monospace;
+}
+
+/* ---------- Üst bar ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: var(--site-header-h);
+  padding: 0 1rem;
+  border-bottom: 1.5px solid var(--site-ink);
+  background: var(--site-bg);
+  transition: background-color 320ms ease;
+}
+.site-logo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  color: inherit;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+}
+.site-logo small {
+  font:
+    500 0.75rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0;
+  opacity: 0.5;
+}
+.site-nav {
+  display: none;
+  gap: 1.25rem;
+  font:
+    500 0.75rem var(--site-font-mono),
+    monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.site-nav a {
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity 160ms;
+}
+.site-nav a:hover,
+.site-nav a[aria-current] {
+  opacity: 1;
+}
+.site-header-end {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-inline-start: auto;
+}
+.site-search-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 1.5px solid var(--site-ink);
+  background: var(--site-panel);
+  color: var(--site-muted);
+  font:
+    500 0.8rem var(--site-font-mono),
+    monospace;
+  cursor: pointer;
+}
+.site-search-trigger:hover {
+  color: var(--site-ink);
+}
+.site-search-trigger svg {
+  flex: none;
+  width: 1.05rem;
+  height: 1.05rem;
+}
+.site-search-trigger :is(span, kbd) {
+  display: none;
+}
+.site-search-trigger kbd {
+  margin-inline-start: auto;
+  padding: 0.15rem 0.35rem;
+  background: var(--site-ink);
+  color: var(--site-bg);
+  font: inherit;
+  font-size: 0.7rem;
+}
+.site-icon-button {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1.5px solid var(--site-ink);
+  background: var(--site-panel);
+  color: var(--site-ink);
+  cursor: pointer;
+  transition:
+    background-color 160ms,
+    color 160ms;
+}
+.site-icon-button:hover {
+  background: var(--site-ink);
+  color: var(--site-bg);
+}
+.site-icon-button svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+/* Güneş/ay: geçişte döner ve küçülür. */
+.site-mode svg {
+  grid-area: 1 / 1;
+  transition:
+    rotate 420ms var(--site-ease),
+    scale 420ms var(--site-ease),
+    opacity 200ms;
+}
+.site-mode .moon,
+:root[data-mode="dark"] .site-mode .sun {
+  opacity: 0;
+  rotate: -90deg;
+  scale: 0.4;
+}
+:root[data-mode="dark"] .site-mode .moon {
+  opacity: 1;
+  rotate: 0deg;
+  scale: 1;
+}
+
+/* ---------- Gövde: yan menü | içerik | başlık listesi ---------- */
+.site-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 88rem;
+  margin: 0 auto;
+  padding: 0 1rem 4rem;
+}
+.site-sidebar {
+  display: none;
+  position: sticky;
+  top: calc(var(--site-header-h) + 2rem);
+  align-self: start;
+  max-height: calc(100vh - var(--site-header-h) - 3rem);
+  overflow-y: auto;
+  font:
+    400 0.85rem var(--site-font-mono),
+    monospace;
+  scrollbar-width: thin;
+}
+.site-sidebar h4 {
+  margin: 1.9rem 0 0.6rem;
+  color: var(--site-nav-heading);
+  font-size: 0.94rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.site-sidebar > div:first-child h4 {
+  margin-top: 0;
+}
+.site-sidebar a,
+.site-sidebar .soon {
+  display: flex;
+  align-items: center;
+  padding: 0.28rem 0;
+  color: inherit;
+  text-decoration: none;
+}
+.site-sidebar a {
+  opacity: var(--site-nav-link);
+}
+.site-sidebar a:hover {
+  opacity: 1;
+}
+.site-sidebar a[aria-current] {
+  opacity: 1;
+  font-weight: 500;
+}
+.site-sidebar a::before {
+  content: "→";
+  width: 0;
+  overflow: hidden;
+  color: var(--site-accent);
+  transition: width 260ms var(--site-ease);
+}
+.site-sidebar a[aria-current]::before {
+  width: 1.5em;
+}
+.site-sidebar .soon {
+  opacity: var(--site-nav-soon);
+  cursor: default;
+}
+
+.site-main {
+  min-width: 0;
+}
+.site-crumb {
+  margin-bottom: 0.75rem;
+  color: var(--site-muted);
+  font:
+    500 0.72rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.site-title {
+  margin: 0;
+  font-size: clamp(2.75rem, 5.5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+.site-title sup {
+  margin-inline-start: 0.4rem;
+  color: var(--site-accent);
+  font:
+    500 0.8rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0;
+  vertical-align: top;
+}
+.site-lead {
+  max-width: 60ch;
+  margin: 1.1rem 0 2.25rem;
+  font-size: 1.12rem;
+  line-height: 1.6;
+}
+
+/* ---------- MDX metni ---------- */
+.site-prose {
+  max-width: 68ch;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+.site-prose > :first-child {
+  margin-top: 0;
+}
+.site-prose h2 {
+  margin: 3.5rem 0 0.75rem;
+  font-weight: 600;
+  font-size: 1.75rem;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  scroll-margin-top: calc(var(--site-header-h) + 1.5rem);
+}
+.site-prose h3 {
+  margin: 2.25rem 0 0.5rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+  scroll-margin-top: calc(var(--site-header-h) + 1.5rem);
+}
+.site-prose :is(h2, h3) a {
+  color: inherit;
+  text-decoration: none;
+}
+.site-prose :is(h2, h3) a::after {
+  content: "#";
+  margin-inline-start: 0.4rem;
+  color: var(--site-accent);
+  opacity: 0;
+  transition: opacity 160ms;
+}
+.site-prose :is(h2, h3):hover a::after {
+  opacity: 1;
+}
+.site-prose p,
+.site-prose ul,
+.site-prose ol {
+  margin: 0.9rem 0;
+}
+.site-prose ul {
+  padding-inline-start: 1.25rem;
+  list-style: square;
+}
+.site-prose ol {
+  padding-inline-start: 1.5rem;
+  list-style: decimal;
+}
+.site-prose li {
+  margin: 0.3rem 0;
+}
+.site-prose li::marker {
+  color: var(--site-accent);
+}
+.site-prose a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--site-accent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+.site-prose :not(pre) > code {
+  padding: 0.1rem 0.32rem;
+  border: 1px solid var(--site-line);
+  background: var(--site-panel);
+  font:
+    500 0.86em var(--site-font-mono),
+    monospace;
+}
+/* Sergiler ve kod kutuları metin sütunundan geniş. */
+.site-prose > :is(.site-exhibit, .site-code, .site-api) {
+  max-width: none;
+  width: min(100%, 52rem);
+  margin: 1.75rem 0;
+}
+.site-prose {
+  max-width: none;
+}
+.site-prose > :is(p, ul, ol, h2, h3) {
+  max-width: 68ch;
+}
+
+/* ---------- Başlık listesi ---------- */
+.site-toc {
+  display: none;
+  position: sticky;
+  top: calc(var(--site-header-h) + 2rem);
+  align-self: start;
+  font-size: 0.82rem;
+}
+.site-toc p {
+  margin: 0 0 0.6rem;
+  color: var(--site-muted);
+  font:
+    500 0.68rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.site-toc-list {
+  position: relative;
+}
+/* Ray: gri çizgi; içindeki mavi dolgu okudukça aşağı iner (Toc.tsx). */
+.site-toc-rail {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 1.5px;
+  background: var(--site-line);
+}
+.site-toc-rail > span {
+  position: absolute;
+  inset-inline: -0.25px;
+  top: 0;
+  height: var(--site-toc-fill, 0px);
+  background: var(--site-accent);
+  transition: height 90ms linear;
+}
+.site-toc a {
+  display: block;
+  padding: 0.25rem 0 0.25rem 0.75rem;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity 160ms;
+}
+.site-toc a[data-depth="3"] {
+  padding-inline-start: 1.5rem;
+}
+.site-toc a:hover {
+  opacity: 1;
+}
+.site-toc a[aria-current] {
+  opacity: 1;
+  font-weight: 500;
+}
+
+/* ---------- Sergi: canlı Plonk eseri ---------- */
+.site-exhibit {
+  position: relative;
+  border: 1.5px solid var(--site-ink);
+  background: var(--site-panel);
+}
+/* Kesim işaretleri: eser bir çizim paftası gibi çerçevelenir. */
+.site-exhibit::before,
+.site-exhibit::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--site-accent);
+  pointer-events: none;
+}
+.site-exhibit::before {
+  top: -8px;
+  left: -8px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.site-exhibit::after {
+  right: -8px;
+  bottom: -8px;
+  border-top: 0;
+  border-left: 0;
+}
+.site-exhibit-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.9rem;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1.5px solid var(--site-ink);
+  font:
+    500 0.7rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.site-exhibit-bar b {
+  font-weight: 500;
+}
+.site-exhibit-bar .live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--site-muted);
+}
+.site-exhibit-bar .live::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #1fbf5c;
+  box-shadow: 0 0 0 3px #1fbf5c33;
+}
+.site-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+.site-chip {
+  padding: 0.3rem 0.55rem;
+  border: 1.5px solid var(--site-ink);
+  background: var(--site-panel);
+  color: var(--site-ink);
+  font: inherit;
+  text-transform: none;
+  cursor: pointer;
+  transition:
+    background-color 160ms,
+    color 160ms,
+    border-color 160ms;
+}
+.site-chip:hover {
+  background: color-mix(in oklab, var(--site-ink) 8%, var(--site-panel));
+}
+.site-chip[data-focus-visible] {
+  outline: 2px solid var(--site-accent);
+  outline-offset: 2px;
+}
+.site-chip[data-selected] {
+  border-color: var(--site-accent);
+  background: var(--site-accent);
+  color: var(--site-on-accent);
+}
+/* Sahne: eserin kendi zemini (kişiliğin canvas rengi). */
+.site-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 13rem;
+  padding: 2.5rem 1rem;
+  overflow: hidden;
+  background: var(--plonk-color-canvas);
+  color: var(--plonk-color-ink);
+  transition: background-color 380ms var(--site-ease);
+}
+.site-stage[data-align="start"] {
+  place-items: start;
+}
+.site-measures {
+  position: absolute;
+  bottom: 0.6rem;
+  left: 0.75rem;
+  display: flex;
+  gap: 1rem;
+  color: var(--plonk-color-ink-muted);
+  font:
+    500 0.66rem var(--site-font-mono),
+    monospace;
+  pointer-events: none;
+}
+/* Kişilik değişince eser yeniden "basılır". */
+.site-stage-inner {
+  animation: site-stage-in 420ms var(--site-ease);
+}
+@keyframes site-stage-in {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+
+/* ---------- Oyun alanı kontrolleri ---------- */
+.site-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  padding: 0.9rem 0.75rem;
+  border-top: 1.5px solid var(--site-ink);
+  font:
+    500 0.75rem var(--site-font-mono),
+    monospace;
+}
+.site-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.site-control > :is(span, label) {
+  color: var(--site-muted);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.site-segment {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1.5px solid var(--site-ink);
+}
+.site-segment label {
+  padding: 0.3rem 0.55rem;
+  cursor: pointer;
+  transition:
+    background-color 160ms,
+    color 160ms;
+}
+.site-segment label + label {
+  border-inline-start: 1.5px solid var(--site-ink);
+}
+.site-segment label[data-hovered] {
+  background: color-mix(in oklab, var(--site-ink) 8%, transparent);
+}
+.site-segment label[data-selected] {
+  background: var(--site-ink);
+  color: var(--site-bg);
+}
+.site-segment label[data-focus-visible] {
+  outline: 2px solid var(--site-accent);
+  outline-offset: -4px;
+}
+.site-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+.site-toggle .box {
+  display: grid;
+  place-items: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 1.5px solid var(--site-ink);
+}
+.site-toggle[data-selected] .box {
+  background: var(--site-ink);
+  color: var(--site-bg);
+}
+.site-toggle[data-focus-visible] .box {
+  outline: 2px solid var(--site-accent);
+  outline-offset: 2px;
+}
+.site-text-input {
+  width: 11rem;
+  padding: 0.3rem 0.5rem;
+  border: 1.5px solid var(--site-ink);
+  background: var(--site-panel);
+  color: inherit;
+  font: inherit;
+}
+
+/* ---------- Kod kutusu ---------- */
+.site-code {
+  position: relative;
+  border: 1.5px solid var(--site-ink);
+  background: var(--site-code-bg);
+  color: var(--site-code-ink);
+}
+.site-exhibit .site-code {
+  border: 0;
+  border-top: 1.5px solid var(--site-ink);
+}
+.site-code-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.45rem 0.5rem 0;
+  font:
+    500 0.72rem var(--site-font-mono),
+    monospace;
+}
+.site-code-bar [role="tab"],
+.site-code-bar .lang {
+  padding: 0.25rem 0.55rem;
+  color: var(--site-code-muted);
+  cursor: pointer;
+}
+.site-code-bar .lang {
+  cursor: default;
+}
+.site-code-bar [role="tab"][data-selected] {
+  background: #2f5bff;
+  color: #fff;
+}
+.site-code-bar [role="tab"][data-focus-visible] {
+  outline: 2px solid #7c97ff;
+  outline-offset: 1px;
+}
+.site-copy {
+  margin-inline-start: auto;
+  padding: 0.25rem 0.55rem;
+  border: 0;
+  background: none;
+  color: var(--site-code-muted);
+  font: inherit;
+  cursor: pointer;
+}
+.site-copy:hover,
+.site-copy[data-copied] {
+  color: #fff;
+}
+.site-code pre {
+  margin: 0;
+  padding: 0.9rem 1.05rem 1.1rem;
+  overflow-x: auto;
+  background: none !important;
+  font:
+    400 0.84rem/1.7 var(--site-font-mono),
+    monospace;
+  tab-size: 2;
+}
+.site-code pre code {
+  font: inherit;
+}
+
+/* ---------- Önceki / sonraki sayfa ---------- */
+/* Telefonda alt alta, önce "Next" (çoğu okuyucu ilerler); geniş ekranda yan yana. */
+.site-pager {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.75rem;
+  width: min(100%, 52rem);
+  margin-top: 4.5rem;
+  padding-top: 2rem;
+  border-top: 1.5px solid var(--site-ink);
+}
+.site-pager-link {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 1.1rem 1.15rem;
+  border: 1.5px solid var(--site-ink);
+  background: var(--site-panel);
+  color: inherit;
+  text-decoration: none;
+  /* Üstüne gelince mürekkep alttan dolar. */
+  background-image: linear-gradient(var(--site-ink), var(--site-ink));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 0%;
+  transition:
+    background-size 360ms var(--site-ease),
+    color 200ms ease;
+}
+.site-pager-link.next {
+  align-items: flex-end;
+  text-align: end;
+}
+.site-pager-link .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--site-muted);
+  font:
+    500 0.7rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 200ms ease;
+}
+.site-pager-link .eyebrow svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  transition: translate 360ms var(--site-ease);
+}
+.site-pager-link.prev .eyebrow svg {
+  rotate: 180deg;
+}
+.site-pager-link .title {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+@media (hover: hover) {
+  .site-pager-link:hover {
+    background-size: 100% 100%;
+    color: var(--site-bg);
+  }
+  .site-pager-link:hover .eyebrow {
+    color: inherit;
+  }
+  .site-pager-link.next:hover .eyebrow svg {
+    translate: 0.3rem 0;
+  }
+  .site-pager-link.prev:hover .eyebrow svg {
+    translate: -0.3rem 0;
+  }
+}
+.site-pager-link:active {
+  background-size: 100% 100%;
+  color: var(--site-bg);
+}
+
+/* ---------- API tablosu ----------
+   Telefonda her prop bir kart: üstte ad, altında tip, varsayılan, açıklama.
+   Tablet ve üstünde gerçek tablo. */
+.site-api {
+  border: 1.5px solid var(--site-ink);
+  background: var(--site-panel);
+}
+.site-api table {
+  display: block;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.site-api thead {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.site-api tbody {
+  display: block;
+}
+.site-api tr {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.9rem 1rem 1rem;
+  border-bottom: 1px solid var(--site-line);
+}
+.site-api tr:last-child {
+  border-bottom: 0;
+}
+.site-api td {
+  display: block;
+  padding: 0;
+}
+.site-api td[data-label] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.site-api td[data-label]::before {
+  content: attr(data-label);
+  flex: none;
+  width: 4.5rem;
+  color: var(--site-muted);
+  font:
+    500 0.66rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.site-api td[data-label] code {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.site-api td:first-child code {
+  color: var(--site-accent);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+.site-api td code {
+  font:
+    500 0.8rem var(--site-font-mono),
+    monospace;
+}
+.site-api .type code {
+  color: var(--site-muted);
+}
+.site-api .description {
+  line-height: 1.55;
+}
+.site-api .req {
+  margin-inline-start: 0.3rem;
+  color: #e5484d;
+}
+
+/* ---------- Arama ---------- */
+.site-search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  padding: 12vh 1rem 1rem;
+  background: color-mix(in oklab, var(--site-bg) 70%, transparent);
+  backdrop-filter: blur(2px);
+}
+.site-search-overlay[data-entering] {
+  animation: site-fade 160ms ease-out;
+}
+.site-search-overlay[data-exiting] {
+  animation: site-fade 120ms ease-in reverse;
+}
+@keyframes site-fade {
+  from {
+    opacity: 0;
+  }
+}
+.site-search-modal {
+  width: min(36rem, 100%);
+}
+.site-search {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: min(28rem, 70vh);
+  border: 1.5px solid var(--site-ink);
+  background: var(--site-panel);
+  color: var(--site-ink);
+  box-shadow: 8px 8px 0 color-mix(in oklab, var(--site-ink) 18%, transparent);
+  outline: none;
+}
+.site-search-overlay[data-entering] .site-search {
+  animation: site-search-in 220ms var(--site-ease);
+}
+@keyframes site-search-in {
+  from {
+    translate: 0 -8px;
+  }
+}
+.site-search input {
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border: 0;
+  border-bottom: 1.5px solid var(--site-ink);
+  outline: none;
+  background: none;
+  color: inherit;
+  font:
+    500 1rem var(--site-font-sans),
+    sans-serif;
+}
+.site-search [role="menu"] {
+  padding: 0.35rem;
+  overflow-y: auto;
+  outline: none;
+}
+.site-search [role="menuitem"] {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.55rem 0.65rem;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+.site-search [role="menuitem"][data-focused] {
+  background: var(--site-ink);
+  color: var(--site-bg);
+}
+.site-search [role="menuitem"] small {
+  margin-inline-start: auto;
+  font:
+    500 0.66rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.06em;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+.site-search-empty {
+  padding: 1rem;
+  color: var(--site-muted);
+  font:
+    500 0.8rem var(--site-font-mono),
+    monospace;
+}
+
+/* ---------- Telefon: menü paneli ---------- */
+.site-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: color-mix(in oklab, var(--site-ink) 35%, transparent);
+}
+.site-menu-overlay[data-entering] {
+  animation: site-fade 260ms ease-out;
+}
+.site-menu-overlay[data-exiting] {
+  animation: site-fade 200ms ease-in reverse;
+}
+.site-menu-panel {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: min(22rem, 88vw);
+  border-inline-end: 1.5px solid var(--site-ink);
+  background-color: var(--site-bg);
+  background-image:
+    linear-gradient(var(--site-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--site-grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--site-ink);
+  font-family: var(--site-font-sans), system-ui, sans-serif;
+}
+.site-menu-panel[data-entering] {
+  animation: site-menu-in 420ms var(--site-ease);
+}
+.site-menu-panel[data-exiting] {
+  animation: site-menu-in 240ms cubic-bezier(0.5, 0, 0.75, 0) reverse;
+}
+@keyframes site-menu-in {
+  from {
+    translate: -100% 0;
+  }
+}
+.site-menu-dialog {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  outline: none;
+}
+.site-menu-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--site-header-h);
+  padding: 0 1rem;
+  border-bottom: 1.5px solid var(--site-ink);
+  font:
+    500 0.75rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+/* Menünün içi: yan menünün aynısı, dokunmaya uygun aralıklarla. */
+.site-menu-list {
+  flex: 1;
+  padding: 0.5rem 1.25rem 2rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  font:
+    400 0.95rem var(--site-font-mono),
+    monospace;
+}
+.site-menu-list h4 {
+  margin: 1.6rem 0 0.4rem;
+  color: var(--site-nav-heading);
+  font-size: 0.94rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.site-menu-list a,
+.site-menu-list .soon {
+  display: flex;
+  align-items: center;
+  min-height: 2.5rem;
+  color: inherit;
+  text-decoration: none;
+}
+.site-menu-list a {
+  opacity: var(--site-nav-link);
+}
+.site-menu-list a[aria-current] {
+  opacity: 1;
+  font-weight: 500;
+}
+.site-menu-list a[aria-current]::before {
+  content: "→";
+  width: 1.5em;
+  color: var(--site-accent);
+}
+.site-menu-list .soon {
+  opacity: var(--site-nav-soon);
+}
+/* Panel açılırken maddeler yukarıdan aşağı sırayla gelir. */
+.site-menu-panel[data-entering] .site-menu-list > div > * {
+  animation: site-menu-item 380ms var(--site-ease) both;
+  animation-delay: calc(80ms + min(var(--i, 0), 18) * 14ms);
+}
+@keyframes site-menu-item {
+  from {
+    opacity: 0;
+    translate: -0.75rem 0;
+  }
+}
+
+/* ---------- Telefon ve tablet: "On this page" çubuğu ---------- */
+.site-tocbar {
+  position: sticky;
+  top: var(--site-header-h);
+  z-index: 30;
+  margin: 0 -1rem 1.5rem;
+  border-bottom: 1.5px solid var(--site-ink);
+  background: var(--site-bg);
+}
+.site-tocbar-button {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  font:
+    500 0.8rem var(--site-font-mono),
+    monospace;
+  text-align: start;
+  cursor: pointer;
+}
+.site-tocbar-button .label {
+  flex: none;
+  color: var(--site-muted);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.site-tocbar-button .current {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.site-tocbar-button svg {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  transition: rotate 320ms var(--site-ease);
+}
+.site-tocbar[data-open] .site-tocbar-button svg {
+  rotate: 180deg;
+}
+/* Okuma ilerlemesi: alt kenarda ince mavi çizgi. */
+.site-tocbar-progress {
+  position: absolute;
+  inset: auto 0 -1.5px;
+  height: 2px;
+  background: var(--site-accent);
+  transform: scaleX(var(--site-progress, 0));
+  transform-origin: 0 50%;
+}
+.site-tocbar-list {
+  position: absolute;
+  inset: calc(100% + 1.5px) 0 auto;
+  max-height: min(60vh, 26rem);
+  padding: 0.4rem 0;
+  overflow-y: auto;
+  border-bottom: 1.5px solid var(--site-ink);
+  background: var(--site-panel);
+  box-shadow: 0 12px 24px -12px
+    color-mix(in oklab, var(--site-ink) 30%, transparent);
+  animation: site-tocbar-in 260ms var(--site-ease);
+}
+.site-tocbar-list[hidden] {
+  display: none;
+}
+@keyframes site-tocbar-in {
+  from {
+    opacity: 0;
+    translate: 0 -6px;
+  }
+}
+.site-tocbar-list a {
+  display: block;
+  padding: 0.6rem 1rem;
+  color: inherit;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+.site-tocbar-list a[data-depth="3"] {
+  padding-inline-start: 2rem;
+  font-size: 0.88rem;
+}
+.site-tocbar-list a[aria-current] {
+  box-shadow: inset 3px 0 0 var(--site-accent);
+  font-weight: 600;
+}
+
+/* ---------- Tablet ve üstü (52rem) ---------- */
+@media (min-width: 52rem) {
+  .site-pager {
+    flex-direction: row;
+  }
+  .site-api {
+    overflow-x: auto;
+  }
+  .site-api table {
+    display: table;
+    font-size: 0.86rem;
+  }
+  .site-api thead {
+    position: static;
+    display: table-header-group;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+  .site-api tbody {
+    display: table-row-group;
+  }
+  .site-api tr {
+    display: table-row;
+  }
+  .site-api th {
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1.5px solid var(--site-ink);
+    font:
+      500 0.66rem var(--site-font-mono),
+      monospace;
+    letter-spacing: 0.08em;
+    text-align: start;
+    text-transform: uppercase;
+  }
+  .site-api td,
+  .site-api td[data-label] {
+    display: table-cell;
+    padding: 0.65rem 0.75rem;
+    border-bottom: 1px solid var(--site-line);
+    vertical-align: top;
+  }
+  .site-api tr:last-child td {
+    border-bottom: 0;
+  }
+  .site-api td[data-label]::before {
+    content: none;
+  }
+  .site-api td:first-child code {
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+  .site-api td[data-label] code {
+    overflow-wrap: normal;
+  }
+  .site-api .default code {
+    white-space: nowrap;
+  }
+  .site-header {
+    gap: 1.75rem;
+    padding: 0 1.5rem;
+  }
+  .site-nav {
+    display: flex;
+  }
+  .site-header-end {
+    gap: 0.6rem;
+  }
+  .site-search-trigger {
+    justify-content: flex-start;
+    width: auto;
+    min-width: 15rem;
+    padding: 0 0.4rem 0 0.75rem;
+  }
+  .site-search-trigger :is(span, kbd) {
+    display: inline;
+  }
+  .site-search-trigger kbd {
+    margin-inline-start: auto;
+  }
+  .site-menu-button {
+    display: none;
+  }
+  .site-shell {
+    grid-template-columns: 13rem minmax(0, 1fr);
+    gap: 2.5rem;
+    padding: 2rem 1.5rem 6rem;
+  }
+  .site-sidebar {
+    display: block;
+  }
+  .site-tocbar {
+    margin: -2rem 0 2rem;
+  }
+  .site-stage {
+    min-height: 15rem;
+    padding: 3rem 1.5rem;
+  }
+  .site-chips {
+    margin-inline-start: auto;
+  }
+}
+
+/* ---------- Geniş ekran (75rem): başlık listesi sağ sütunda ---------- */
+@media (min-width: 75rem) {
+  .site-shell {
+    grid-template-columns: 15rem minmax(0, 1fr) 12rem;
+    gap: 3rem;
+  }
+  .site-toc {
+    display: block;
+  }
+  .site-tocbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-stage-inner,
+  .site-menu-panel[data-entering],
+  .site-tocbar-list {
+    animation: site-fade 150ms ease-out;
+  }
+  .site-menu-panel[data-exiting] {
+    animation: site-fade 120ms ease-in reverse;
+  }
+  .site-menu-panel[data-entering] .site-menu-list > div > * {
+    animation: none;
+  }
+  .site-pager-link,
+  .site-pager-link .eyebrow svg,
+  .site-toc-rail > span {
+    transition: none;
+  }
+  .site-mode svg,
+  .site-sidebar a::before {
+    transition: none;
+  }
+}

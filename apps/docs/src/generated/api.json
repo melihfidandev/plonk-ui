@@ -1,0 +1,1559 @@
+{
+  "Accordion": [
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "AccordionItem": [
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": true,
+      "inherited": false
+    },
+    {
+      "name": "headingLevel",
+      "type": "2 | 3 | 4 | 5 | 6",
+      "default": "3",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Avatar": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "inherited": false
+    },
+    {
+      "name": "src",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\"",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "AvatarGroup": [
+    {
+      "name": "max",
+      "type": "number",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\"",
+      "default": "\"md\"",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "moreLabel",
+      "type": "(count: number) => string",
+      "default": "(count) => `${count} more`",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Badge": [
+    {
+      "name": "variant",
+      "type": "\"neutral\" | \"primary\" | \"secondary\" | \"accent\" | \"success\" | \"warning\" | \"danger\"",
+      "default": "\"neutral\"",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "dot",
+      "type": "boolean",
+      "default": "false",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Button": [
+    {
+      "name": "variant",
+      "type": "\"neutral\" | \"primary\" | \"secondary\" | \"accent\" | \"danger\" | \"ghost\"",
+      "default": "\"primary\"",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\"",
+      "default": "\"md\"",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "iconStart",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "iconEnd",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "default": "false",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "style",
+      "type": "CSSProperties",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "onPress",
+      "type": "(e: PressEvent) => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "type",
+      "type": "\"button\" | \"submit\" | \"reset\"",
+      "default": "\"button\"",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "autoFocus",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    }
+  ],
+  "Card": [
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "actions",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "footer",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "onClose",
+      "type": "() => void",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "closeLabel",
+      "type": "string",
+      "default": "Close",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "tape",
+      "type": "boolean",
+      "default": "false",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "tilt",
+      "type": "\"left\" | \"right\"",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "CloseIcon": [],
+  "Checkbox": [
+    {
+      "name": "indeterminate",
+      "type": "boolean",
+      "default": "false",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "ListPopover": [
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "ItemContent": [
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "shortcut",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "render",
+      "type": "ItemRenderProps",
+      "required": true,
+      "inherited": false
+    }
+  ],
+  "SectionHeader": [],
+  "ComboBox": [
+    {
+      "name": "placeholder",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "emptyMessage",
+      "type": "ReactNode",
+      "default": "No results",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "ComboBoxItem": [
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "shortcut",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "CommandPalette": [
+    {
+      "name": "isOpen",
+      "type": "boolean",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "onOpenChange",
+      "type": "(isOpen: boolean) => void",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "shortcut",
+      "type": "string | false",
+      "default": "k",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "Search for a command…",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "default": "Commands",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "emptyLabel",
+      "type": "ReactNode",
+      "default": "No results",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "onSearchChange",
+      "type": "(search: string) => void",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "CommandPage": [
+    {
+      "name": "id",
+      "type": "string",
+      "required": true,
+      "inherited": false
+    }
+  ],
+  "CommandGroup": [
+    {
+      "name": "heading",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "filter",
+      "type": "boolean",
+      "default": "true",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "isLoading",
+      "type": "boolean",
+      "default": "false",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "loadingLabel",
+      "type": "ReactNode",
+      "default": "Searching…",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "CommandItem": [
+    {
+      "name": "textValue",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "keywords",
+      "type": "string[]",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "shortcut",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "onAction",
+      "type": "() => void",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "keepOpen",
+      "type": "boolean",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "page",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "CommandPaletteTrigger": [
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Calendar": [
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "RangeCalendar": [
+    {
+      "name": "presets",
+      "type": "CalendarPreset[]",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "DatePicker": [
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "DateRangePicker": [
+    {
+      "name": "presets",
+      "type": "CalendarPreset[]",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Countdown": [
+    {
+      "name": "seconds",
+      "type": "number",
+      "required": true,
+      "inherited": false
+    },
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "inherited": false
+    },
+    {
+      "name": "message",
+      "type": "(seconds: number) => string",
+      "required": true,
+      "inherited": false
+    },
+    {
+      "name": "onEnd",
+      "type": "() => void",
+      "required": true,
+      "inherited": false
+    }
+  ],
+  "Dialog": [
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "footer",
+      "type": "RenderSlot",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\"",
+      "default": "\"md\"",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "role",
+      "type": "\"dialog\" | \"alertdialog\"",
+      "default": "\"dialog\"",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "isDismissable",
+      "type": "boolean",
+      "default": "role === \"dialog\"",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "hideClose",
+      "type": "boolean",
+      "default": "role === \"alertdialog\"",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "closeLabel",
+      "type": "string",
+      "default": "Close",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "countdown",
+      "type": "number",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "onCountdownEnd",
+      "type": "(api: { close: () => void; }) => void",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "countdownLabel",
+      "type": "ReactNode",
+      "default": "Continue?",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "countdownMessage",
+      "type": "(seconds: number) => string",
+      "default": "(seconds: number) => `${seconds} seconds left`",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "DialogTrigger": [],
+  "DialogFrame": [
+    {
+      "name": "close",
+      "type": "() => void",
+      "required": true,
+      "inherited": false
+    },
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "descriptionId",
+      "type": "string",
+      "required": true,
+      "inherited": false
+    },
+    {
+      "name": "footer",
+      "type": "RenderSlot",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "hideClose",
+      "type": "boolean",
+      "required": true,
+      "inherited": false
+    },
+    {
+      "name": "closeLabel",
+      "type": "string",
+      "required": true,
+      "inherited": false
+    },
+    {
+      "name": "countdown",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Drawer": [
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "footer",
+      "type": "RenderSlot",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "placement",
+      "type": "\"left\" | \"right\" | \"bottom\"",
+      "default": "\"right\"",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "isDismissable",
+      "type": "boolean",
+      "default": "true",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "hideClose",
+      "type": "boolean",
+      "default": "false",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "closeLabel",
+      "type": "string",
+      "default": "Close",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "FieldLabel": [
+    {
+      "name": "htmlFor",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "FieldDescription": [
+    {
+      "name": "id",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "FieldError": [
+    {
+      "name": "id",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Input": [
+    {
+      "name": "iconStart",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "iconEnd",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Kbd": [],
+  "Menu": [
+    {
+      "name": "placement",
+      "type": "\"left\" | \"right\" | \"bottom\" | \"bottom left\" | \"bottom right\" | \"bottom start\" | \"bottom end\" | \"top\" | \"top left\" | \"top right\" | \"top start\" | \"top end\" | \"left top\" | \"left bottom\" | \"start\" | \"start top\" | \"start bottom\" | \"right top\" | \"right bottom\" | \"end\" | \"end top\" | \"end bottom\"",
+      "default": "\"bottom start\"",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "MenuItem": [
+    {
+      "name": "variant",
+      "type": "\"danger\" | \"default\"",
+      "default": "\"default\"",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "shortcut",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "MenuSection": [
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "MenuTrigger": [],
+  "Popover": [
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Progress": [
+    {
+      "name": "value",
+      "type": "number | null",
+      "default": "null",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "default": "100",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "showValue",
+      "type": "boolean",
+      "default": "false",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "formatValue",
+      "type": "(value: number, max: number) => string",
+      "default": "(value: number, max: number) =>\n  `${Math.round((value / max) * 100)}%`",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "variant",
+      "type": "\"primary\" | \"secondary\" | \"accent\" | \"success\" | \"warning\" | \"danger\"",
+      "default": "\"primary\"",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "RadioGroup": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "value",
+      "type": "string | null",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string) => void",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "default": "false",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\"",
+      "default": "\"vertical\"",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Radio": [
+    {
+      "name": "value",
+      "type": "string",
+      "required": true,
+      "inherited": false
+    },
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Select": [
+    {
+      "name": "items",
+      "type": "Iterable<T>",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "SelectItem": [
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "shortcut",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "SelectSection": [
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Slider": [
+    {
+      "name": "value",
+      "type": "SliderValue",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "defaultValue",
+      "type": "SliderValue",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "onChange",
+      "type": "(value: T) => void",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "onChangeEnd",
+      "type": "(value: T) => void",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "min",
+      "type": "number",
+      "default": "0",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "default": "100",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "step",
+      "type": "number",
+      "default": "1",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "minGap",
+      "type": "number",
+      "default": "0",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "formatOptions",
+      "type": "NumberFormatOptions",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "formatValue",
+      "type": "(value: number) => string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "marks",
+      "type": "(number | SliderMark)[]",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "valueBubble",
+      "type": "\"always\" | \"active\" | \"never\"",
+      "default": "\"always\"",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "thumbLabels",
+      "type": "[string, string]",
+      "default": "[\"Minimum\", \"Maximum\"]",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "default": "false",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Switch": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "DataTable": [
+    {
+      "name": "data",
+      "type": "T[]",
+      "required": true,
+      "inherited": false
+    },
+    {
+      "name": "columns",
+      "type": "DataTableColumn<T>[]",
+      "required": true,
+      "inherited": false
+    },
+    {
+      "name": "getRowId",
+      "type": "(row: T) => string",
+      "required": true,
+      "inherited": false
+    },
+    {
+      "name": "selectable",
+      "type": "boolean",
+      "default": "false",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "bulkActions",
+      "type": "(ctx: DataTableBulkContext<T>) => ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "bulkBarTape",
+      "type": "boolean",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "searchable",
+      "type": "boolean",
+      "default": "true",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "columnMenu",
+      "type": "boolean",
+      "default": "true",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "toolbar",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "height",
+      "type": "string | number",
+      "default": "28rem",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "rowHeight",
+      "type": "number",
+      "default": "44",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "isLoading",
+      "type": "boolean",
+      "default": "false",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "emptyState",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "manualSorting",
+      "type": "boolean",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "manualFiltering",
+      "type": "boolean",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "rowCount",
+      "type": "number",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "sorting",
+      "type": "SortingState",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "onSortingChange",
+      "type": "(sorting: SortingState) => void",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "globalFilter",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "onGlobalFilterChange",
+      "type": "(value: string) => void",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "columnFilters",
+      "type": "ColumnFiltersState",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "onColumnFiltersChange",
+      "type": "(filters: ColumnFiltersState) => void",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "rowSelection",
+      "type": "RowSelectionState",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "onRowSelectionChange",
+      "type": "(selection: RowSelectionState) => void",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "columnVisibility",
+      "type": "ColumnVisibilityState",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "onColumnVisibilityChange",
+      "type": "(visibility: ColumnVisibilityState) => void",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "messages",
+      "type": "Partial<DataTableMessages>",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Tabs": [
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "TabList": [
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Tab": [
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "TabPanel": [
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Textarea": [
+    {
+      "name": "autoResize",
+      "type": "boolean",
+      "default": "false",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "Toaster": [
+    {
+      "name": "container",
+      "type": "HTMLElement | null",
+      "required": true,
+      "inherited": false
+    },
+    {
+      "name": "placement",
+      "type": "\"bottom\" | \"top\" | \"top-start\" | \"top-end\" | \"bottom-start\" | \"bottom-end\"",
+      "default": "\"bottom-end\"",
+      "required": false,
+      "inherited": false
+    }
+  ],
+  "TooltipTrigger": [],
+  "Tooltip": [
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "inherited": false
+    }
+  ]
+}
