@@ -378,7 +378,7 @@ html:has(.site) {
     monospace;
 }
 /* Sergiler ve kod kutuları metin sütunundan geniş. */
-.site-prose > :is(.site-exhibit, .site-code, .site-api) {
+.site-prose > :is(.site-exhibit, .site-code, .site-api, .site-lineup) {
   max-width: none;
   width: min(100%, 52rem);
   margin: 1.75rem 0;
@@ -569,6 +569,59 @@ html:has(.site) {
     opacity: 0;
     translate: 0 6px;
   }
+}
+
+/* ---------- Kişilik dizisi: dört kişilik yan yana ---------- */
+.site-lineup {
+  display: grid;
+  gap: 1rem;
+}
+.site-lineup-card {
+  margin: 0;
+  border: 1.5px solid var(--site-ink);
+  background: var(--site-panel);
+}
+.site-lineup-card figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.6rem;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1.5px solid var(--site-ink);
+  font:
+    500 0.7rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.site-lineup-card .index {
+  color: var(--site-accent);
+}
+.site-lineup-card b {
+  font-weight: 500;
+}
+.site-lineup-card code {
+  color: var(--site-muted);
+  text-transform: none;
+}
+.site-lineup-card .motion {
+  flex-basis: 100%;
+  color: var(--site-muted);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.site-lineup-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 1.5rem 1.25rem;
+  background: var(--plonk-color-canvas);
+  color: var(--plonk-color-ink);
+}
+/* Kartlar sırayla yerine oturur (bir kez, sayfa açılınca). */
+.site-lineup-card {
+  animation: site-stage-in 520ms var(--site-ease) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
 }
 
 /* ---------- Oyun alanı kontrolleri ---------- */
@@ -1260,6 +1313,10 @@ html:has(.site) {
   .site-tocbar {
     margin: -2rem 0 2rem;
   }
+  .site-lineup {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
   .site-stage {
     min-height: 15rem;
     padding: 3rem 1.5rem;
@@ -1284,6 +1341,7 @@ html:has(.site) {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .site-lineup-card,
   .site-stage-inner,
   .site-menu-panel[data-entering],
   .site-tocbar-list {

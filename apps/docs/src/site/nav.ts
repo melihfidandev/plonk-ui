@@ -24,8 +24,8 @@ export const NAV: NavSection[] = [
     title: "Get started",
     pages: [
       { title: "Introduction", href: "/docs", ready: true },
-      { title: "Installation", href: "/docs/installation" },
-      { title: "Personalities", href: "/docs/personalities" },
+      { title: "Installation", href: "/docs/installation", ready: true },
+      { title: "Personalities", href: "/docs/personalities", ready: true },
     ],
   },
   {

@@ -4,6 +4,9 @@ import ButtonIcons from "./button/icons";
 import ButtonLoading from "./button/loading";
 import ButtonSizes from "./button/sizes";
 import ButtonVariants from "./button/variants";
+import InstallationFirst from "./installation/first";
+import PersonalitiesMoments from "./personalities/moments";
+import PersonalitiesTape from "./personalities/tape";
 
 /**
  * Docs örnekleri. Her biri hem canlı çalışır hem kaynak kodu sayfada gösterilir
@@ -19,6 +22,9 @@ export const EXAMPLES = {
   "button/icons": ButtonIcons,
   "button/loading": ButtonLoading,
   "button/form": ButtonForm,
+  "installation/first": InstallationFirst,
+  "personalities/moments": PersonalitiesMoments,
+  "personalities/tape": PersonalitiesTape,
 } satisfies Record<string, ComponentType>;
 
 export type ExampleName = keyof typeof EXAMPLES;

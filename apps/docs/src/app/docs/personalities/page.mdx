@@ -1,0 +1,130 @@
+import { Example } from "@/site/Example";
+import { Lineup } from "@/site/Lineup";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Personalities",
+  description: "Four looks and four ways of moving, one set of components.",
+};
+
+<PageHeader crumb="Get started" title="Personalities" number="02">
+  A personality is more than a color scheme. It sets the borders, shadows and
+  fonts, and it decides how every component moves. Same props, same
+  accessibility, four characters.
+</PageHeader>
+
+<Lineup />
+
+## Choosing one
+
+Pass `personality` to the provider. Sticker is the default.
+
+```tsx
+<PlonkProvider personality="retro">
+  <App />
+</PlonkProvider>
+```
+
+Providers nest, and the closest one wins. A settings page can be Retro inside a
+Sticker app, or a single promo card can be Arcade:
+
+```tsx
+<PlonkProvider personality="sticker">
+  <Dashboard />
+  <PlonkProvider personality="arcade">
+    <HighScores />
+  </PlonkProvider>
+</PlonkProvider>
+```
+
+Dialogs, menus and toasts opened inside a provider keep its personality, even
+though they render at the end of the page. To read the current personality in
+your own components, call `usePersonality()`.
+
+## The four
+
+### Sticker
+
+Notebook lines, paper tape and stickers stuck on at a slight angle. Press a
+button and it squashes, then springs back like jelly. Toasts drop in with a
+strip of tape and peel off from the corner when dismissed. Calendar pages tear
+off as you move forward.
+
+### Retro
+
+Every surface is a window with a striped title bar and a pixel font. Motion is
+stepped and instant, like an old Mac: dialogs open with growing outline frames,
+toasts roll up like a window shade, and pressing a button snaps without bounce.
+
+### Comic
+
+Thick ink, halftone dots and a hand-lettered body font. Motion is fast and
+overshoots. Buttons shout **POW!** or **ZAP!** where you clicked, dialogs open as
+speech bubbles, and dismissed toasts tear in half.
+
+### Arcade
+
+Domed buttons, neon glow and pixel steps. Pressing a button throws **+100** into
+the air, lists open like an old CRT screen, and a dialog with a timer turns into
+a giant **CONTINUE? 9…8…**
+
+Arcade is the only dark personality. Its colors are tuned to pass contrast on
+its own dark canvas, so give it its own surface instead of placing it on a light
+page's background.
+
+## Signature moments
+
+The bigger moments live in toasts and dialogs. Switch personalities and try
+them again.
+
+<Example name="personalities/moments" title="Signature moments" toaster />
+
+## Press effects
+
+Comic and Arcade add an effect on top of the press: a sound word in Comic,
+flying points in Arcade. Buttons play it on every press; checkboxes and switches
+only when they turn on. Keyboard presses play it from the middle of the
+control.
+
+To turn effects off, set `--plonk-press-effect` to `none`, for one personality
+or for a part of the page:
+
+```css
+/* No effects anywhere in Comic */
+[data-plonk-personality="comic"] {
+  --plonk-press-effect: none;
+}
+
+/* Or only in this toolbar */
+.toolbar {
+  --plonk-press-effect: none;
+}
+```
+
+With reduced motion, effects only fade in and out in place.
+
+## Tape
+
+Decorative tape sits on toasts and on the data table's bulk action bar. Each
+personality draws its own: paper tape in Sticker, a dithered pixel strip in
+Retro, a blue halftone ribbon in Comic and a blinking **1UP** plate in Arcade.
+
+<Example name="personalities/tape" title="Tape" toaster />
+
+Turn it off everywhere with the provider. Nested providers inherit the setting:
+
+```tsx
+<PlonkProvider tape={false}>
+  <App />
+</PlonkProvider>
+```
+
+A component's own setting always wins over the provider's:
+
+```tsx
+toast("Saved", { tape: true });
+```
+
+The data table has its own switch for its bulk action bar: `bulkBarTape`.
+
+Cards are the exception: they have no tape by default. Add it with `<Card tape>`.

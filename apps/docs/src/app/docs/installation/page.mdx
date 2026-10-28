@@ -1,0 +1,140 @@
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Installation",
+  description: "Add Plonk to a React app in three steps.",
+};
+
+<PageHeader crumb="Get started" title="Installation" number="01">
+  Install the package, import the styles, wrap your app once. That's the whole
+  setup.
+</PageHeader>
+
+## Requirements
+
+- **React 19** and React DOM 19.
+- **Tailwind CSS v4.** Plonk's components are styled with Tailwind classes, so
+  your app compiles them alongside its own.
+
+## 1. Install the package
+
+```bash
+npm install plonk
+```
+
+pnpm, Yarn and Bun work the same way. The fonts for all four personalities come
+with the package; you don't need to load anything from Google Fonts.
+
+## 2. Import the styles
+
+In the CSS file where you import Tailwind, add Plonk's theme and tell Tailwind
+to scan the package for classes:
+
+```css
+@import "tailwindcss";
+@import "plonk/theme.css";
+
+/* Path from this CSS file to node_modules */
+@source "../node_modules/plonk/dist";
+```
+
+`theme.css` brings the tokens for every personality, the motion keyframes and
+the `@font-face` rules. A browser only downloads a font when something on the
+page actually uses it.
+
+## 3. Wrap your app once
+
+Put a `PlonkProvider` near the root of your app. It sets the personality and
+opens the region where toasts appear.
+
+```tsx
+import { PlonkProvider } from "plonk";
+
+export function App() {
+  return (
+    <PlonkProvider personality="sticker">
+      <Routes />
+    </PlonkProvider>
+  );
+}
+```
+
+That's it. Use any component:
+
+<Example name="installation/first" title="Your first component" toaster />
+
+### Without a provider
+
+Components still render without a provider; they fall back to Sticker. But a few
+things only work inside one:
+
+- `toast()` has nowhere to show up.
+- There's no `personality`, `motion`, `jelly`, `tape` or `locale` setting.
+
+So wrap the app once, even if you never change the defaults.
+
+## TypeScript or JavaScript
+
+Plonk is written in TypeScript and ships plain JavaScript with type definitions,
+so it works in both. It's an ES module package: use it with a bundler or a
+framework (Next.js, Vite, Remix), not with `require()`.
+
+Code samples in these docs are written in TypeScript. When the JavaScript
+version differs, a **TS / JS** switch appears on the code block. Your choice is
+remembered, and the copy button copies the language you're looking at.
+
+## Next.js
+
+Every component is a client component (the package ships with `"use client"`),
+so you can import them straight into Server Components. Put the provider in your
+root layout:
+
+```tsx
+// app/layout.tsx
+import { PlonkProvider } from "plonk";
+import "./globals.css";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>
+        <PlonkProvider>{children}</PlonkProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+### Dates and prerendering
+
+With Cache Components, Next.js prerenders pages and refuses values that change
+on every render, like "today". `DatePicker` and `DateRangePicker` are safe:
+they render a stable placeholder on the server and fill in on the client.
+
+A `Calendar` or `RangeCalendar` placed directly on a page is different: the month
+it shows depends on today's date. Wrap it in `<Suspense>`, or render it only on
+the client.
+
+```tsx
+import { Suspense } from "react";
+import { Calendar } from "plonk";
+
+export default function Page() {
+  return (
+    <Suspense>
+      <Calendar aria-label="Pick a day" />
+    </Suspense>
+  );
+}
+```
+
+## Next steps
+
+- [Personalities](/docs/personalities): meet all four and pick one.
+- [Colors](/docs/colors) and [Fonts](/docs/fonts): make it yours.
+- [Button](/docs/components/button): a full component page.

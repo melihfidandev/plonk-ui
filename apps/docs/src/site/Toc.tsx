@@ -8,7 +8,8 @@ import {
   type RefObject,
 } from "react";
 
-const SELECTOR = ".site-prose :is(h2, h3)[id]";
+// Sadece metnin kendi başlıkları; sergilerdeki bileşen başlıkları (Card) değil.
+const SELECTOR = ".site-prose > :is(h2, h3)[id]";
 
 /** Okuma çizgisi: üst barın biraz altı. Bunu geçen başlık "okunuyor" sayılır. */
 const READ_LINE = 140;
