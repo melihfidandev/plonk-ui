@@ -422,6 +422,8 @@ export function DataTable<T extends RowData>({
                     aria-rowindex={item.index + 2}
                     aria-selected={selectable ? row.getIsSelected() : undefined}
                     data-selected={row.getIsSelected() || undefined}
+                    // Dönüşümlü satırlar için: nth-child sanal kaydırmada kayar.
+                    data-odd={item.index % 2 === 1 || undefined}
                     className="plonk-table-row"
                   >
                     {row.getVisibleCells().map((cell) => (
@@ -728,7 +730,9 @@ function BulkBar({
  *
  * Kişilik hareketi CSS'te seçer (`--plonk-table-reorder`): Sticker `flip`
  * (aşmadan kayar, yolda eğilir; yay aşması satırları üst üste yığıyordu),
- * Retro `steps` (yukarıdan aşağı kademeli belirir), azaltılmış hareket `fade`.
+ * Çizgi Roman `hop` (gittiği yöne öne yatar, hedefi sabit birkaç piksel geçip
+ * geri oturur ve inişte ezilir), Retro ve Atari `steps` (yukarıdan aşağı
+ * kademeli belirir), azaltılmış hareket `fade`.
  */
 function useReorderMotion(
   tbody: React.RefObject<HTMLTableSectionElement | null>,
@@ -782,6 +786,34 @@ function useReorderMotion(
               { transform: "none" },
             ],
             { duration: 640, easing: "cubic-bezier(.22, 1, .36, 1)" },
+          );
+        }
+      } else if (mode === "hop") {
+        if (was === undefined) {
+          tr.animate(
+            [
+              { opacity: 0, transform: "scale(.94) skewX(-8deg)" },
+              { opacity: 1, transform: "scale(1.02) skewX(2deg)", offset: 0.6 },
+              { opacity: 1, transform: "none" },
+            ],
+            { duration: 300, easing: "cubic-bezier(.2, .8, .3, 1)" },
+          );
+        } else if (was !== top) {
+          const dy = Math.max(-limit, Math.min(limit, was - top));
+          // Aşma mesafeyle büyümez: uzaktan gelen satır da birkaç piksel geçer.
+          const over = Math.sign(dy) * -5;
+          const lean = Math.sign(dy) * 7;
+          tr.animate(
+            [
+              { transform: `translateY(${dy}px) skewX(${lean}deg)` },
+              {
+                transform: `translateY(${over}px) skewX(${-lean * 0.4}deg)`,
+                offset: 0.55,
+              },
+              { transform: "translateY(0) scale(1.01, .9)", offset: 0.78 },
+              { transform: "none" },
+            ],
+            { duration: 520, easing: "cubic-bezier(.3, .7, .4, 1)" },
           );
         }
       } else if (mode === "steps") {

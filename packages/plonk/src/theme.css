@@ -4586,6 +4586,238 @@
     }
   }
 
+  /* ---------- Çizgi Roman ve Atari: veri tablosu ---------- */
+
+  /*
+   * Çizgi Roman: başlık satırı sarı anlatıcı şeridi. Seçilen satıra önce mavi
+   * baskı tramı basılır, üstünden mavi kalem soldan sağa geçer. Sıralamada
+   * satırlar zıplayarak yerine oturur (hop). İşlem çubuğu bir konuşma balonu.
+   */
+  [data-plonk-personality="comic"] {
+    .plonk-table-grid {
+      --plonk-table-reorder: hop;
+    }
+    .plonk-table-head {
+      background: var(--plonk-color-accent);
+      color: var(--plonk-color-on-accent);
+      font-weight: 400;
+    }
+    .plonk-table-sort:hover {
+      background: color-mix(in oklab, var(--plonk-color-ink) 12%, transparent);
+    }
+    .plonk-table-sort-index {
+      background: var(--plonk-color-surface);
+      color: var(--plonk-color-ink);
+    }
+    .plonk-table-row[data-selected] {
+      background-image: radial-gradient(
+        circle,
+        color-mix(in oklab, var(--plonk-color-secondary) 55%, transparent) 1.4px,
+        transparent 1.9px
+      );
+      background-size: 6px 6px;
+    }
+    .plonk-table-cell {
+      background-image: linear-gradient(
+        color-mix(in oklab, var(--plonk-color-secondary) 26%, transparent),
+        color-mix(in oklab, var(--plonk-color-secondary) 26%, transparent)
+      );
+    }
+
+    /* İşlem çubuğu: beyaz konuşma balonu, sol altta kuyruk; kuyruğundan şişer. */
+    .plonk-table-bulk {
+      border: var(--plonk-border-width) solid var(--plonk-color-ink);
+      border-radius: 1.5rem;
+      background: var(--plonk-color-surface);
+      color: var(--plonk-color-ink);
+      box-shadow: 4px 4px 0 var(--plonk-color-ink);
+      font-weight: 400;
+      transform-origin: 12% 120%;
+      animation: plonk-balloon-in var(--plonk-motion-enter-duration)
+        var(--plonk-motion-enter-easing);
+    }
+    .plonk-table-bulk[data-exiting] {
+      animation: plonk-balloon-out var(--plonk-motion-exit-duration)
+        var(--plonk-motion-exit-easing) forwards;
+    }
+    .plonk-table-bulk::after {
+      content: "";
+      position: absolute;
+      top: calc(100% - 0.55rem);
+      left: 1.6rem;
+      width: 1rem;
+      height: 1rem;
+      border-right: var(--plonk-border-width) solid var(--plonk-color-ink);
+      border-bottom: var(--plonk-border-width) solid var(--plonk-color-ink);
+      background: var(--plonk-color-surface);
+      transform: rotate(45deg) skew(12deg, 12deg);
+    }
+    .plonk-table-bulk-n {
+      color: var(--plonk-color-primary);
+    }
+    .plonk-table-bulk-clear:hover {
+      background: var(--plonk-color-danger);
+      color: var(--plonk-color-on-danger);
+    }
+    /* Bant: kartlardaki gibi mavi tramlı şerit. */
+    .plonk-table-bulk[data-tape]::before {
+      top: -0.8rem;
+      width: 4.5rem;
+      height: 1.3rem;
+      rotate: 3deg;
+      border: 2px solid var(--plonk-color-ink);
+      background:
+        radial-gradient(circle, rgb(255 255 255 / 0.6) 1.4px, transparent 1.9px)
+          0 0 / 7px 7px,
+        var(--plonk-color-secondary);
+      box-shadow: 2px 2px 0 var(--plonk-color-ink);
+      clip-path: none;
+      animation-delay: 300ms;
+    }
+  }
+
+  /*
+   * Atari: tablo bir "HIGH SCORES" listesi. Başlıklar skor tabelası gibi,
+   * satırlar dönüşümlü, seçilen satır camgöbeği neon. Sıralamada satırlar
+   * yukarıdan aşağı kademeli yazılır. İşlem çubuğu neon plaka, "1UP"
+   * plakasıyla; sayı her değişimde skor gibi atar.
+   */
+  [data-plonk-personality="arcade"] {
+    .plonk-table-grid {
+      --plonk-table-reorder: steps;
+    }
+    .plonk-table-scroll {
+      box-shadow:
+        var(--plonk-shadow-x) var(--plonk-shadow-y) 0 var(--plonk-shadow-color),
+        var(--plonk-shadow-glow);
+    }
+    .plonk-table-head {
+      border-bottom-color: var(--plonk-color-secondary);
+      background: var(--plonk-color-sunken);
+      color: var(--plonk-color-accent);
+      font-size: 0.75rem;
+      font-weight: 400;
+      text-shadow: 2px 2px 0 var(--plonk-color-primary);
+    }
+    .plonk-table-head[data-sorted] .plonk-table-sort {
+      text-shadow: none;
+    }
+    .plonk-table-row[data-odd] > .plonk-table-cell {
+      background-color: rgb(0 0 0 / 0.14);
+    }
+    .plonk-table-cell {
+      border-bottom-color: color-mix(
+        in oklab,
+        var(--plonk-color-secondary) 16%,
+        transparent
+      );
+      background-image: linear-gradient(
+        color-mix(in oklab, var(--plonk-color-secondary) 22%, transparent),
+        color-mix(in oklab, var(--plonk-color-secondary) 22%, transparent)
+      );
+    }
+    .plonk-table-row[data-selected] > .plonk-table-cell {
+      box-shadow:
+        inset 0 2px 0 var(--plonk-color-secondary),
+        inset 0 -2px 0 var(--plonk-color-secondary);
+      color: var(--plonk-color-accent);
+      transition-timing-function: steps(3, end);
+    }
+    .plonk-table-skeleton span {
+      animation: plonk-dot-blink 1s steps(2, jump-none) infinite;
+    }
+
+    .plonk-table-bulk {
+      border: 2px solid var(--plonk-color-secondary);
+      border-radius: var(--plonk-radius-pill);
+      background: var(--plonk-color-sunken);
+      color: var(--plonk-color-ink);
+      box-shadow: 0 0 1.2rem -0.2rem var(--plonk-color-secondary);
+      font-size: 0.85rem;
+      font-weight: 400;
+      animation: plonk-arcade-bulk-in 250ms steps(5, end);
+    }
+    .plonk-table-bulk[data-exiting] {
+      animation: plonk-arcade-crt-out 160ms linear forwards;
+    }
+    .plonk-table-bulk-n {
+      color: var(--plonk-color-accent);
+      text-shadow: 2px 2px 0 var(--plonk-color-primary);
+      animation: plonk-countdown-tick 240ms steps(3, end);
+    }
+    .plonk-table-bulk-clear:hover {
+      background: var(--plonk-color-danger);
+      color: var(--plonk-color-on-danger);
+    }
+    /* Bant yerine yanıp sönen "1UP" plakası. */
+    .plonk-table-bulk[data-tape]::before {
+      content: "1UP";
+      content: "1UP" / "";
+      top: -0.85rem;
+      width: auto;
+      height: auto;
+      padding: 0.15rem 0.6rem 0.05rem;
+      rotate: none;
+      border: 2px solid var(--plonk-color-secondary);
+      border-radius: var(--plonk-radius-pill);
+      background: var(--plonk-color-sunken);
+      box-shadow: 0 0 0.9rem -0.1rem var(--plonk-color-secondary);
+      color: var(--plonk-color-accent);
+      font-size: 0.7rem;
+      line-height: 1.2;
+      letter-spacing: 0.08em;
+      text-shadow: 1px 1px 0 var(--plonk-color-primary);
+      clip-path: none;
+      animation: plonk-blink 1600ms steps(1, end) infinite;
+    }
+  }
+
+  :is(
+    [data-plonk-motion="reduce"] [data-plonk-personality="comic"],
+    [data-plonk-motion="reduce"] [data-plonk-personality="arcade"],
+    [data-plonk-personality="comic"][data-plonk-motion="reduce"],
+    [data-plonk-personality="arcade"][data-plonk-motion="reduce"]
+  ) {
+    .plonk-table-grid {
+      --plonk-table-reorder: fade;
+    }
+    .plonk-table-bulk {
+      animation: plonk-fade-in 150ms ease-out;
+    }
+    .plonk-table-bulk[data-exiting] {
+      animation: plonk-fade-out 100ms ease-in forwards;
+    }
+    .plonk-table-bulk-n,
+    .plonk-table-bulk[data-tape]::before,
+    .plonk-table-skeleton span {
+      animation: none;
+    }
+    .plonk-table-row[data-selected] > .plonk-table-cell {
+      transition: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :is([data-plonk-personality="comic"], [data-plonk-personality="arcade"]) {
+      .plonk-table-grid {
+        --plonk-table-reorder: fade;
+      }
+      .plonk-table-bulk {
+        animation: plonk-fade-in 150ms ease-out;
+      }
+      .plonk-table-bulk[data-exiting] {
+        animation: plonk-fade-out 100ms ease-in forwards;
+      }
+      .plonk-table-bulk-n,
+      .plonk-table-bulk[data-tape]::before,
+      .plonk-table-skeleton span {
+        animation: none;
+      }
+      .plonk-table-row[data-selected] > .plonk-table-cell {
+        transition: none;
+      }
+    }
+  }
+
   /* ---------- Çizgi Roman: temel bileşenler ---------- */
 
   [data-plonk-personality="comic"] {
@@ -5914,5 +6146,11 @@
     opacity: 0;
     scale: 0.75;
     rotate: -3deg;
+  }
+}
+
+@keyframes plonk-arcade-bulk-in {
+  from {
+    transform: translateY(160%);
   }
 }
