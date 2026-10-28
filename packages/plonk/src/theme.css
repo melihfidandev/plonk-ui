@@ -1051,9 +1051,17 @@
   .plonk-item-shortcut {
     color: var(--plonk-color-ink-muted);
   }
+  /*
+   * Vurgunun görünüşü --plonk-item-on-* değişkenlerinden gelir; kişilikler
+   * durum seçicisi yazmadan değiştirir, aşağıdaki sıfırlamalar hepsini kapsar.
+   * --plonk-item-cursor: vurgulu satırda 1 (kişiliğin imleci buna bakar).
+   */
   .plonk-item:is([data-hovered], [data-focus-visible]) {
-    background: var(--plonk-color-primary);
-    color: var(--plonk-color-on-primary);
+    --plonk-item-cursor: 1;
+    background: var(--plonk-item-on-bg, var(--plonk-color-primary));
+    color: var(--plonk-item-on-ink, var(--plonk-color-on-primary));
+    box-shadow: var(--plonk-item-on-shadow, none);
+    transform: var(--plonk-item-on-transform, none);
   }
   /*
    * Kapanırken odak vurgusu gösterme: React Aria kapanış sırasında ilk
@@ -1061,8 +1069,11 @@
    */
   .plonk-list[data-exiting]
     .plonk-item:is([data-hovered], [data-focus-visible]) {
+    --plonk-item-cursor: 0;
     background: transparent;
     color: inherit;
+    box-shadow: none;
+    transform: none;
   }
   .plonk-item:is([data-hovered], [data-focus-visible])
     :is(.plonk-item-description, .plonk-item-shortcut) {
@@ -1076,8 +1087,11 @@
    */
   .plonk-list:has([data-focus-visible])
     .plonk-item[data-hovered]:not([data-focus-visible]) {
+    --plonk-item-cursor: 0;
     background: transparent;
     color: inherit;
+    box-shadow: none;
+    transform: none;
   }
   .plonk-item[data-variant="danger"] {
     color: color-mix(
@@ -1260,6 +1274,358 @@
   @media (prefers-reduced-motion: reduce) {
     [data-plonk-personality] .plonk-tab-panel {
       animation: plonk-fade-in 150ms ease-out;
+    }
+  }
+
+  /* ---------- Çizgi Roman ve Atari: seçim ve yapı ---------- */
+
+  /*
+   * Listelerde vurgulu satırın başında bir imleç: satırın ilk esnek öğesi,
+   * yeri hep ayrılır (oyun menülerindeki gibi), sadece vurgulu satırda görünür.
+   */
+  :is([data-plonk-personality="comic"], [data-plonk-personality="arcade"]) {
+    .plonk-item::before {
+      content: "";
+      flex: none;
+      width: 0.55rem;
+      height: 0.75rem;
+      margin-inline-end: -0.2rem;
+      background: var(--plonk-color-primary);
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+      scale: var(--plonk-item-cursor, 0);
+      transition: scale var(--plonk-motion-snap-duration)
+        var(--plonk-motion-snap-easing);
+    }
+    .plonk-item:dir(rtl)::before {
+      rotate: 180deg;
+    }
+    /* Bölüm başlıkları başlık fontuyla; tek kalınlıklı fontta sahte kalın yok. */
+    .plonk-list-header {
+      font-family: var(--plonk-font-display);
+      font-synthesis-weight: none;
+    }
+  }
+
+  [data-plonk-personality="comic"] {
+    /* Liste zemininde hafif baskı tramı. */
+    .plonk-list {
+      background-image: radial-gradient(
+        circle,
+        color-mix(in oklab, var(--plonk-color-ink) 9%, transparent) 1.2px,
+        transparent 1.7px
+      );
+      background-size: 8px 8px;
+    }
+    /* Vurgulu satır sarı anlatıcı kutusu; hız çizgisi gibi öne yatar. */
+    .plonk-item {
+      --plonk-item-on-bg: var(--plonk-color-accent);
+      --plonk-item-on-ink: var(--plonk-color-on-accent);
+      --plonk-item-on-shadow: inset 0 0 0 2px var(--plonk-color-ink);
+      --plonk-item-on-transform: skewX(-6deg);
+      transition:
+        background-color var(--plonk-motion-press-duration)
+          var(--plonk-motion-press-easing),
+        transform var(--plonk-motion-snap-duration)
+          var(--plonk-motion-snap-easing);
+    }
+    /* Seçenekler kare kare "pat pat" düşer. */
+    .plonk-list[data-entering] .plonk-item {
+      animation-name: plonk-comic-item-in;
+      animation-duration: 280ms;
+      animation-timing-function: cubic-bezier(0.3, 1.7, 0.5, 1);
+    }
+    .plonk-list-header {
+      --plonk-color-ink-muted: var(--plonk-color-primary);
+    }
+
+    /*
+     * Sekmeler çizgi roman kareleri: köşeli, gösterge eğik kırmızı panel.
+     * İçerik bir sonraki kareye geçer gibi yandan kayarak gelir.
+     */
+    .plonk-tablist {
+      --plonk-tabs-radius: var(--plonk-radius-md);
+    }
+    .plonk-tab-indicator {
+      transform: skewX(-8deg);
+      box-shadow: 3px 3px 0 var(--plonk-color-ink);
+    }
+    .plonk-tab-panel {
+      animation: plonk-comic-panel-in var(--plonk-motion-snap-duration)
+        var(--plonk-motion-snap-easing);
+    }
+
+    /*
+     * Accordion: açık bölümün başlığı sarı anlatıcı kutusuna girer, içi
+     * köşeden baskı tramı alır, gövde bir mürekkep çizgisiyle ayrılır.
+     * Kutunun çerçevesi ve iç boşluğu hep vardır; açılınca yazı kaymaz.
+     */
+    .plonk-accordion-title {
+      margin-inline-start: -0.5rem;
+      padding: 0.15rem 0.5rem 0.05rem;
+      border: 2px solid transparent;
+      transition:
+        background-color var(--plonk-motion-press-duration)
+          var(--plonk-motion-press-easing),
+        border-color var(--plonk-motion-press-duration)
+          var(--plonk-motion-press-easing),
+        box-shadow var(--plonk-motion-press-duration)
+          var(--plonk-motion-press-easing),
+        rotate var(--plonk-motion-spring-duration)
+          var(--plonk-motion-spring-easing);
+    }
+    .plonk-accordion-item[data-expanded]
+      > *
+      > .plonk-accordion-trigger
+      > .plonk-accordion-title {
+      border-color: var(--plonk-color-ink);
+      background: var(--plonk-color-accent);
+      color: var(--plonk-color-on-accent);
+      box-shadow: 3px 3px 0 var(--plonk-color-ink);
+      rotate: -1.5deg;
+    }
+    .plonk-accordion-item[data-expanded] {
+      background-image:
+        linear-gradient(200deg, transparent 0%, var(--plonk-color-surface) 42%),
+        radial-gradient(
+          circle,
+          color-mix(in oklab, var(--plonk-color-secondary) 55%, transparent)
+            1.7px,
+          transparent 2.2px
+        );
+      background-size:
+        auto,
+        9px 9px;
+    }
+    .plonk-accordion-body {
+      padding-top: 0.85rem;
+      background: linear-gradient(
+          var(--plonk-color-ink),
+          var(--plonk-color-ink)
+        )
+        no-repeat 1rem 0 / calc(100% - 2rem) 2px;
+    }
+  }
+
+  [data-plonk-personality="arcade"] {
+    /* Liste bir CRT ekranı: tarama çizgileri; önce yatay bir çizgi, sonra açılır. */
+    .plonk-list {
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgb(0 0 0 / 0.18) 0 1px,
+        transparent 1px 3px
+      );
+    }
+    /* plonk-hold: seçenekler satır satır yazılana kadar "açılıyor" sayılsın. */
+    .plonk-list[data-entering] {
+      animation:
+        plonk-arcade-crt-in 240ms linear,
+        plonk-hold 460ms;
+    }
+    .plonk-list[data-exiting] {
+      animation: plonk-arcade-crt-out 160ms linear forwards;
+    }
+    .plonk-list[data-entering] .plonk-item {
+      animation: plonk-arcade-type 1ms steps(1, end) both;
+      animation-delay: calc(240ms + var(--plonk-stagger) * 22ms);
+    }
+
+    /* Vurgulu satır neon çerçeveli; imleç piksel bir ok, yanıp söner. */
+    .plonk-item {
+      --plonk-item-on-bg: color-mix(
+        in oklab,
+        var(--plonk-color-secondary) 16%,
+        transparent
+      );
+      --plonk-item-on-ink: var(--plonk-color-accent);
+      --plonk-item-on-shadow:
+        inset 0 0 0 2px var(--plonk-color-secondary),
+        inset 0 0 0.8rem -0.2rem var(--plonk-color-secondary);
+    }
+    .plonk-item::before {
+      width: 0.6rem;
+      height: 0.8rem;
+      clip-path: polygon(
+        0 0,
+        34% 0,
+        34% 17%,
+        67% 17%,
+        67% 34%,
+        100% 34%,
+        100% 66%,
+        67% 66%,
+        67% 83%,
+        34% 83%,
+        34% 100%,
+        0 100%
+      );
+      transition: none;
+    }
+    .plonk-item:is([data-hovered], [data-focus-visible])::before {
+      animation: plonk-blink 700ms steps(1, end) infinite;
+    }
+    /* Seçili seçenekte tik yerine yıldız; kademeli belirir. */
+    .plonk-item-check {
+      display: none;
+    }
+    .plonk-item:has(.plonk-item-check)::after {
+      content: "";
+      flex: none;
+      width: 1rem;
+      height: 1rem;
+      background: var(--plonk-color-accent);
+      clip-path: polygon(
+        50% 0%,
+        61% 35%,
+        98% 35%,
+        68% 57%,
+        79% 91%,
+        50% 70%,
+        21% 91%,
+        32% 57%,
+        2% 35%,
+        39% 35%
+      );
+      scale: 0;
+      transition: scale 150ms steps(3, end);
+    }
+    .plonk-item[data-selected]::after {
+      scale: 1;
+    }
+    .plonk-list-header {
+      --plonk-color-ink-muted: var(--plonk-color-secondary);
+    }
+
+    /*
+     * Sekmeler oyuncu seçimi: gösterge neon çerçeveli pembe kutu, kademeli
+     * kayar; varınca seçilen sekme üç kez yanıp söner. İçerik yukarıdan
+     * aşağı satır satır çizilir.
+     */
+    .plonk-tab-indicator {
+      border-color: var(--plonk-color-secondary);
+      box-shadow:
+        0 0 0 1px var(--plonk-color-secondary),
+        0 0 0.3rem var(--plonk-color-secondary);
+    }
+    .plonk-tab[data-selected] {
+      animation: plonk-blink 100ms steps(1, end) 240ms 3;
+    }
+    .plonk-tab-panel {
+      animation: plonk-arcade-wipe var(--plonk-motion-snap-duration)
+        var(--plonk-motion-snap-easing);
+    }
+
+    /*
+     * Accordion bir bölüm listesi: başlıkların önünde 01, 02… Açık bölümün
+     * önünde yanıp sönen imleç, çerçevesi neon. Panel kademeli açılır.
+     */
+    .plonk-accordion {
+      counter-reset: plonk-stage;
+    }
+    .plonk-accordion-item {
+      counter-increment: plonk-stage;
+    }
+    .plonk-accordion-title::before {
+      content: counter(plonk-stage, decimal-leading-zero);
+      content: counter(plonk-stage, decimal-leading-zero) / "";
+      margin-inline-end: 0.6rem;
+      color: var(--plonk-color-accent);
+    }
+    .plonk-accordion-trigger::before {
+      content: "";
+      flex: none;
+      width: 0.6rem;
+      height: 0.8rem;
+      margin-inline-end: -0.25rem;
+      background: var(--plonk-color-primary);
+      clip-path: polygon(
+        0 0,
+        34% 0,
+        34% 17%,
+        67% 17%,
+        67% 34%,
+        100% 34%,
+        100% 66%,
+        67% 66%,
+        67% 83%,
+        34% 83%,
+        34% 100%,
+        0 100%
+      );
+      scale: 0;
+    }
+    .plonk-accordion-trigger:dir(rtl)::before {
+      rotate: 180deg;
+    }
+    @media (hover: hover) {
+      .plonk-accordion-trigger:not([data-disabled]):hover::before {
+        scale: 1;
+      }
+    }
+    .plonk-accordion-item[data-expanded]
+      > *
+      > .plonk-accordion-trigger::before {
+      scale: 1;
+      animation: plonk-blink 900ms steps(1, end) infinite;
+    }
+    .plonk-accordion-item[data-expanded] {
+      --plonk-shadow-glow: 0 0 1.6rem -0.1rem var(--plonk-shadow-color);
+      outline: var(--plonk-border-width) solid var(--plonk-color-secondary);
+      outline-offset: calc(var(--plonk-border-width) * -1);
+    }
+    .plonk-accordion-item[data-expanded] > .plonk-accordion-panel {
+      transition-duration: var(--plonk-motion-snap-duration);
+      transition-timing-function: var(--plonk-motion-snap-easing);
+    }
+  }
+
+  /*
+   * Hareket azaltılınca: seçenekler sırayla gelmez, imleç ve sekme yanıp
+   * sönmez, ekran açılışı yerine solma. Kişilik kurallarıyla aynı ya da daha
+   * yüksek özgüllükte.
+   */
+  :is(
+    [data-plonk-motion="reduce"] [data-plonk-personality="comic"],
+    [data-plonk-motion="reduce"] [data-plonk-personality="arcade"],
+    [data-plonk-personality="comic"][data-plonk-motion="reduce"],
+    [data-plonk-personality="arcade"][data-plonk-motion="reduce"]
+  ) {
+    .plonk-list[data-entering] {
+      animation: plonk-fade-in 150ms ease-out;
+    }
+    .plonk-list[data-exiting] {
+      animation: plonk-fade-out 100ms ease-out forwards;
+    }
+    .plonk-list[data-entering] .plonk-item,
+    .plonk-item:is([data-hovered], [data-focus-visible])::before,
+    .plonk-tab[data-selected],
+    .plonk-accordion-item[data-expanded]
+      > *
+      > .plonk-accordion-trigger::before {
+      animation: none;
+    }
+    .plonk-tab-panel {
+      animation: plonk-fade-in 150ms ease-out;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :is([data-plonk-personality="comic"], [data-plonk-personality="arcade"]) {
+      .plonk-list[data-entering] {
+        animation: plonk-fade-in 150ms ease-out;
+      }
+      .plonk-list[data-exiting] {
+        animation: plonk-fade-out 100ms ease-out forwards;
+      }
+      .plonk-list[data-entering] .plonk-item,
+      .plonk-item:is([data-hovered], [data-focus-visible])::before,
+      .plonk-tab[data-selected],
+      .plonk-accordion-item[data-expanded]
+        > *
+        > .plonk-accordion-trigger::before {
+        animation: none;
+      }
+      .plonk-tab-panel {
+        animation: plonk-fade-in 150ms ease-out;
+      }
     }
   }
 
@@ -4278,5 +4644,63 @@
 @keyframes plonk-countdown-tick {
   from {
     scale: 1.4;
+  }
+}
+
+@keyframes plonk-comic-item-in {
+  from {
+    opacity: 0;
+    scale: 0.6;
+    rotate: -4deg;
+  }
+}
+
+@keyframes plonk-comic-panel-in {
+  from {
+    opacity: 0;
+    translate: -2rem 0;
+    transform: skewX(10deg);
+  }
+}
+
+/* CRT açılışı: önce ortadan yatay bir çizgi, sonra aşağı açılır. */
+@keyframes plonk-arcade-crt-in {
+  0% {
+    scale: 0.04 0.03;
+    animation-timing-function: steps(3, end);
+  }
+  40% {
+    scale: 1 0.03;
+    animation-timing-function: steps(4, end);
+  }
+  100% {
+    scale: 1 1;
+  }
+}
+
+@keyframes plonk-arcade-crt-out {
+  0% {
+    scale: 1 1;
+    animation-timing-function: steps(3, end);
+  }
+  60% {
+    scale: 1 0.03;
+    animation-timing-function: steps(2, end);
+  }
+  100% {
+    opacity: 0;
+    scale: 0.04 0.03;
+  }
+}
+
+@keyframes plonk-arcade-type {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes plonk-arcade-wipe {
+  from {
+    clip-path: inset(0 0 100% 0);
   }
 }

@@ -67,16 +67,18 @@ export function AccordionItem({
         <AriaButton
           slot="trigger"
           onPress={() => chevronRef.current && playJelly(chevronRef.current)}
-          className="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left font-plonk-display text-lg leading-tight outline-none data-disabled:cursor-not-allowed data-focus-visible:outline-3 data-focus-visible:outline-offset-2 data-focus-visible:outline-plonk-focus"
+          className="plonk-accordion-trigger flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left font-plonk-display text-lg leading-tight outline-none data-disabled:cursor-not-allowed data-focus-visible:outline-3 data-focus-visible:outline-offset-2 data-focus-visible:outline-plonk-focus"
         >
-          <span className="min-w-0 flex-1">{title}</span>
+          <span className="plonk-accordion-title me-auto min-w-0">{title}</span>
           <span ref={chevronRef} className="inline-grid">
             <Chevron />
           </span>
         </AriaButton>
       </Heading>
       <DisclosurePanel className="plonk-accordion-panel">
-        <div className="px-4 pb-4 text-plonk-ink">{children}</div>
+        <div className="plonk-accordion-body px-4 pb-4 text-plonk-ink">
+          {children}
+        </div>
       </DisclosurePanel>
     </Disclosure>
   );

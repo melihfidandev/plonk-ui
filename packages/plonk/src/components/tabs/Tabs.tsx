@@ -100,14 +100,14 @@ export function TabList<T extends object>({
     <div
       ref={boxRef}
       className={cn(
-        "plonk-tablist relative flex w-fit max-w-full overflow-x-auto rounded-plonk-pill bg-plonk-surface p-1 plonk-border",
+        "plonk-tablist relative flex w-fit max-w-full overflow-x-auto rounded-[var(--plonk-tabs-radius,var(--plonk-radius-pill))] bg-plonk-surface p-1 plonk-border",
         className,
       )}
     >
       <span
         ref={indicatorRef}
         aria-hidden="true"
-        className="plonk-tab-indicator absolute top-0 left-0 rounded-plonk-pill"
+        className="plonk-tab-indicator absolute top-0 left-0 rounded-[var(--plonk-tabs-radius,var(--plonk-radius-pill))]"
       />
       <AriaTabList {...props} className="flex gap-1" />
     </div>
@@ -127,7 +127,7 @@ export function Tab({ children, className, ...props }: TabProps) {
     <AriaTab
       {...props}
       className={cn(
-        "plonk-tab relative cursor-pointer rounded-plonk-pill px-4 py-1.5 font-plonk-display whitespace-nowrap outline-none select-none data-disabled:cursor-not-allowed data-disabled:opacity-50",
+        "plonk-tab relative cursor-pointer rounded-[var(--plonk-tabs-radius,var(--plonk-radius-pill))] px-4 py-1.5 font-plonk-display whitespace-nowrap outline-none select-none data-disabled:cursor-not-allowed data-disabled:opacity-50",
         "outline-offset-2 data-focus-visible:outline-3 data-focus-visible:outline-plonk-focus",
         className,
       )}

@@ -90,7 +90,7 @@ export function ItemContent({
           strokeWidth={3.5}
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="size-4 shrink-0"
+          className="plonk-item-check size-4 shrink-0"
         >
           <path
             className="plonk-check-mark"
@@ -105,7 +105,7 @@ export function ItemContent({
 
 export function SectionHeader({ children }: { children: ReactNode }) {
   return (
-    <Header className="px-2.5 pt-2.5 pb-1 text-xs font-extrabold tracking-wide text-plonk-ink-muted uppercase">
+    <Header className="plonk-list-header px-2.5 pt-2.5 pb-1 text-xs font-extrabold tracking-wide text-plonk-ink-muted uppercase">
       {children}
     </Header>
   );
