@@ -2972,6 +2972,338 @@
     }
   }
 
+  /* ---------- Çizgi Roman ve Atari: takvim ---------- */
+
+  :is([data-plonk-personality="comic"], [data-plonk-personality="arcade"]) {
+    .plonk-cal-rings {
+      display: none;
+    }
+    .plonk-calendar {
+      padding-top: 0.9rem;
+    }
+    /* Ay adı kendi kutusunda; kutu yazıyı sarar, ortada durur. */
+    .plonk-cal-heading {
+      flex: none;
+      margin-inline: auto;
+    }
+    .plonk-cal-dow {
+      font-family: var(--plonk-font-display);
+      font-weight: 400;
+      text-transform: var(--plonk-font-display-case);
+      letter-spacing: var(--plonk-font-display-tracking);
+    }
+    /* Eski sayfa her iki yönde de oynar (Sticker'da geri giderken gizli). */
+    .plonk-cal-old[data-dir] {
+      display: table;
+      background: none;
+      clip-path: none;
+    }
+  }
+
+  /*
+   * Çizgi Roman: takvim bir çizgi roman karesi. Ay adı anlatıcı kutusunda,
+   * seçilen gün kırmızı bir patlama yıldızı, aralık mavi tramlı bir şerit,
+   * bugün sarı kalemle halkalanır. Ay değişince sayfa bir sonraki kareye
+   * geçer gibi eğilerek yana kayar.
+   */
+  [data-plonk-personality="comic"] {
+    .plonk-calendar {
+      background-image:
+        linear-gradient(200deg, transparent 0%, var(--plonk-color-surface) 38%),
+        radial-gradient(
+          circle,
+          color-mix(in oklab, var(--plonk-color-secondary) 55%, transparent)
+            1.7px,
+          transparent 2.2px
+        );
+      background-size:
+        auto,
+        9px 9px;
+    }
+    .plonk-cal-heading {
+      padding: 0.15rem 0.6rem 0.05rem;
+      border: var(--plonk-border-width) solid var(--plonk-color-ink);
+      background: var(--plonk-color-accent);
+      color: var(--plonk-color-on-accent);
+      box-shadow: 3px 3px 0 var(--plonk-color-ink);
+      font-size: 1.15rem;
+      rotate: -1.5deg;
+    }
+
+    /* Seçilen gün: mürekkep çerçeveli patlama yıldızı, "BAM" diye çıkar. */
+    .plonk-cal-dot {
+      inset: -0.3rem;
+      border: 0;
+      border-radius: 0;
+      background: var(--plonk-color-ink);
+      box-shadow: none;
+      clip-path: polygon(
+        50% 0%,
+        58.5% 13%,
+        71.7% 5%,
+        71.2% 23.4%,
+        89.1% 18.8%,
+        84.2% 33.5%,
+        98.7% 38.9%,
+        84% 50%,
+        98.7% 61.1%,
+        84.2% 66.5%,
+        89.1% 81.2%,
+        71.2% 76.6%,
+        71.7% 95%,
+        58.5% 87%,
+        50% 100%,
+        42.4% 83.1%,
+        28.3% 95%,
+        26.3% 79.7%,
+        10.9% 81.2%,
+        19.4% 64.8%,
+        1.3% 61.1%,
+        12% 50%,
+        1.3% 38.9%,
+        19.4% 35.2%,
+        10.9% 18.8%,
+        26.3% 20.3%,
+        28.3% 5%,
+        42.4% 16.9%
+      );
+      animation: plonk-countdown-bam 420ms cubic-bezier(0.3, 1.6, 0.5, 1);
+    }
+    .plonk-cal-dot::before {
+      content: "";
+      position: absolute;
+      inset: var(--plonk-border-width);
+      background: var(--plonk-color-primary);
+      clip-path: inherit;
+    }
+    .plonk-calendar-range .plonk-cal-dot::before {
+      background: var(--plonk-color-accent);
+    }
+    /* Aralığın ikinci ucu bekleniyor: yıldızın sadece kesik çizgili halkası. */
+    .plonk-cal-dot[data-pending] {
+      inset: 0.15rem;
+      border: 2px dashed var(--plonk-color-ink);
+      border-radius: var(--plonk-radius-pill);
+      background: var(--plonk-color-surface);
+      clip-path: none;
+      animation: none;
+    }
+    .plonk-cal-dot[data-pending]::before {
+      display: none;
+    }
+
+    /* Aralık: mavi tramlı şerit, mürekkep kenarlı; satır satır çizilir. */
+    .plonk-cal-hl {
+      height: 1.6rem;
+      border-block: 2px solid var(--plonk-color-ink);
+      background:
+        radial-gradient(
+            circle,
+            color-mix(in oklab, var(--plonk-color-secondary) 70%, transparent)
+              1.4px,
+            transparent 1.9px
+          )
+          0 0 / 6px 6px,
+        color-mix(in oklab, var(--plonk-color-secondary) 22%, transparent);
+      mix-blend-mode: normal;
+    }
+    .plonk-cal-grid td:first-child .plonk-cal-hl,
+    .plonk-cal-cell[data-selection-start] .plonk-cal-hl,
+    .plonk-cal-grid td:last-child .plonk-cal-hl,
+    .plonk-cal-cell[data-selection-end] .plonk-cal-hl {
+      border-radius: 0;
+    }
+
+    /* Bugün: sarı kalem, mürekkep gölgeli. */
+    .plonk-cal-today > path {
+      stroke: var(--plonk-color-accent);
+      stroke-width: 3.4;
+      filter: drop-shadow(1px 1px 0 var(--plonk-color-ink));
+    }
+
+    .plonk-cal-old[data-dir="next"] {
+      animation: plonk-comic-cal-out-next 260ms cubic-bezier(0.5, 0, 0.9, 0.5)
+        forwards;
+    }
+    .plonk-cal-old[data-dir="prev"] {
+      animation: plonk-comic-cal-out-prev 260ms cubic-bezier(0.5, 0, 0.9, 0.5)
+        forwards;
+    }
+    .plonk-cal-grid[data-turn] tbody {
+      animation: plonk-comic-cal-in-next var(--plonk-motion-snap-duration)
+        var(--plonk-motion-snap-easing) 90ms backwards;
+    }
+    .plonk-cal-grid[data-turn="prev"] tbody {
+      animation-name: plonk-comic-cal-in-prev;
+    }
+  }
+
+  /*
+   * Atari: takvim bir seviye seçim ekranı. Ay adı skor tabelası gibi, seçilen
+   * gün pembe neon kutu ve yanında yanıp sönen imleç, aralık camgöbeği neon
+   * şerit, bugün küçük bir yıldız. Ay değişince eski ızgara satır satır
+   * silinir, yenisi satır satır yazılır.
+   */
+  [data-plonk-personality="arcade"] {
+    .plonk-calendar {
+      box-shadow:
+        var(--plonk-shadow-x) var(--plonk-shadow-y) 0 var(--plonk-shadow-color),
+        var(--plonk-shadow-glow);
+    }
+    .plonk-cal-heading {
+      color: var(--plonk-color-accent);
+      font-size: 1.1rem;
+      text-shadow: 2px 2px 0 var(--plonk-color-primary);
+    }
+    .plonk-cal-nav {
+      border-color: var(--plonk-color-secondary);
+      box-shadow: 0 0 0.7rem -0.1rem var(--plonk-color-secondary);
+    }
+    .plonk-cal-nav[data-pressed] {
+      translate: none;
+      background: var(--plonk-color-secondary);
+      color: var(--plonk-color-sunken);
+    }
+    .plonk-cal-dow {
+      color: var(--plonk-color-secondary);
+      font-size: 0.65rem;
+    }
+    .plonk-cal-cell {
+      border-radius: var(--plonk-radius-sm);
+    }
+    .plonk-cal-cell[data-hovered]:not([data-selected]) {
+      background: none;
+      outline: 2px solid var(--plonk-color-secondary);
+      outline-offset: -4px;
+    }
+
+    /* Seçilen gün: neon kutu, kademeli belirir. */
+    .plonk-cal-dot {
+      inset: 0.15rem;
+      border: 0;
+      border-radius: var(--plonk-radius-sm);
+      background: var(--plonk-color-primary);
+      box-shadow: 0 0 0.9rem -0.1rem var(--plonk-color-primary);
+      rotate: none;
+      animation: plonk-cal-blink 160ms steps(2, jump-none);
+    }
+    .plonk-calendar-range .plonk-cal-dot {
+      background: var(--plonk-color-accent);
+      box-shadow: 0 0 0.9rem -0.1rem var(--plonk-color-accent);
+    }
+    /* Tek takvimde seçilen günün içinde, altta yanıp sönen bir imleç. */
+    .plonk-calendar:not(.plonk-calendar-range) .plonk-cal-dot::before {
+      content: "";
+      position: absolute;
+      bottom: 0.2rem;
+      left: 50%;
+      width: 0.8rem;
+      height: 2px;
+      translate: -50% 0;
+      background: var(--plonk-color-on-primary);
+      animation: plonk-blink 700ms steps(1, end) infinite;
+    }
+    .plonk-cal-dot[data-pending] {
+      border: 2px dashed var(--plonk-color-secondary);
+      background: none;
+      box-shadow: none;
+      animation: none;
+    }
+
+    /* Aralık: camgöbeği neon şerit, sütun sütun yanar. */
+    .plonk-cal-grid .plonk-cal-cell .plonk-cal-hl {
+      height: 1.7rem;
+      border-block: 2px solid var(--plonk-color-secondary);
+      border-radius: 0;
+      background: color-mix(
+        in oklab,
+        var(--plonk-color-secondary) 20%,
+        transparent
+      );
+      box-shadow: 0 0 0.6rem -0.2rem var(--plonk-color-secondary);
+      mix-blend-mode: normal;
+      animation: plonk-cal-dither 1ms calc(var(--plonk-cal-col, 0) * 30ms)
+        backwards;
+    }
+
+    /* Bugün: köşede küçük sarı bir yıldız. */
+    .plonk-cal-today {
+      top: 0.1rem;
+      left: auto;
+      inset-inline-end: 0.05rem;
+      width: 0.6rem;
+      height: 0.6rem;
+      background: var(--plonk-color-accent);
+      clip-path: polygon(
+        50% 0%,
+        61% 35%,
+        98% 35%,
+        68% 57%,
+        79% 91%,
+        50% 70%,
+        21% 91%,
+        32% 57%,
+        2% 35%,
+        39% 35%
+      );
+    }
+    .plonk-cal-today > path {
+      display: none;
+    }
+
+    .plonk-cal-old[data-dir="next"] {
+      clip-path: inset(var(--plonk-cal-dow-h) 0 0 0);
+      animation: plonk-arcade-cal-out-next 150ms steps(6, end) forwards;
+    }
+    .plonk-cal-old[data-dir="prev"] {
+      clip-path: inset(var(--plonk-cal-dow-h) 0 0 0);
+      animation: plonk-arcade-cal-out-prev 150ms steps(6, end) forwards;
+    }
+    .plonk-cal-grid[data-turn] tbody {
+      animation: plonk-arcade-cal-in-next 150ms steps(6, end) 150ms backwards;
+    }
+    .plonk-cal-grid[data-turn="prev"] tbody {
+      animation-name: plonk-arcade-cal-in-prev;
+    }
+  }
+
+  /* Hareket azaltılınca: sayfa sadece belirir; yıldız, şerit, imleç hareketsiz. */
+  :is(
+    [data-plonk-motion="reduce"] [data-plonk-personality="comic"],
+    [data-plonk-motion="reduce"] [data-plonk-personality="arcade"],
+    [data-plonk-personality="comic"][data-plonk-motion="reduce"],
+    [data-plonk-personality="arcade"][data-plonk-motion="reduce"]
+  ) {
+    .plonk-cal-old[data-dir] {
+      display: none;
+    }
+    .plonk-cal-grid[data-turn] tbody {
+      animation: plonk-fade-in 150ms ease-out;
+    }
+    .plonk-cal-dot,
+    .plonk-cal-dot::before,
+    .plonk-cal-grid .plonk-cal-cell .plonk-cal-hl,
+    .plonk-cal-today > path {
+      animation: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :is([data-plonk-personality="comic"], [data-plonk-personality="arcade"]) {
+      .plonk-cal-old[data-dir] {
+        display: none;
+      }
+      .plonk-cal-grid[data-turn] tbody {
+        animation: plonk-fade-in 150ms ease-out;
+      }
+      .plonk-cal-dot,
+      .plonk-cal-dot::before,
+      .plonk-cal-grid .plonk-cal-cell .plonk-cal-hl,
+      .plonk-cal-today > path {
+        animation: none;
+      }
+    }
+  }
+
   /* ---------- Slider ---------- */
 
   /*
@@ -5161,5 +5493,62 @@
   to {
     opacity: 0;
     transform: scaleX(1) translateX(calc(var(--plonk-toast-swipe, 1) * 20%));
+  }
+}
+
+@keyframes plonk-comic-cal-out-next {
+  to {
+    opacity: 0;
+    translate: -2.5rem 0;
+    transform: skewX(14deg);
+  }
+}
+
+@keyframes plonk-comic-cal-out-prev {
+  to {
+    opacity: 0;
+    translate: 2.5rem 0;
+    transform: skewX(-14deg);
+  }
+}
+
+@keyframes plonk-comic-cal-in-next {
+  from {
+    opacity: 0;
+    translate: 2.5rem 0;
+    transform: skewX(-14deg);
+  }
+}
+
+@keyframes plonk-comic-cal-in-prev {
+  from {
+    opacity: 0;
+    translate: -2.5rem 0;
+    transform: skewX(14deg);
+  }
+}
+
+/* Atari ay değişimi: eski satırlar yukarıdan aşağı silinir, yeniler yazılır. */
+@keyframes plonk-arcade-cal-out-next {
+  to {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+
+@keyframes plonk-arcade-cal-out-prev {
+  to {
+    clip-path: inset(var(--plonk-cal-dow-h) 0 100% 0);
+  }
+}
+
+@keyframes plonk-arcade-cal-in-next {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+
+@keyframes plonk-arcade-cal-in-prev {
+  from {
+    clip-path: inset(100% 0 0 0);
   }
 }
