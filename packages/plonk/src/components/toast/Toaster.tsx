@@ -22,6 +22,7 @@ import {
   type QueuedToast,
   type ToastState,
 } from "react-aria-components";
+import { playPressEffect } from "../../motion/effects";
 import { Button } from "../button";
 import { CloseIcon } from "../card/CloseIcon";
 import { toastQueue, type ToastContent, type ToastVariant } from "./queue";
@@ -265,6 +266,9 @@ function seed(key: string) {
   return ((h >>> 0) % 1000) / 1000;
 }
 
+/** Çizgi Roman'ın giriş animasyonu (theme.css); bitince patlama oynar. */
+const SLAM = "plonk-toast-slam";
+
 const SWIPE_DISTANCE = 110;
 const SWIPE_VELOCITY = 0.6;
 
@@ -302,6 +306,23 @@ function ToastItem({
     const el = card.current;
     const box = slot.current;
     if (!exiting || !el || !box) return;
+    /*
+     * Çizgi Roman'da kart ortadan yırtılır: kart sol yarıyı, kopyası sağ
+     * yarıyı oynar. Hangi çıkışın oynayacağını CSS söyler (--plonk-toast-exit);
+     * sürükleyip atılan toast yırtılmaz, fırlar.
+     */
+    if (
+      box.dataset.exit !== "swipe" &&
+      getComputedStyle(el).getPropertyValue("--plonk-toast-exit").trim() ===
+        "tear"
+    ) {
+      const half = el.cloneNode(true) as HTMLElement;
+      half.classList.add("plonk-toast-half");
+      half.removeAttribute("data-bump");
+      for (const node of half.querySelectorAll("[id]"))
+        node.removeAttribute("id");
+      box.append(half);
+    }
     // Ölçüler slot'a yazılır: hem kart hem Retro'nun zoom çerçeveleri okur.
     const height = el.offsetHeight;
     const bar = el.querySelector<HTMLElement>(".plonk-toast-bar");
@@ -471,6 +492,17 @@ function ToastItem({
           if (!(e.target as Element).closest("button, a, input")) {
             e.preventDefault();
           }
+        }}
+        onAnimationEnd={(e) => {
+          // Çizgi Roman: toast yere çarpınca köşesinde küçük bir "BAM!".
+          if (e.target !== e.currentTarget || e.animationName !== SLAM) return;
+          const rect = e.currentTarget.getBoundingClientRect();
+          const rtl = getComputedStyle(e.currentTarget).direction === "rtl";
+          playPressEffect(
+            e.currentTarget,
+            { x: rtl ? rect.left + 14 : rect.right - 14, y: rect.top + 6 },
+            { size: "sm" },
+          );
         }}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerEnd}

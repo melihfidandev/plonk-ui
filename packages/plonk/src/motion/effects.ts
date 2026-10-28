@@ -33,11 +33,20 @@ function pick<T>(list: T[]): T {
   return list[i] as T;
 }
 
+export interface PressEffectOptions {
+  /** `sm`: küçük patlama (ör. toast'un inişi). */
+  size?: "sm";
+}
+
 /**
  * Elemanın kişiliğindeki basma efektini oynatır. `point` ekran koordinatı;
  * verilmezse (klavye) elemanın ortası kullanılır.
  */
-export function playPressEffect(el: Element, point?: { x: number; y: number }) {
+export function playPressEffect(
+  el: Element,
+  point?: { x: number; y: number },
+  options: PressEffectOptions = {},
+) {
   if (typeof document === "undefined") return;
   const style = getComputedStyle(el);
   const kind = style.getPropertyValue("--plonk-press-effect").trim();
@@ -47,6 +56,7 @@ export function playPressEffect(el: Element, point?: { x: number; y: number }) {
   const fx = document.createElement("div");
   fx.setAttribute("aria-hidden", "true");
   fx.className = kind === "burst" ? "plonk-fx-burst" : "plonk-fx-score";
+  if (options.size) fx.dataset.size = options.size;
   for (const name of COPIED) {
     fx.style.setProperty(name, style.getPropertyValue(name));
   }

@@ -31,6 +31,14 @@ describe("playPressEffect", () => {
     expect(fx?.textContent).toMatch(/^[A-Z]+!$/);
   });
 
+  it("size: küçük patlama işaretlenir", () => {
+    playPressEffect(button("burst"), undefined, { size: "sm" });
+    expect(document.querySelector(".plonk-fx-burst")).toHaveAttribute(
+      "data-size",
+      "sm",
+    );
+  });
+
   it("anchor destekleniyorsa elemana çapalanır, bitince çapa kalkar", () => {
     vi.useFakeTimers();
     vi.spyOn(CSS, "supports").mockReturnValue(true);

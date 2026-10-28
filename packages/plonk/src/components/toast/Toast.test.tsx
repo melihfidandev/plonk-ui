@@ -138,6 +138,20 @@ describe("Toast", () => {
     await waitFor(() => expect(screen.queryByRole("region")).toBeNull());
   });
 
+  it("CSS yırtılma çıkışı seçerse kart kopyalanır; kopya erişilebilirlik ağacında yok", () => {
+    render(<PlonkProvider />);
+    const key = show("Saved", { description: "2 seconds ago" });
+    const card = screen.getByRole("alertdialog");
+    card.style.setProperty("--plonk-toast-exit", "tear");
+    act(() => toast.dismiss(key));
+    const half = document.querySelector<HTMLElement>(".plonk-toast-half");
+    expect(half?.parentElement).toBe(card.parentElement);
+    expect(half).toHaveAttribute("inert");
+    expect(half).toHaveAttribute("aria-hidden", "true");
+    expect(half?.querySelector("[id]")).toBeNull();
+    expect(half?.textContent).toContain("Saved");
+  });
+
   it("fare üstündeyken süreleri durdurur", async () => {
     render(<PlonkProvider />);
     show("Saved");

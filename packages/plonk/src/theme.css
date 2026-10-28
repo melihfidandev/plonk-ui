@@ -2092,6 +2092,358 @@
     }
   }
 
+  /* ---------- Çizgi Roman ve Atari: toast ---------- */
+
+  /* Yırtılan toast'un sağ yarısı (Toaster kopyalar); sadece Çizgi Roman'da. */
+  .plonk-toast-half {
+    display: none;
+  }
+
+  /*
+   * İkisinde de kart yüzey renginde; türün rengi sol üstteki etikette
+   * (Çizgi Roman anlatıcı kutusu, Atari neon plaka) ve ikonda. Toast kenardan
+   * gelir: --plonk-toast-from bölgenin yerine göre yön (1 sağdan, -1 soldan,
+   * 0 ortadan).
+   */
+  :is([data-plonk-personality="comic"], [data-plonk-personality="arcade"]) {
+    .plonk-toast-region {
+      --plonk-toast-from: 1;
+    }
+    .plonk-toast-region[data-placement$="start"] {
+      --plonk-toast-from: -1;
+    }
+    .plonk-toast-region:dir(rtl) {
+      --plonk-toast-from: -1;
+    }
+    .plonk-toast-region[data-placement$="start"]:dir(rtl) {
+      --plonk-toast-from: 1;
+    }
+    .plonk-toast-region:is([data-placement="top"], [data-placement="bottom"]) {
+      --plonk-toast-from: 0;
+    }
+    .plonk-toast-region {
+      row-gap: 1.4rem;
+    }
+    .plonk-toast {
+      padding-top: 1.35rem;
+    }
+    .plonk-toast[data-variant] {
+      --plonk-toast-bg: var(--plonk-color-surface);
+      --plonk-toast-fg: var(--plonk-color-ink);
+      --plonk-toast-badge: var(--plonk-toast-tone);
+      --plonk-toast-on-badge: var(--plonk-toast-on-tone);
+    }
+    .plonk-toast-curl {
+      display: none;
+    }
+    .plonk-toast-bar {
+      display: block;
+      position: absolute;
+      z-index: 1;
+      top: -0.85rem;
+      inset-inline-start: 0.75rem;
+      pointer-events: none;
+    }
+    .plonk-toast-label {
+      display: block;
+      white-space: nowrap;
+    }
+  }
+
+  [data-plonk-personality="comic"] {
+    --plonk-toast-exit: tear;
+
+    /* Kart bir çizgi roman karesi: köşede baskı tramı. */
+    .plonk-toast {
+      background-image:
+        linear-gradient(200deg, transparent 0%, var(--plonk-color-surface) 42%),
+        radial-gradient(
+          circle,
+          color-mix(in oklab, var(--plonk-color-secondary) 55%, transparent)
+            1.7px,
+          transparent 2.2px
+        );
+      background-size:
+        auto,
+        9px 9px;
+      /*
+       * Kenardan fırlatılır, eğik iner, yere çarpınca ezilir; çarpma anında
+       * köşesinde "BAM!" patlar (Toaster, plonk-toast-slam bitince).
+       */
+      animation:
+        plonk-toast-slam 420ms cubic-bezier(0.2, 0.8, 0.3, 1) backwards,
+        plonk-toast-impact 260ms ease-out 420ms;
+    }
+    /* Etiket: türün renginde, eğik bir anlatıcı kutusu. */
+    .plonk-toast-label {
+      padding: 0.15rem 0.55rem 0.05rem;
+      border: 2px solid var(--plonk-color-ink);
+      background: var(--plonk-toast-tone);
+      color: var(--plonk-toast-on-tone);
+      box-shadow: 2px 2px 0 var(--plonk-color-ink);
+      font-size: 0.95rem;
+      line-height: 1.2;
+      rotate: -2deg;
+    }
+    /* Bant: kartlardaki gibi mavi zemin üstünde beyaz tram, mürekkeple çizili. */
+    .plonk-toast-tape {
+      top: -0.75rem;
+      left: 62%;
+      width: 5rem;
+      height: 1.45rem;
+      border: 2px solid var(--plonk-color-ink);
+      background:
+        radial-gradient(circle, rgb(255 255 255 / 0.6) 1.4px, transparent 1.9px)
+          0 0 / 7px 7px,
+        var(--plonk-color-secondary);
+      box-shadow: 2px 2px 0 var(--plonk-color-ink);
+      clip-path: none;
+      animation-delay: 420ms;
+    }
+    /* Kalan süre: incelen bir nokta sırası. */
+    .plonk-toast-timer {
+      height: 5px;
+      background: none;
+    }
+    .plonk-toast-timer > span {
+      background: radial-gradient(circle, currentColor 1.6px, transparent 2.1px)
+        0 50% / 6px 5px;
+    }
+
+    /*
+     * Sürüklerken dönmez, gittiği yöne öne yatar (Button'a basınca olduğu
+     * gibi). Bırakınca önce bir an geri gerilir, sonra uzayarak dümdüz
+     * fırlar; arkasında hız çizgileri kalır.
+     */
+    .plonk-toast {
+      transform: translateX(var(--plonk-toast-drag-x, 0px))
+        skewX(
+          clamp(-14deg, calc(var(--plonk-toast-drag-turn, 0) * -4deg), 14deg)
+        );
+    }
+    .plonk-toast-slot[data-exit="swipe"] > .plonk-toast {
+      transform-origin: 50% 50%;
+      animation: plonk-toast-zip 340ms forwards;
+    }
+    .plonk-toast-slot[data-exit="swipe"]::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 12% -4%;
+      background:
+        linear-gradient(var(--plonk-color-ink), var(--plonk-color-ink)) 0 8% /
+          72% 3px no-repeat,
+        linear-gradient(var(--plonk-color-ink), var(--plonk-color-ink)) 18%
+          30% / 94% 2px no-repeat,
+        linear-gradient(var(--plonk-color-ink), var(--plonk-color-ink)) 6% 52% /
+          60% 4px no-repeat,
+        linear-gradient(var(--plonk-color-ink), var(--plonk-color-ink)) 30%
+          74% / 84% 2px no-repeat,
+        linear-gradient(var(--plonk-color-ink), var(--plonk-color-ink)) 10%
+          94% / 52% 3px no-repeat;
+      transform-origin: calc(50% - 50% * var(--plonk-toast-swipe, 1)) 50%;
+      pointer-events: none;
+      animation: plonk-toast-speedlines 380ms ease-out forwards;
+    }
+
+    /*
+     * Çıkış: ortadan yırtılır, iki yarı ayrı yönlere düşer. Kart sol yarı,
+     * kopyası sağ yarı. Kırpma kenarları gölge payı kadar dışarıda.
+     */
+    .plonk-toast-slot[data-exiting]:not([data-exit="swipe"]) {
+      .plonk-toast-timer {
+        visibility: hidden;
+      }
+      > .plonk-toast {
+        transform-origin: 25% 30%;
+        clip-path: polygon(
+          -12px -12px,
+          52% -12px,
+          47% 14%,
+          54% 28%,
+          46% 42%,
+          53% 56%,
+          45% 70%,
+          52% 84%,
+          47% calc(100% + 12px),
+          -12px calc(100% + 12px)
+        );
+        animation: plonk-toast-tear-left 560ms cubic-bezier(0.4, 0, 0.75, 0.5)
+          forwards;
+      }
+      > .plonk-toast-half {
+        display: grid;
+        position: absolute;
+        inset: 0 0 auto;
+        transform-origin: 75% 30%;
+        clip-path: polygon(
+          52% -12px,
+          calc(100% + 12px) -12px,
+          calc(100% + 12px) calc(100% + 12px),
+          47% calc(100% + 12px),
+          52% 84%,
+          45% 70%,
+          53% 56%,
+          46% 42%,
+          54% 28%,
+          47% 14%
+        );
+        animation: plonk-toast-tear-right 560ms cubic-bezier(0.4, 0, 0.75, 0.5)
+          forwards;
+      }
+    }
+  }
+
+  [data-plonk-personality="arcade"] {
+    .plonk-toast {
+      --plonk-toast-drag-step: 6;
+      --plonk-toast-drag-fade: 0;
+      box-shadow:
+        var(--plonk-shadow-x) var(--plonk-shadow-y) 0 var(--plonk-shadow-color),
+        0 0 1.4rem -0.3rem var(--plonk-toast-tone);
+      /*
+       * Ekranın kenarından kademeli kayarak girer, varınca iki kare ters
+       * renkte yanıp söner ("BONUS!").
+       */
+      animation:
+        plonk-toast-arcade-in 300ms steps(6, end) backwards,
+        plonk-toast-flash 70ms step-end 300ms,
+        plonk-toast-flash 70ms step-end 440ms;
+    }
+    /* Etiket: türün renginde yanan neon plaka. */
+    .plonk-toast-label {
+      padding: 0.25rem 0.7rem 0.15rem;
+      border: 2px solid var(--plonk-toast-tone);
+      border-radius: var(--plonk-radius-pill);
+      background: var(--plonk-color-sunken);
+      color: var(--plonk-toast-tone);
+      box-shadow: 0 0 0.9rem -0.1rem var(--plonk-toast-tone);
+      font-size: 0.7rem;
+      line-height: 1.2;
+      letter-spacing: 0.06em;
+    }
+    /* Bant yerine kartlardaki gibi yanıp sönen "1UP" plakası. */
+    .plonk-toast-tape {
+      top: -0.8rem;
+      left: auto;
+      inset-inline-end: 2.75rem;
+      width: auto;
+      height: auto;
+      padding: 0.2rem 0.65rem 0.1rem;
+      translate: none;
+      rotate: none;
+      border: 2px solid var(--plonk-color-secondary);
+      border-radius: var(--plonk-radius-pill);
+      background: var(--plonk-color-sunken);
+      box-shadow: 0 0 0.9rem -0.1rem var(--plonk-color-secondary);
+      clip-path: none;
+      animation: plonk-blink 1600ms steps(1, end) infinite;
+    }
+    .plonk-toast-tape::before {
+      content: "1UP";
+      content: "1UP" / "";
+      display: block;
+      color: var(--plonk-color-accent);
+      font-family: var(--plonk-font-display);
+      font-size: 0.75rem;
+      line-height: 1.2;
+      letter-spacing: 0.08em;
+      text-shadow: 1px 1px 0 var(--plonk-color-primary);
+    }
+    /* İkon: Retro'nun piksel çizimleri, neon bir rozette. */
+    .plonk-toast-icon {
+      border-color: var(--plonk-toast-tone);
+      box-shadow: 0 0 0.8rem -0.1rem var(--plonk-toast-tone);
+    }
+    .plonk-toast-icon-smooth {
+      display: none;
+    }
+    .plonk-toast-icon > .plonk-toast-icon-pixel {
+      display: block;
+      width: 10px;
+      height: 14px;
+    }
+    /* Kalan süre: türün renginde akan bir enerji barı, blok blok azalır. */
+    .plonk-toast-timer {
+      height: 6px;
+      border-radius: 0;
+      background: color-mix(in oklab, var(--plonk-toast-tone) 18%, transparent);
+    }
+    .plonk-toast-timer > span {
+      background:
+        repeating-linear-gradient(
+            -45deg,
+            transparent 0 4px,
+            rgb(0 0 0 / 0.22) 4px 8px
+          )
+          0 0 / 11.3px 11.3px,
+        var(--plonk-toast-tone);
+      box-shadow: 0 0 0.5rem var(--plonk-toast-tone);
+      animation:
+        plonk-toast-timer var(--plonk-toast-timeout) steps(24, end) forwards,
+        plonk-arcade-energy 800ms linear infinite;
+    }
+    .plonk-toast-timer > span:dir(rtl) {
+      animation-name: plonk-toast-timer-rtl, plonk-arcade-energy;
+    }
+    /* Çıkış: tüplü ekran kapanır gibi önce çizgiye, sonra noktaya. */
+    .plonk-toast-slot[data-exiting] > .plonk-toast {
+      transform-origin: 50% 50%;
+      animation: plonk-arcade-crt-out 200ms linear forwards;
+    }
+    .plonk-toast-slot[data-exit="swipe"] > .plonk-toast {
+      animation: plonk-toast-fling 160ms steps(4, end) forwards;
+    }
+  }
+
+  /*
+   * Hareket azaltılınca: kısa belirme ve solma; fırlatma, yırtılma, kayma ve
+   * yanıp sönme yok. Kişilik kurallarından yüksek ya da eşit özgüllükte.
+   */
+  :is(
+    [data-plonk-motion="reduce"] [data-plonk-personality="comic"],
+    [data-plonk-motion="reduce"] [data-plonk-personality="arcade"],
+    [data-plonk-personality="comic"][data-plonk-motion="reduce"],
+    [data-plonk-personality="arcade"][data-plonk-motion="reduce"]
+  ) {
+    --plonk-toast-exit: none;
+
+    .plonk-toast {
+      animation: plonk-panel-in 150ms ease-out;
+    }
+    .plonk-toast-tape {
+      animation: none;
+    }
+    .plonk-toast-slot[data-exit="swipe"]::before {
+      display: none;
+    }
+    .plonk-toast-slot[data-exiting] > .plonk-toast,
+    .plonk-toast-slot[data-exiting]:not([data-exit="swipe"]) > .plonk-toast {
+      clip-path: none;
+      animation: plonk-fade-out 100ms ease-in forwards;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :is([data-plonk-personality="comic"], [data-plonk-personality="arcade"]) {
+      --plonk-toast-exit: none;
+
+      .plonk-toast {
+        animation: plonk-panel-in 150ms ease-out;
+      }
+      .plonk-toast-tape {
+        animation: none;
+      }
+      .plonk-toast-slot[data-exit="swipe"]::before {
+        display: none;
+      }
+      .plonk-toast-slot[data-exiting] > .plonk-toast,
+      .plonk-toast-slot[data-exiting]:not([data-exit="swipe"]) > .plonk-toast {
+        clip-path: none;
+        animation: plonk-fade-out 100ms ease-in forwards;
+      }
+    }
+  }
+
   /* ---------- Date Picker ve takvim ---------- */
 
   /* Alan: gün, ay, yıl ayrı parçalar. Odaktaki parça vurgulanır. */
@@ -3552,9 +3904,6 @@
     /* Basınca tıklanan yerde PAT!, ZAP! (motion/effects.ts). */
     --plonk-press-effect: burst;
 
-    .plonk-toast-tape {
-      display: none;
-    }
     /* Bant: mavi zemin üstünde beyaz baskı tramı, mürekkeple çizili. */
     .plonk-card[data-tape]::before {
       top: -0.75rem;
@@ -3658,9 +4007,6 @@
     /* Jetonlu makinenin kubbeli düğmeleri. */
     --plonk-button-radius: var(--plonk-radius-pill);
 
-    .plonk-toast-tape {
-      display: none;
-    }
     /* Bant yerine üstte neon bir "1UP" plakası; oyunlardaki gibi yanıp söner. */
     .plonk-card[data-tape]::before {
       content: "1UP";
@@ -3875,6 +4221,14 @@
     white-space: nowrap;
     pointer-events: none;
     animation: plonk-fx-score 900ms ease-out both;
+  }
+
+  /* Küçük patlama: toast'un inişi gibi ikincil anlar. */
+  .plonk-fx-burst[data-size="sm"] {
+    width: 2.6rem;
+  }
+  .plonk-fx-burst[data-size="sm"] > span {
+    font-size: 0.68rem;
   }
 
   /* Hareket azaltılınca: efekt yerinde belirip söner; büyüme ve uçuş yok. */
@@ -4702,5 +5056,110 @@
 @keyframes plonk-arcade-wipe {
   from {
     clip-path: inset(0 0 100% 0);
+  }
+}
+
+@keyframes plonk-toast-slam {
+  from {
+    opacity: 0;
+    translate: calc(var(--plonk-toast-from, 1) * 120%)
+      calc((1 - var(--plonk-toast-from, 1) * var(--plonk-toast-from, 1)) * 4rem);
+    rotate: calc(var(--plonk-toast-from, 1) * 14deg);
+    scale: 1.08;
+  }
+  20% {
+    opacity: 1;
+  }
+  60% {
+    translate: calc(var(--plonk-toast-from, 1) * -3%) 0;
+    rotate: calc(var(--plonk-toast-from, 1) * -4deg);
+    scale: 1;
+  }
+  80% {
+    translate: calc(var(--plonk-toast-from, 1) * 1%) 0;
+    rotate: calc(var(--plonk-toast-from, 1) * 1.5deg);
+  }
+}
+
+@keyframes plonk-toast-impact {
+  30% {
+    scale: 1.04 0.95;
+  }
+  65% {
+    scale: 0.99 1.015;
+  }
+}
+
+@keyframes plonk-toast-tear-left {
+  22% {
+    translate: -4px 2px;
+    rotate: -2deg;
+  }
+  to {
+    opacity: 0;
+    translate: -2.5rem 6rem;
+    rotate: -20deg;
+  }
+}
+
+@keyframes plonk-toast-tear-right {
+  22% {
+    translate: 4px 1px;
+    rotate: 2.5deg;
+  }
+  to {
+    opacity: 0;
+    translate: 2.5rem 6.5rem;
+    rotate: 22deg;
+  }
+}
+
+@keyframes plonk-toast-arcade-in {
+  from {
+    translate: calc(var(--plonk-toast-from, 1) * 115%)
+      calc((1 - var(--plonk-toast-from, 1) * var(--plonk-toast-from, 1)) * 3rem);
+  }
+}
+
+/*
+ * Çizgi Roman fırlatması: sürüklemedeki eğim (transform) korunur; önce geri
+ * gerilir, sonra yatay uzayarak hızlanır.
+ */
+@keyframes plonk-toast-zip {
+  0% {
+    animation-timing-function: cubic-bezier(0.2, 0.7, 0.4, 1);
+  }
+  22% {
+    translate: calc(var(--plonk-toast-swipe, 1) * -0.75rem) 0;
+    scale: 0.92 1.04;
+    animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.4);
+  }
+  90% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    translate: calc(var(--plonk-toast-swipe, 1) * 160%) 0;
+    scale: 1.45 0.88;
+  }
+}
+
+/* Hız çizgileri: kartın arkasından gittiği yöne uzar, sonra söner. */
+@keyframes plonk-toast-speedlines {
+  from {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+  25% {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+  65% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  to {
+    opacity: 0;
+    transform: scaleX(1) translateX(calc(var(--plonk-toast-swipe, 1) * 20%));
   }
 }
