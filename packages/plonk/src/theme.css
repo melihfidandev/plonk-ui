@@ -3523,6 +3523,158 @@
     }
   }
 
+  /* ---------- Çizgi Roman ve Atari: slider ---------- */
+
+  /*
+   * Çizgi Roman: tutamaç kırmızı mürekkep topu, dolgu tramlı. Sürüklerken
+   * arkasında hız çizgileri uzar (fizik: --plonk-slider-drift yön,
+   * --plonk-slider-stretch hız). Değer bir konuşma balonunda.
+   */
+  [data-plonk-personality="comic"] {
+    .plonk-slider-fill {
+      background:
+        radial-gradient(
+            circle,
+            color-mix(in oklab, var(--plonk-color-ink) 30%, transparent) 1.4px,
+            transparent 1.9px
+          )
+          0 0 / 6px 6px,
+        var(--plonk-color-primary);
+    }
+    .plonk-slider-knob {
+      background:
+        radial-gradient(
+          circle at 34% 30%,
+          rgb(255 255 255 / 0.85) 0 0.18rem,
+          transparent 0.22rem
+        ),
+        var(--plonk-color-primary);
+    }
+    .plonk-slider-thumb::before {
+      --plonk-line: linear-gradient(
+        var(--plonk-color-ink),
+        var(--plonk-color-ink)
+      );
+      content: "";
+      position: absolute;
+      top: -0.7rem;
+      left: 0;
+      width: 3.8rem;
+      height: 1.4rem;
+      background:
+        var(--plonk-line) 100% 0 / 50% 3px no-repeat,
+        var(--plonk-line) 100% 50% / 68% 3px no-repeat,
+        var(--plonk-line) 100% 100% / 42% 3px no-repeat;
+      transform-origin: 0 50%;
+      scale: var(--plonk-slider-drift, 0) 1;
+      opacity: calc(var(--plonk-slider-stretch, 0) * 5);
+      pointer-events: none;
+    }
+    /* Değer balonu: yuvarlak konuşma balonu, kuyruğu tutamacı gösterir. */
+    .plonk-slider-bubble {
+      padding: 0.35rem 0.65rem 0.25rem;
+      border-radius: 1rem;
+      font-size: 0.95rem;
+      font-weight: 400;
+    }
+    .plonk-slider-bubble::before,
+    .plonk-slider-bubble::after {
+      content: "";
+      position: absolute;
+      left: calc(50% - 0.5rem);
+      width: 1rem;
+      translate: none;
+      rotate: none;
+      border: 0;
+      clip-path: polygon(15% 0, 85% 0, 35% 100%);
+    }
+    .plonk-slider-bubble::before {
+      top: 100%;
+      bottom: auto;
+      height: calc(0.65rem + var(--plonk-border-width));
+      background: var(--plonk-color-ink);
+    }
+    .plonk-slider-bubble::after {
+      top: calc(100% - 1px);
+      bottom: auto;
+      height: calc(0.65rem - var(--plonk-border-width) * 0.6);
+      background: var(--plonk-color-surface);
+    }
+  }
+
+  /*
+   * Atari: ses / güç göstergesi. Ray sönük LED blokları, dolgu yanan bloklar.
+   * Tutamaç joystick topu; değer skor tabelası gibi, her adımda bir kare
+   * ters renkte yanıp söner.
+   */
+  [data-plonk-personality="arcade"] {
+    .plonk-slider-track {
+      height: 0.9rem;
+      background:
+        repeating-linear-gradient(
+            90deg,
+            color-mix(in oklab, var(--plonk-color-secondary) 16%, transparent) 0
+              6px,
+            transparent 6px 8px
+          )
+          2px 0 / auto content-box,
+        var(--plonk-color-sunken);
+    }
+    .plonk-slider-fill {
+      background: repeating-linear-gradient(
+          90deg,
+          var(--plonk-color-secondary) 0 6px,
+          transparent 6px 8px
+        )
+        content-box;
+      filter: drop-shadow(0 0 3px var(--plonk-color-secondary));
+    }
+    .plonk-slider-knob {
+      background: radial-gradient(
+        circle at 35% 32%,
+        rgb(255 255 255 / 0.9) 0 3px,
+        var(--plonk-color-primary) 5px
+      );
+      box-shadow: 0 0 0.9rem -0.1rem var(--plonk-color-primary);
+    }
+    .plonk-slider-thumb[data-active] .plonk-slider-knob {
+      scale: 1.1;
+    }
+    .plonk-slider-bubble {
+      border-color: var(--plonk-color-secondary);
+      border-radius: var(--plonk-radius-sm);
+      background: var(--plonk-color-sunken);
+      box-shadow: 0 0 0.8rem -0.1rem var(--plonk-color-secondary);
+      color: var(--plonk-color-accent);
+      font-size: 0.8rem;
+      font-weight: 400;
+      text-shadow: 2px 2px 0 var(--plonk-color-primary);
+    }
+    .plonk-slider-bubble::after {
+      border-color: var(--plonk-color-secondary);
+      background: var(--plonk-color-sunken);
+    }
+    .plonk-slider-knob[data-hop] + .plonk-slider-bubble {
+      animation: plonk-toast-flash 70ms step-end;
+    }
+  }
+
+  :is(
+      [data-plonk-motion="reduce"] [data-plonk-personality="arcade"],
+      [data-plonk-personality="arcade"][data-plonk-motion="reduce"]
+    )
+    .plonk-slider-knob[data-hop]
+    + .plonk-slider-bubble {
+    animation: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-plonk-personality="arcade"]
+      .plonk-slider-knob[data-hop]
+      + .plonk-slider-bubble {
+      animation: none;
+    }
+  }
+
   /* ---------- Komut paleti ---------- */
 
   /*
@@ -3790,6 +3942,210 @@
   @media (prefers-reduced-motion: reduce) {
     [data-plonk-personality] {
       .plonk-command-list[data-turn],
+      .plonk-command-loading {
+        animation: none;
+      }
+    }
+  }
+
+  /* ---------- Çizgi Roman ve Atari: komut paleti ---------- */
+
+  /* İkisinde de paletin başlığı görünür (kart başlığı kişiliğin stilinde). */
+  :is([data-plonk-personality="comic"], [data-plonk-personality="arcade"]) {
+    .plonk-command-title {
+      display: flex;
+      padding: 0.9rem 1rem 0.1rem;
+    }
+    .plonk-command-heading {
+      font-family: var(--plonk-font-display);
+      font-weight: 400;
+      text-transform: var(--plonk-font-display-case);
+      letter-spacing: var(--plonk-font-display-tracking);
+    }
+  }
+
+  /*
+   * Çizgi Roman: palet bir kare, başlığı anlatıcı kutusunda. Kare "pat" diye
+   * açılır. Vurgu sarı kutu, öne yatık, satırdan satıra yayla kayar. Alt
+   * sayfa bir sonraki kareye geçer gibi yandan gelir.
+   */
+  [data-plonk-personality="comic"] {
+    .plonk-command[data-entering] {
+      animation: plonk-comic-command-in var(--plonk-motion-snap-duration)
+        var(--plonk-motion-snap-easing);
+    }
+    .plonk-command-search {
+      border-bottom-style: solid;
+    }
+    .plonk-command-search-icon {
+      color: var(--plonk-color-primary);
+    }
+    .plonk-command-input {
+      caret-color: var(--plonk-color-primary);
+    }
+    .plonk-command-crumb {
+      border-radius: var(--plonk-radius-sm);
+      background: var(--plonk-color-secondary);
+      color: var(--plonk-color-on-secondary);
+      box-shadow: 2px 2px 0 var(--plonk-color-ink);
+      font-weight: 400;
+    }
+    .plonk-command-indicator {
+      inset-inline: 0.75rem;
+      border-radius: var(--plonk-radius-sm);
+      background: var(--plonk-color-accent);
+      transform: skewX(-6deg);
+    }
+    .plonk-command-item[data-active] {
+      color: var(--plonk-color-on-accent);
+    }
+    .plonk-command-heading {
+      color: var(--plonk-color-primary);
+      font-size: 0.8rem;
+    }
+    .plonk-command-list[data-turn="in"] {
+      animation: plonk-comic-cal-in-next var(--plonk-motion-snap-duration)
+        var(--plonk-motion-snap-easing);
+    }
+    .plonk-command-list[data-turn="out"] {
+      animation: plonk-comic-cal-in-prev var(--plonk-motion-snap-duration)
+        var(--plonk-motion-snap-easing);
+    }
+  }
+
+  /*
+   * Atari: seviye seçim ekranı. Palet CRT gibi açılır, ardından liste satır
+   * satır yazılır; kapanırken tüp söner. Vurgu neon kutu ve yanıp sönen
+   * piksel imleç, arama kutusunda blok imleç.
+   */
+  [data-plonk-personality="arcade"] {
+    .plonk-command[data-entering] {
+      transform-origin: 50% 50%;
+      animation:
+        plonk-arcade-crt-in 240ms linear,
+        plonk-hold 460ms;
+    }
+    .plonk-command[data-entering] .plonk-command-list {
+      animation: plonk-arcade-cal-in-next 200ms steps(6, end) 240ms backwards;
+    }
+    .plonk-command[data-exiting] {
+      transform-origin: 50% 50%;
+      animation: plonk-arcade-crt-out 160ms linear forwards;
+    }
+    .plonk-command-search {
+      margin: 0.4rem 0.75rem 0;
+      padding: 0.55rem 0.75rem;
+      border: 2px solid var(--plonk-color-secondary);
+      border-radius: var(--plonk-radius-sm);
+      background: var(--plonk-color-sunken);
+      box-shadow: 0 0 0.8rem -0.2rem var(--plonk-color-secondary);
+    }
+    .plonk-command-search-icon {
+      color: var(--plonk-color-secondary);
+    }
+    .plonk-command-input {
+      caret-color: var(--plonk-color-accent);
+      caret-shape: block;
+    }
+    .plonk-command-crumb {
+      border-color: var(--plonk-color-secondary);
+      background: var(--plonk-color-sunken);
+      color: var(--plonk-color-secondary);
+      box-shadow: 0 0 0.7rem -0.1rem var(--plonk-color-secondary);
+      font-weight: 400;
+      rotate: none;
+    }
+    .plonk-command-indicator {
+      border: 2px solid var(--plonk-color-secondary);
+      border-radius: var(--plonk-radius-sm);
+      background: color-mix(
+        in oklab,
+        var(--plonk-color-secondary) 16%,
+        transparent
+      );
+      box-shadow: inset 0 0 0.8rem -0.2rem var(--plonk-color-secondary);
+    }
+    .plonk-command-indicator::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      inset-inline-start: -0.15rem;
+      width: 0.5rem;
+      height: 0.7rem;
+      translate: -100% -50%;
+      background: var(--plonk-color-primary);
+      clip-path: polygon(
+        0 0,
+        34% 0,
+        34% 17%,
+        67% 17%,
+        67% 34%,
+        100% 34%,
+        100% 66%,
+        67% 66%,
+        67% 83%,
+        34% 83%,
+        34% 100%,
+        0 100%
+      );
+      animation: plonk-blink 700ms steps(1, end) infinite;
+    }
+    .plonk-command-indicator:dir(rtl)::before {
+      translate: 100% -50%;
+      rotate: 180deg;
+    }
+    .plonk-command-list {
+      padding-inline: 0.85rem 0.6rem;
+    }
+    .plonk-command-indicator {
+      inset-inline: 0.85rem 0.6rem;
+    }
+    .plonk-command-item[data-active],
+    .plonk-command-item[data-active] .plonk-command-description {
+      color: var(--plonk-color-accent);
+    }
+    .plonk-command-heading {
+      color: var(--plonk-color-secondary);
+      font-size: 0.65rem;
+    }
+    .plonk-command-list[data-turn] {
+      animation: plonk-arcade-cal-in-next 200ms steps(6, end);
+    }
+    .plonk-command-loading {
+      animation: plonk-blink 800ms steps(1, end) infinite;
+    }
+  }
+
+  :is(
+    [data-plonk-motion="reduce"] [data-plonk-personality="comic"],
+    [data-plonk-motion="reduce"] [data-plonk-personality="arcade"],
+    [data-plonk-personality="comic"][data-plonk-motion="reduce"],
+    [data-plonk-personality="arcade"][data-plonk-motion="reduce"]
+  ) {
+    .plonk-command[data-entering] {
+      animation: plonk-fade-in 150ms ease-out;
+    }
+    .plonk-command[data-exiting] {
+      animation: plonk-fade-out 100ms ease-in forwards;
+    }
+    .plonk-command[data-entering] .plonk-command-list,
+    .plonk-command-list[data-turn],
+    .plonk-command-indicator::before,
+    .plonk-command-loading {
+      animation: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :is([data-plonk-personality="comic"], [data-plonk-personality="arcade"]) {
+      .plonk-command[data-entering] {
+        animation: plonk-fade-in 150ms ease-out;
+      }
+      .plonk-command[data-exiting] {
+        animation: plonk-fade-out 100ms ease-in forwards;
+      }
+      .plonk-command[data-entering] .plonk-command-list,
+      .plonk-command-list[data-turn],
+      .plonk-command-indicator::before,
       .plonk-command-loading {
         animation: none;
       }
@@ -5550,5 +5906,13 @@
 @keyframes plonk-arcade-cal-in-prev {
   from {
     clip-path: inset(100% 0 0 0);
+  }
+}
+
+@keyframes plonk-comic-command-in {
+  from {
+    opacity: 0;
+    scale: 0.75;
+    rotate: -3deg;
   }
 }

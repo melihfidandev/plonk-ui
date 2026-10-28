@@ -410,6 +410,12 @@ function useSliderPhysics(
         st.s += (stretch - st.s) * 0.35;
       }
       el.style.setProperty("--plonk-slider-lag", `${(st.x - target) * sign}px`);
+      // Birimsiz yön: tutamaç gerçek konumun hangi yanında kalıyor (-1…1).
+      // Çizgi Roman'ın hız çizgileri bu yana uzanır.
+      el.style.setProperty(
+        "--plonk-slider-drift",
+        clamp((st.x - target) * sign, -1, 1).toFixed(2),
+      );
       el.style.setProperty("--plonk-slider-stretch", st.s.toFixed(3));
       el.style.setProperty(
         "--plonk-slider-trail",
