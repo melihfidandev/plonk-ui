@@ -22,6 +22,8 @@ export interface CardProps extends Omit<
   tape?: boolean;
   /** Kişiliğin eğim açısıyla yapıştırır. Retro'da eğim 0'dır. */
   tilt?: "left" | "right";
+  /** Başlık etiketinin seviyesi (sayfadaki başlık sırasına uysun diye). */
+  headingLevel?: 2 | 3 | 4 | 5 | 6;
 }
 
 /**
@@ -37,11 +39,13 @@ export function Card({
   closeLabel = "Close",
   tape = false,
   tilt,
+  headingLevel = 3,
   className,
   children,
   ...props
 }: CardProps) {
   const titleId = useId();
+  const Heading = `h${headingLevel}` as const;
   const hasHeader = title != null || actions != null || onClose != null;
 
   return (
@@ -70,12 +74,12 @@ export function Card({
           )}
           {title != null && (
             <div className="plonk-card-heading min-w-0 flex-1">
-              <h3
+              <Heading
                 id={titleId}
                 className="plonk-card-title font-plonk-display text-xl leading-tight"
               >
                 {title}
-              </h3>
+              </Heading>
             </div>
           )}
           {actions != null && (

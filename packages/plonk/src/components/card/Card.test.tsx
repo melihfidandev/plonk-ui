@@ -16,6 +16,19 @@ describe("Card", () => {
     expect(screen.getByRole("heading", { name: "Gelir" })).toBeInTheDocument();
   });
 
+  it("başlık seviyesi varsayılan h3, headingLevel ile değişir", () => {
+    const { rerender } = render(<Card title="Gelir" />);
+    expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(
+      "Gelir",
+    );
+    rerender(<Card title="Gelir" headingLevel={2} />);
+    expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
+      "Gelir",
+    );
+    // Bölge adı seviyeden bağımsız başlığa bağlı kalır.
+    expect(screen.getByRole("region", { name: "Gelir" })).toBeInTheDocument();
+  });
+
   it("başlıksız kart başlık alanı çizmez", () => {
     const { container } = render(<Card>İçerik</Card>);
     expect(container.querySelector("header")).toBeNull();

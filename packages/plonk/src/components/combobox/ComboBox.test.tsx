@@ -1,6 +1,7 @@
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
+import { PlonkProvider } from "../../provider/PlonkProvider";
 import { ComboBox, ComboBoxItem } from "./ComboBox";
 
 const CITIES = ["İstanbul", "İzmir", "Ankara", "Antalya", "Eskişehir"];
@@ -27,6 +28,20 @@ describe("ComboBox", () => {
     const mark = within(
       screen.getByRole("option", { name: "Antalya" }),
     ).getByText("An");
+    expect(mark.tagName).toBe("MARK");
+  });
+
+  it("vurguyu provider'ın diline göre yapar (tarayıcının dili değil)", async () => {
+    // İngilizce kurala göre "İzmir" küçültülünce "i̇zmir" olur, "iz" bulunmazdı.
+    render(
+      <PlonkProvider locale="tr-TR" toaster={false}>
+        <Example />
+      </PlonkProvider>,
+    );
+    await userEvent.type(screen.getByRole("combobox"), "iz");
+    const mark = within(
+      screen.getByRole("option", { name: "İzmir" }),
+    ).getByText("İz");
     expect(mark.tagName).toBe("MARK");
   });
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { use, type ReactNode } from "react";
+import { useLocale } from "react-aria";
 import {
   Button as AriaButton,
   ComboBox as AriaComboBox,
@@ -144,11 +145,16 @@ export function ComboBoxItem<T extends object>({
   );
 }
 
-/** Yazılan metnin seçenekteki ilk eşleşmesini vurgular (Türkçe büyük/küçük harf dahil). */
+/**
+ * Yazılan metnin seçenekteki ilk eşleşmesini vurgular. Küçük harfe çevirme
+ * provider'ın diline göre: dil verilmezse tarayıcınınki kullanılır ve İngilizce
+ * bir tarayıcıda "İzmir" → "i̇zmir" (noktalı i) olur, "iz" eşleşmez.
+ */
 function Highlight({ text }: { text: string }) {
+  const { locale } = useLocale();
   const query = use(ComboBoxStateContext)?.inputValue.trim() ?? "";
   const index = query
-    ? text.toLocaleLowerCase().indexOf(query.toLocaleLowerCase())
+    ? text.toLocaleLowerCase(locale).indexOf(query.toLocaleLowerCase(locale))
     : -1;
   if (index < 0) return text;
   return (
