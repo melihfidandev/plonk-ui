@@ -1,0 +1,75 @@
+import SwitchPlayground from "@/examples/switch/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Switch",
+  description:
+    "An on/off setting. The knob springs across and squashes on the way.",
+};
+
+<PageHeader crumb="Components / Forms" title="Switch" number="21">
+  An on/off setting that takes effect right away. The knob springs to the other
+  side and squashes on the way. Comic turns it into a red button on yellow,
+  Arcade into a joystick ball.
+</PageHeader>
+
+<SwitchPlayground />
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { Switch } from "plonk";
+
+export function Autosave() {
+  const [on, setOn] = useState(true);
+  return (
+    <Switch
+      label="Autosave"
+      checked={on}
+      onChange={(event) => setOn(event.target.checked)}
+    />
+  );
+}
+```
+
+A switch is a checkbox with `role="switch"`, so it takes the same props:
+`checked` and `onChange`, or `defaultChecked`.
+
+### Switch or checkbox?
+
+Use a switch when the change happens immediately, like turning on autosave. Use
+a [Checkbox](/docs/components/checkbox) when the choice waits for a submit
+button, like accepting terms.
+
+<Example name="switch/settings" title="Switch · Settings" align="start" />
+
+### In a form
+
+A switch still submits like a checkbox: its `value` (`on` by default) under its
+`name` when it's on, and nothing when it's off.
+
+<Example name="switch/form" title="Switch · Form" align="start" />
+
+## Personalities
+
+Sticker springs the knob across and squashes it like jelly. Retro jumps it in
+three steps and Arcade in five frames. Comic turns the track yellow with a red knob and shouts a PAT!; Arcade
+lights the track cyan under a pink joystick ball and throws points. Effects play
+only when the switch turns on. Turn them off with `--plonk-press-effect: none`.
+
+## Accessibility
+
+- Screen readers announce it as a switch, "on" or "off".
+- `Space` toggles it, and its label toggles it too.
+- `description` is linked with `aria-describedby`.
+- Pass `aria-label` when there's no visible label, like a switch in a table
+  row.
+
+## API
+
+All other `<input>` props are passed through.
+
+<ApiTable component="Switch" />

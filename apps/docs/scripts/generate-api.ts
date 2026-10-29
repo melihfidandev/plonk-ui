@@ -82,7 +82,7 @@ for (const doc of parser.parse(files)) {
   });
   result[name] = [...own, ...inherited].map((p) => ({
     name: p.name,
-    type: typeOf(p),
+    type: content?.types?.[p.name] ?? typeOf(p),
     ...(defaultOf(p) !== undefined && { default: defaultOf(p) }),
     required: p.required,
     inherited: !isOwn(p),

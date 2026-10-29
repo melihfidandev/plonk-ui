@@ -1,0 +1,91 @@
+import RadioGroupPlayground from "@/examples/radio-group/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Radio Group",
+  description: "Pick one option. The dot springs in when you choose.",
+};
+
+<PageHeader crumb="Components / Forms" title="Radio Group" number="18">
+  One choice from a short list. The dot springs into the option you pick and
+  wobbles as it lands. For long lists, use a Select instead.
+</PageHeader>
+
+<RadioGroupPlayground />
+
+## Usage
+
+```tsx
+import { Radio, RadioGroup } from "plonk";
+
+export function Plan() {
+  return (
+    <RadioGroup label="Plan" name="plan" defaultValue="free">
+      <Radio value="free" label="Free" />
+      <Radio value="pro" label="Pro" />
+    </RadioGroup>
+  );
+}
+```
+
+`RadioGroup` is a `<fieldset>` with a `legend`, and every `Radio` inside is a
+real `<input type="radio">` sharing the group's `name`. The selected `value` is
+submitted with the form. A `Radio` has to be inside a `RadioGroup`.
+
+### Descriptions
+
+Each option can have a `description`. Disable a single option with `disabled`,
+or the whole group with `disabled` on `RadioGroup`.
+
+<Example
+  name="radio-group/descriptions"
+  title="Radio Group · Descriptions"
+  align="start"
+/>
+
+### Controlled
+
+Pass `value` and `onValueChange` to keep the selection in state. Use `null` for
+"nothing selected": `undefined` would make the group uncontrolled.
+
+<Example
+  name="radio-group/controlled"
+  title="Radio Group · Controlled"
+  align="start"
+/>
+
+### Errors
+
+`error` belongs to the group. It shows under the options, marks every option
+invalid, and shakes them once. Add `required` when an answer is mandatory.
+
+## Personalities
+
+Sticker springs the dot in and wobbles the circle. Retro pops it in two
+steps, Comic punches it in fast with a big overshoot, and Arcade springs it in
+without the wobble.
+
+## Accessibility
+
+- A native radio group: `Tab` enters the group once, at the selected option,
+  and arrow keys move and select.
+- The label is the fieldset's `legend`, so screen readers announce it when you
+  enter the group.
+- `description` and `error` are linked to the group with `aria-describedby`.
+- `orientation` only changes the layout; the keys stay the same.
+
+## API
+
+### RadioGroup
+
+All other `<fieldset>` props are passed through.
+
+<ApiTable component="RadioGroup" />
+
+### Radio
+
+All other `<input>` props are passed through.
+
+<ApiTable component="Radio" />

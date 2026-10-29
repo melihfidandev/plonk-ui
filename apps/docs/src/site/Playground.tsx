@@ -32,6 +32,11 @@ export interface PlaygroundProps<C extends Record<string, Control>> {
   component: string;
   controls: C;
   render: (values: Values<C>) => ReactNode;
+  /**
+   * Koda yazılacak sabit içerik (ör. RadioGroup'un seçenekleri), `children`
+   * kontrolü olmayan bileşenler için. Satırlar olduğu gibi girintilenir.
+   */
+  childrenCode?: string;
 }
 
 /**
@@ -43,6 +48,7 @@ export function Playground<const C extends Record<string, Control>>({
   component,
   controls,
   render,
+  childrenCode,
 }: PlaygroundProps<C>) {
   const [values, setValues] = useState(
     () =>
@@ -52,7 +58,7 @@ export function Playground<const C extends Record<string, Control>>({
   );
   const set = (key: keyof C, value: unknown) =>
     setValues((current) => ({ ...current, [key]: value }));
-  const code = toJsx(component, controls, values);
+  const code = toJsx(component, controls, values, childrenCode);
 
   return (
     <Exhibit
@@ -152,6 +158,7 @@ function toJsx<C extends Record<string, Control>>(
   component: string,
   controls: C,
   values: Values<C>,
+  childrenCode?: string,
 ) {
   const props = Object.entries(controls)
     .filter(([key, c]) => key !== "children" && values[key] !== c.default)
@@ -160,11 +167,23 @@ function toJsx<C extends Record<string, Control>>(
       if (c.type === "boolean") return value ? key : `${key}={false}`;
       return `${key}="${String(value)}"`;
     });
-  const open = [component, ...props].join(" ");
-  const children = "children" in controls ? String(values.children) : "";
-  if (!children) return `<${open} />`;
+  // Uzun açılış etiketinde her prop kendi satırında (Prettier gibi).
+  const inline = [component, ...props].join(" ");
+  const open =
+    inline.length + 3 <= 72
+      ? inline
+      : [component, ...props].join("\n  ") + "\n";
+  const children =
+    childrenCode ?? ("children" in controls ? String(values.children) : "");
+  if (!children) return open.endsWith("\n") ? `<${open}/>` : `<${open} />`;
+  if (childrenCode !== undefined) {
+    const body = childrenCode.replace(/^/gm, "  ");
+    return `<${open}>\n${body}\n</${component}>`;
+  }
   const line = `<${open}>${children}</${component}>`;
-  return line.length <= 72 ? line : `<${open}>\n  ${children}\n</${component}>`;
+  return line.length <= 72 && !open.endsWith("\n")
+    ? line
+    : `<${open}>\n  ${children}\n</${component}>`;
 }
 
 /*

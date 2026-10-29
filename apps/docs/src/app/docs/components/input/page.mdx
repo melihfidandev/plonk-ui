@@ -1,0 +1,96 @@
+import InputPlayground from "@/examples/input/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Input",
+  description:
+    "A text field that lifts when you focus it and shakes its head at errors.",
+};
+
+<PageHeader crumb="Components / Forms" title="Input" number="13">
+  A text field with its label, help text and error built in. It lifts off the
+  page when you focus it, leaves a hard shadow in the focus color, and shakes
+  its head when something's wrong.
+</PageHeader>
+
+<InputPlayground />
+
+## Usage
+
+```tsx
+import { Input } from "plonk";
+
+export function Profile() {
+  return <Input label="Email" name="email" type="email" />;
+}
+```
+
+`Input` renders a real `<input>`, and every native prop goes to it: `type`,
+`name`, `value` and `onChange`, `defaultValue`, `autoComplete`, `inputMode`,
+`ref`. `className` styles the outer wrapper, so use it for width and layout.
+
+### Description and errors
+
+`description` adds help text under the field. `error` marks it invalid, shows
+the message as a small tag, and shakes the field once when the error appears.
+Both are connected to the input, so screen readers read them with the label.
+
+<Example
+  name="input/details"
+  title="Input · Description and errors"
+  align="start"
+/>
+
+### Icons and affixes
+
+`iconStart` and `iconEnd` take an icon or short text, like a unit or a protocol.
+They're decorative and hidden from screen readers, so the label has to say what
+the field is for.
+
+<Example name="input/icons" title="Input · Icons and affixes" align="start" />
+
+### Forms and validation
+
+Inputs are plain form fields: they submit with the form and show up in
+`FormData` under their `name`. Plonk doesn't validate anything on its own. You
+decide what's valid, on the client or the server, and pass the message to
+`error`.
+
+This form uses a React 19 action with `useActionState`. The action checks the
+values and returns errors; the fields keep what was typed through
+`defaultValue`, the button shows `loading` while the action runs, and focus
+moves to the first invalid field. `noValidate` turns off the browser's own
+bubbles so the messages come from you, while `required` still tells screen
+readers the field is required.
+
+<Example name="input/validation" title="Input · Validation" align="start" />
+
+Prefer native validation? Leave out `noValidate` and use `required`, `type`,
+`pattern` or `minLength`; the browser shows its messages and blocks the submit.
+
+## Personalities
+
+Sticker and Comic lift the field toward you when it's focused. Retro does the
+same in one snap. Arcade keeps it in place and lights a neon ring around it, like
+a screen switching on. In every personality the error tag sticks on at a slight
+angle and the field shakes once.
+
+## Accessibility
+
+- The label is a real `<label>` linked to the input. Without a visible label,
+  pass `aria-label`.
+- `description` and `error` are linked with `aria-describedby`; `error` also
+  sets `aria-invalid`.
+- `required` is announced from the native attribute. The asterisk is visual
+  only.
+- Icons and affixes are hidden from screen readers.
+- After a failed submit, move focus to the first invalid field, as in the
+  validation example.
+
+## API
+
+All other `<input>` props are passed through.
+
+<ApiTable component="Input" />

@@ -242,6 +242,48 @@
       "type": "ReactNode",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "checked",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultChecked",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onChange",
+      "type": "ChangeEventHandler<HTMLInputElement>",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "value",
+      "type": "string | number | readonly string[]",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
     }
   ],
   "ListPopover": [
@@ -887,6 +929,30 @@
       "type": "ReactNode",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "type",
+      "type": "HTMLInputTypeAttribute",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
     }
   ],
   "Kbd": [],
@@ -1066,6 +1132,12 @@
       "type": "ReactNode",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
     }
   ],
   "Radio": [
@@ -1086,6 +1158,12 @@
       "type": "ReactNode",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
     }
   ],
   "Select": [
@@ -1289,6 +1367,42 @@
       "type": "ReactNode",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "checked",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultChecked",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onChange",
+      "type": "ChangeEventHandler<HTMLInputElement>",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "value",
+      "type": "string | number | readonly string[]",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
     }
   ],
   "DataTable": [
@@ -1530,6 +1644,31 @@
       "type": "ReactNode",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "rows",
+      "type": "number",
+      "default": "3",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
     }
   ],
   "Toaster": [

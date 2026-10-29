@@ -1,0 +1,74 @@
+import CheckboxPlayground from "@/examples/checkbox/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Checkbox",
+  description: "A checkbox that draws its tick and wobbles when you check it.",
+};
+
+<PageHeader crumb="Components / Forms" title="Checkbox" number="06">
+  Draws its tick in one stroke and wobbles like jelly. In Comic it goes PAT!, in
+  Arcade it scores. Use it for choices people confirm with a form, and for
+  picking items from a list.
+</PageHeader>
+
+<CheckboxPlayground />
+
+## Usage
+
+```tsx
+import { Checkbox } from "plonk";
+
+export function Updates() {
+  return <Checkbox label="Email me about replies" name="replies" />;
+}
+```
+
+`Checkbox` renders a real `<input type="checkbox">`. Leave it uncontrolled with
+`defaultChecked`, or control it with `checked` and `onChange`; the new state is
+`event.target.checked`. For a setting that takes effect right away, use a
+[Switch](/docs/components/switch) instead.
+
+### Select all
+
+`indeterminate` shows a dash for "some of these are selected". It's a visual
+state only: you decide when it's on, and clicking the box checks it.
+
+<Example
+  name="checkbox/select-all"
+  title="Checkbox · Select all"
+  align="start"
+/>
+
+### In a form
+
+A checked box submits its `value` (`on` by default) under its `name`; an
+unchecked box sends nothing. `error` marks it invalid and shakes it once,
+here when the terms aren't accepted.
+
+<Example name="checkbox/terms" title="Checkbox · Required" align="start" />
+
+## Personalities
+
+Sticker squashes the box and springs it back. Retro draws the tick in three
+steps. Comic shouts a PAT! next to the box and Arcade throws points into the
+air, then flashes the box. The effects play only when the box gets checked, so
+clearing a list stays quiet. To turn them off, set
+`--plonk-press-effect: none` on the checkbox or any parent.
+
+## Accessibility
+
+- A native checkbox: `Space` toggles it, and its label toggles it too.
+- `indeterminate` is announced as "mixed".
+- `description` and `error` are linked with `aria-describedby`; `error` also
+  sets `aria-invalid`.
+- The focus ring shows for keyboard users only. Effects and jelly are
+  decorative and skip screen readers.
+
+## API
+
+All other `<input>` props are passed through.
+
+<ApiTable component="Checkbox" />
