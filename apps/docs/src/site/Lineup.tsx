@@ -9,6 +9,7 @@ import {
   Switch,
   type PersonalityName,
 } from "plonk";
+import type { ReactNode } from "react";
 
 const CARDS: Record<PersonalityName, { name: string; motion: string }> = {
   sticker: { name: "Sticker", motion: "Squash, stretch, spring back" },
@@ -19,9 +20,14 @@ const CARDS: Record<PersonalityName, { name: string; motion: string }> = {
 
 /**
  * Dört kişilik yan yana, aynı küçük setle. Sergi seçicisinden bağımsız: burada
- * amaç karşılaştırmak. Telefonda alt alta, geniş ekranda 2×2.
+ * amaç karşılaştırmak. Telefonda alt alta, geniş ekranda 2×2. `children`
+ * verilirse küçük set yerine o çizilir (ör. Card sayfasında bant).
  */
-export function Lineup() {
+export function Lineup({
+  children,
+}: {
+  children?: (personality: PersonalityName) => ReactNode;
+}) {
   return (
     <div className="site-lineup">
       {PERSONALITY_NAMES.map((personality, i) => (
@@ -41,12 +47,18 @@ export function Lineup() {
             toaster={false}
             className="site-lineup-stage"
           >
-            <div className="flex flex-wrap items-center gap-3">
-              <Button size="sm">Press me</Button>
-              <Badge variant="accent">New</Badge>
-            </div>
-            <Switch label="Autosave" defaultChecked={i % 2 === 0} />
-            <Progress value={40 + i * 15} label="Level" showValue />
+            {children ? (
+              children(personality)
+            ) : (
+              <>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button size="sm">Press me</Button>
+                  <Badge variant="accent">New</Badge>
+                </div>
+                <Switch label="Autosave" defaultChecked={i % 2 === 0} />
+                <Progress value={40 + i * 15} label="Level" showValue />
+              </>
+            )}
           </PlonkProvider>
         </figure>
       ))}

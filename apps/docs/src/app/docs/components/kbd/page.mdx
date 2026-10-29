@@ -1,0 +1,61 @@
+import KbdPlayground from "@/examples/kbd/playground";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Kbd",
+  description: "A keyboard key, for shortcuts in text and menus.",
+};
+
+<PageHeader crumb="Components / Display" title="Kbd" number="14">
+  A keyboard key with a thick bottom edge, for shortcuts in help text, menus and
+  tooltips.
+</PageHeader>
+
+<KbdPlayground />
+
+## Usage
+
+```tsx
+import { Kbd } from "plonk";
+
+export function Hint() {
+  return (
+    <p>
+      Press <Kbd>⌘</Kbd> <Kbd>K</Kbd> to search.
+    </p>
+  );
+}
+```
+
+One `Kbd` is one key. For a combination, put the keys next to each other.
+
+### Shortcut list
+
+<Example name="kbd/shortcuts" title="Kbd · Shortcuts" />
+
+### In text
+
+Keys sit on the text's baseline and keep the line readable. Give the line a
+little more height if keys appear often.
+
+<Example name="kbd/inline" title="Kbd · In text" />
+
+## Personalities
+
+The key takes the personality's mono font, border and corners, with a doubled
+bottom edge so it reads as a key you can press. In Arcade it sits light on the
+dark screen.
+
+## Accessibility
+
+- `Kbd` renders a native `<kbd>`, which marks the text as keyboard input.
+- Screen readers read symbols like ⌘ and ⇧ inconsistently. When the shortcut
+  matters, spell it out nearby ("Command K") or write the key name (`Ctrl`).
+- Shortcuts are help text, not the only way in: every action should also be
+  reachable without them.
+
+## API
+
+`Kbd` has no props of its own. Every `<kbd>` prop is passed through, and
+`className` is merged with Tailwind Merge.

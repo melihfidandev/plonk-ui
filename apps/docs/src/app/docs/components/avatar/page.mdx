@@ -1,0 +1,81 @@
+import AvatarPlayground from "@/examples/avatar/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Avatar",
+  description:
+    "A profile picture with colorful initials when there's no image.",
+};
+
+<PageHeader crumb="Components / Display" title="Avatar" number="02">
+  A profile picture, or colorful initials when there's no picture. Stack them in
+  a group and each one springs up when you point at it.
+</PageHeader>
+
+<AvatarPlayground />
+
+## Usage
+
+```tsx
+import { Avatar } from "plonk";
+
+export function Author() {
+  return <Avatar name="Ada Lovelace" src="/avatars/ada.svg" />;
+}
+```
+
+`name` is required: it's the image's alt text and the source of the initials.
+
+### Fallback
+
+Without `src`, or when the image fails to load, the avatar shows the first
+letters of the first and last name. The background color is picked from the
+name, so the same person always gets the same color.
+
+<Example name="avatar/fallback" title="Avatar · Fallback" />
+
+### Group
+
+`AvatarGroup` overlaps its avatars and sets one size for all of them. With
+`max`, the rest collapse into a "+N" bubble. Give the group an `aria-label` that
+says who these people are.
+
+<Example name="avatar/group" title="Avatar · Group" />
+
+The "+N" bubble is read as "2 more". Translate it with `moreLabel`:
+
+```tsx
+<AvatarGroup max={4} moreLabel={(count) => `${count} kişi daha`}>
+  …
+</AvatarGroup>
+```
+
+## Personalities
+
+The border and the initials' font follow the personality: chunky letters in
+Sticker, pixel letters in Retro, inked capitals in Comic and arcade capitals on
+Arcade's dark screen. In a group, avatars spring up under the pointer; Retro
+does it in steps.
+
+## Accessibility
+
+- Images use `name` as their alt text; initials are an image named `name`, so
+  screen readers say the name, not the letters.
+- A group is a `group` role. Name it with `aria-label`.
+- The "+N" bubble has its own accessible name from `moreLabel`.
+
+## API
+
+### Avatar
+
+All other `<span>` props are passed through.
+
+<ApiTable component="Avatar" />
+
+### AvatarGroup
+
+All other `<div>` props are passed through.
+
+<ApiTable component="AvatarGroup" />

@@ -1,0 +1,63 @@
+import BadgePlayground from "@/examples/badge/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Badge",
+  description: "A small label for a status or a category.",
+};
+
+<PageHeader crumb="Components / Display" title="Badge" number="03">
+  A small, loud label for a status or a category. In Comic it jumps and tilts
+  when you point at it; in Arcade it blinks like "insert coin".
+</PageHeader>
+
+<BadgePlayground />
+
+## Usage
+
+```tsx
+import { Badge } from "plonk";
+
+export function Status() {
+  return <Badge variant="success">Live</Badge>;
+}
+```
+
+`Badge` is a `<span>` and isn't interactive. Put it next to the thing it
+describes, inside a card header, a table cell or a list row.
+
+### Variants
+
+Each variant is a fill color from the personality's palette, with its matching
+text color, so the pair always passes contrast.
+
+<Example name="badge/variants" title="Badge · Variants" />
+
+### Status dot
+
+`dot` adds a small dot before the text, which helps a list of statuses scan at a
+glance. The text still says the status; the color only supports it.
+
+<Example name="badge/status" title="Badge · Status" />
+
+## Personalities
+
+Sticker and Retro keep the badge still. Comic makes it pop: it grows and tilts
+under the pointer. Arcade blinks it three times. Both only react to a mouse, not
+to touch. With reduced motion, Arcade's blinking stops and Comic's pop becomes a
+short, plain ease.
+
+## Accessibility
+
+- A badge is plain text: screen readers read its content where it sits.
+- Don't rely on color alone. "Failed" in red is clear; a red dot by itself
+  isn't.
+- The dot is hidden from screen readers.
+
+## API
+
+All other `<span>` props are passed through.
+
+<ApiTable component="Badge" />

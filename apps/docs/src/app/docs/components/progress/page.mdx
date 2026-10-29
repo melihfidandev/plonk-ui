@@ -1,0 +1,67 @@
+import ProgressPlayground from "@/examples/progress/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Progress",
+  description: "A progress bar that springs forward, or fills block by block.",
+};
+
+<PageHeader crumb="Components / Display" title="Progress" number="17">
+  Shows how far along something is. The fill springs forward in Sticker, fills
+  block by block in Retro, prints halftone in Comic and flows like an energy bar
+  in Arcade.
+</PageHeader>
+
+<ProgressPlayground />
+
+## Usage
+
+```tsx
+import { Progress } from "plonk";
+
+export function Upload({ percent }: { percent: number }) {
+  return <Progress label="Uploading" value={percent} showValue />;
+}
+```
+
+`value` goes from 0 to `max` (100 by default); values outside are clamped.
+
+### Custom values
+
+`max` can be any unit. `formatValue` writes the text next to the label, and the
+same text is what screen readers hear, so "3.5 of 8.4 MB" beats "42%".
+
+<Example name="progress/upload" title="Progress · Upload" />
+
+### Indeterminate
+
+Leave out `value`, or pass `null`, when you can't tell how long something will
+take. A segment slides back and forth until you have a value.
+
+<Example name="progress/indeterminate" title="Progress · Indeterminate" />
+
+## Personalities
+
+Sticker's fill springs to the new value with a little overshoot. Retro splits
+the bar into blocks and fills it in steps. Comic prints the fill in halftone
+dots, and Arcade's stripes keep flowing like an energy bar. With reduced motion
+the fill still moves, without the overshoot, and the indeterminate segment slows
+down.
+
+## Accessibility
+
+- A `progressbar` with `aria-valuenow`, `aria-valuemin` and `aria-valuemax`;
+  indeterminate bars leave out the value.
+- `label` names the bar. Without one, pass `aria-label`.
+- `formatValue`'s text is the `aria-valuetext`, so screen readers hear the same
+  thing you show.
+- Screen readers don't announce every change. When something finishes, say so
+  in text too, for example with a toast.
+
+## API
+
+All other `<div>` props go to the bar itself.
+
+<ApiTable component="Progress" />

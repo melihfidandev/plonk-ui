@@ -1,0 +1,97 @@
+import CardPlayground from "@/examples/card/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+import { TapeLineup } from "@/site/TapeLineup";
+
+export const metadata = {
+  title: "Card",
+  description: "A box for related content. In Retro, every card is a window.",
+};
+
+<PageHeader crumb="Components / Display" title="Card" number="05">
+  A box for related content: a title, a body, actions and a footer. Sticker can
+  tape it to the page, Retro turns it into a window, Comic into a panel with a
+  caption box, Arcade into a score screen.
+</PageHeader>
+
+<CardPlayground />
+
+## Usage
+
+```tsx
+import { Card } from "plonk";
+
+export function Report() {
+  return (
+    <Card title="Weekly report">
+      Signups are up 12% since the new onboarding shipped.
+    </Card>
+  );
+}
+```
+
+`Card` is a `<section>`. Every part is optional, and only the parts you pass
+are rendered, so a card can be just a body or just a title.
+
+### Anatomy
+
+`title` and `description` head the card, `actions` sit to the right of the
+title, `children` is the body and `footer` holds the buttons at the bottom.
+
+<Example name="card/anatomy" title="Card · Anatomy" />
+
+### Closable
+
+Pass `onClose` to show a close box. The card doesn't hide itself; you decide
+what closing means. Give the box a specific name with `closeLabel`.
+
+<Example name="card/closable" title="Card · Closable" />
+
+### Tilt
+
+`tilt` sticks the card on at a slight angle, to the left or the right. The
+angle is the personality's `--plonk-tilt`: 1.5° in Sticker, 0.8° in Comic, and
+none in Retro and Arcade, which stay straight.
+
+<Example name="card/tilt" title="Card · Tilt" />
+
+## Tape
+
+Cards have no tape by default. Add it with `tape`, and each personality draws
+its own: paper tape in Sticker, a dithered pixel strip at the top right in
+Retro, a blue halftone strip in Comic, and a blinking neon "1UP" plate in
+Arcade.
+
+```tsx
+<Card tape title="Pinned note">
+  Same prop, four kinds of tape.
+</Card>
+```
+
+<TapeLineup />
+
+The provider's `tape` setting turns tape off for toasts and the data table, but
+never adds it to cards: a card only has tape when you ask for it. See
+[Personalities](/docs/personalities#tape) for the global switch.
+
+## Personalities
+
+Sticker is a sheet of paper with a hard shadow. Retro wraps the card in a window
+with a striped title bar, and the close box moves to the left like on an old
+Mac. Comic prints a halftone corner and puts the title in a yellow caption box.
+Arcade lights the title up like a high score.
+
+## Accessibility
+
+- A card with a `title` is a region named by its title, so screen reader users
+  can find it in the landmarks list. Without a title it's a plain section.
+- The title is an `<h3>`. Keep your page's headings in order around it.
+- The close box is a real button with an accessible name, "Close" by default.
+- Tape, halftone and title bar stripes are decoration and stay silent.
+
+## API
+
+All other `<section>` props are passed through.
+
+<ApiTable component="Card" />

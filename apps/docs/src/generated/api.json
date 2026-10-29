@@ -198,7 +198,7 @@
     {
       "name": "closeLabel",
       "type": "string",
-      "default": "Close",
+      "default": "\"Close\"",
       "required": false,
       "inherited": false
     },
@@ -409,14 +409,14 @@
     {
       "name": "placeholder",
       "type": "string",
-      "default": "Search for a command…",
+      "default": "\"Search for a command…\"",
       "required": false,
       "inherited": false
     },
     {
       "name": "title",
       "type": "string",
-      "default": "Commands",
+      "default": "\"Commands\"",
       "required": false,
       "inherited": false
     },
@@ -697,7 +697,7 @@
     {
       "name": "closeLabel",
       "type": "string",
-      "default": "Close",
+      "default": "\"Close\"",
       "required": false,
       "inherited": false
     },
@@ -834,7 +834,7 @@
     {
       "name": "closeLabel",
       "type": "string",
-      "default": "Close",
+      "default": "\"Close\"",
       "required": false,
       "inherited": false
     },
@@ -1064,7 +1064,7 @@
     {
       "name": "formatValue",
       "type": "(value: number, max: number) => string",
-      "default": "(value: number, max: number) =>\n  `${Math.round((value / max) * 100)}%`",
+      "default": "percent, e.g. \"60%\"",
       "required": false,
       "inherited": false
     },

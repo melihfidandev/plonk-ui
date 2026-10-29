@@ -14,6 +14,8 @@ export interface ComponentApi {
    * DOM olay tipleri başka bir elemana göre çözülebiliyor).
    */
   types?: Record<string, string>;
+  /** Tabloda gösterilecek varsayılan, koddaki uzun ifade yerine. */
+  defaults?: Record<string, string>;
   props: Record<string, string>;
 }
 
@@ -154,6 +156,55 @@ export const API: Record<string, ComponentApi> = {
       name: "Field name in the submitted form data.",
       value: "Value sent with the form when on. Defaults to `on`.",
       disabled: "Disables the switch. The track turns dashed.",
+    },
+  },
+  Card: {
+    props: {
+      title:
+        "Heading, rendered as an `<h3>` and used to name the card's region. In Retro it sits in the window's title bar.",
+      description: "Muted line under the title.",
+      actions:
+        "Content on the right of the header, like a badge, a button or a menu.",
+      footer: "Bottom row, usually buttons. Wraps on narrow screens.",
+      onClose:
+        "Shows a close box and calls this when it's pressed. Retro puts it at the left of the title bar.",
+      closeLabel: "Accessible name of the close box.",
+      tape: "Sticks decorative tape on top, drawn differently by each personality.",
+      tilt: "Sticks the card on at the personality's tilt angle. Retro and Arcade stay straight.",
+    },
+  },
+  Badge: {
+    props: {
+      variant: "Fill color, from the personality's palette.",
+      dot: "A small status dot before the text, in the text color.",
+    },
+  },
+  Avatar: {
+    props: {
+      name: "Person's name. Used as the image's alt text and for the initials fallback, whose color is picked from the name.",
+      src: "Image URL. If it's missing or fails to load, the initials show instead.",
+      size: "Size. Inside an `AvatarGroup`, the group's size is the default.",
+    },
+  },
+  AvatarGroup: {
+    props: {
+      max: "Show at most this many avatars; the rest collapse into a “+N” bubble.",
+      size: "Size of every avatar in the group.",
+      moreLabel:
+        "Accessible name of the “+N” bubble. Translate it for your app's language.",
+    },
+  },
+  Progress: {
+    defaults: { formatValue: `percent, e.g. "60%"` },
+    props: {
+      value:
+        "Current value. Leave it out or pass `null` for an indeterminate bar.",
+      max: "Value that means done.",
+      label: "Visible label, linked to the bar.",
+      showValue: "Shows the formatted value on the right of the label.",
+      formatValue:
+        "Formats the value for the label and for screen readers (`aria-valuetext`).",
+      variant: "Fill color.",
     },
   },
 };

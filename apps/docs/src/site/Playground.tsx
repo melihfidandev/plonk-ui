@@ -5,6 +5,7 @@ import {
   Checkbox,
   Input,
   Label,
+  NumberField,
   Radio,
   RadioGroup,
   TextField,
@@ -15,13 +16,22 @@ import { Exhibit } from "./Exhibit";
 export type Control =
   | { type: "enum"; options: readonly string[]; default: string }
   | { type: "boolean"; default: boolean }
-  | { type: "text"; default: string };
+  | { type: "text"; default: string }
+  | {
+      type: "number";
+      default: number;
+      min?: number;
+      max?: number;
+      step?: number;
+    };
 
 type ValueOf<C> = C extends { type: "boolean" }
   ? boolean
-  : C extends { type: "enum"; options: readonly (infer O)[] }
-    ? O
-    : string;
+  : C extends { type: "number" }
+    ? number
+    : C extends { type: "enum"; options: readonly (infer O)[] }
+      ? O
+      : string;
 
 export type Values<C extends Record<string, Control>> = {
   [K in keyof C]: ValueOf<C[K]>;
@@ -41,7 +51,10 @@ export interface PlaygroundProps<C extends Record<string, Control>> {
 
 /**
  * Oyun alanı: kontrollerle prop'ları değiştir, eseri canlı gör, kodu kopyala.
- * Kod, varsayılandan farklı olan prop'lardan kendiliğinden yazılır;
+ * Kod ekranda görünenden kendiliğinden yazılır: metin ve sayılar her zaman
+ * (boş metin hariç), açık/kapalılar açıksa, seçenekler bileşenin varsayılanından
+ * farklıysa. Bu yüzden enum kontrolünün `default`'u bileşenin gerçek varsayılanı
+ * olmalı; metin ve sayı `default`'ları sadece örnek değerdir.
  * `children` kontrolü bileşenin içeriği olur.
  */
 export function Playground<const C extends Record<string, Control>>({
@@ -142,6 +155,23 @@ function ControlField({
       </div>
     );
   }
+  if (control.type === "number") {
+    return (
+      <NumberField
+        value={Number(value)}
+        onChange={(next) =>
+          onChange(Number.isNaN(next) ? control.default : next)
+        }
+        minValue={control.min}
+        maxValue={control.max}
+        step={control.step}
+        className="site-control"
+      >
+        <Label>{name}</Label>
+        <Input className="site-text-input" />
+      </NumberField>
+    );
+  }
   return (
     <TextField
       value={String(value)}
@@ -161,10 +191,18 @@ function toJsx<C extends Record<string, Control>>(
   childrenCode?: string,
 ) {
   const props = Object.entries(controls)
-    .filter(([key, c]) => key !== "children" && values[key] !== c.default)
+    .filter(([key, c]) => {
+      if (key === "children") return false;
+      const value = values[key];
+      if (c.type === "text") return value !== "";
+      if (c.type === "boolean") return value === true;
+      if (c.type === "enum") return value !== c.default;
+      return true;
+    })
     .map(([key, c]) => {
       const value = values[key];
-      if (c.type === "boolean") return value ? key : `${key}={false}`;
+      if (c.type === "boolean") return key;
+      if (c.type === "number") return `${key}={${String(value)}}`;
       return `${key}="${String(value)}"`;
     });
   // Uzun açılış etiketinde her prop kendi satırında (Prettier gibi).
@@ -188,10 +226,13 @@ function toJsx<C extends Record<string, Control>>(
 
 /*
  * Oyun alanının ürettiği küçük JSX için hafif renklendirme (Shiki'yi tarayıcıya
- * taşımaya değmez). Renkler kod kutusunun temasıyla aynı.
+ * taşımaya değmez). Renkler kod kutusunun temasıyla aynı. Önce etiketler
+ * ayrılır; prop adları sadece etiketin içinde renklenir, aradaki düz metin
+ * (children) olduğu gibi kalır.
  */
-const TOKEN =
-  /(<\/?)([A-Za-z][\w.]*)|(\s)([a-zA-Z][\w-]*)(?=[=\s/>])|("[^"]*")|(\{[^}]*\})|(\/?>)/g;
+const TAG = /<\/?[A-Za-z][^>]*>/g;
+const IN_TAG =
+  /^(<\/?)([A-Za-z][\w.]*)|(\s)([a-zA-Z][\w-]*)(?=[=\s/>])|("[^"]*")|(\{[^}]*\})|(\/?>)$/g;
 const COLORS = {
   tag: "#7ee787",
   attr: "#79c0ff",
@@ -202,14 +243,26 @@ const COLORS = {
 function Jsx({ code }: { code: string }) {
   const parts: ReactNode[] = [];
   let last = 0;
-  for (const match of code.matchAll(TOKEN)) {
+  for (const tag of code.matchAll(TAG)) {
+    if (tag.index > last) parts.push(code.slice(last, tag.index));
+    parts.push(...highlightTag(tag[0]));
+    last = tag.index + tag[0].length;
+  }
+  parts.push(code.slice(last));
+  return parts.map((part, i) => <Fragment key={i}>{part}</Fragment>);
+}
+
+function highlightTag(tag: string) {
+  const parts: ReactNode[] = [];
+  let last = 0;
+  for (const match of tag.matchAll(IN_TAG)) {
     const index = match.index;
-    if (index > last) parts.push(code.slice(last, index));
-    const [, bracket, tag, space, attr, string, expr, close] = match;
-    if (tag) {
+    if (index > last) parts.push(tag.slice(last, index));
+    const [, bracket, name, space, attr, string, expr, close] = match;
+    if (name) {
       parts.push(
         <span style={{ color: COLORS.punct }}>{bracket}</span>,
-        <span style={{ color: COLORS.tag }}>{tag}</span>,
+        <span style={{ color: COLORS.tag }}>{name}</span>,
       );
     } else if (attr) {
       parts.push(space, <span style={{ color: COLORS.attr }}>{attr}</span>);
@@ -222,6 +275,6 @@ function Jsx({ code }: { code: string }) {
     }
     last = index + match[0].length;
   }
-  parts.push(code.slice(last));
-  return parts.map((part, i) => <Fragment key={i}>{part}</Fragment>);
+  parts.push(tag.slice(last));
+  return parts;
 }

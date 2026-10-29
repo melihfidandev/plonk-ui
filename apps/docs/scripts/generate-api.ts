@@ -59,7 +59,7 @@ function defaultOf(prop: PropItem): string | undefined {
   if (raw == null || raw === "") return undefined;
   const value = String(raw).replace(/^'(.*)'$/, '"$1"');
   // Yapıdan gelen varsayılan tırnaksız gelir: dizgi birleşiminde tırnakla.
-  return prop.type.name === "enum" && /^[A-Za-z]/.test(value)
+  return ["enum", "string"].includes(prop.type.name) && /^[A-Za-z]/.test(value)
     ? `"${value}"`
     : value;
 }
@@ -83,7 +83,9 @@ for (const doc of parser.parse(files)) {
   result[name] = [...own, ...inherited].map((p) => ({
     name: p.name,
     type: content?.types?.[p.name] ?? typeOf(p),
-    ...(defaultOf(p) !== undefined && { default: defaultOf(p) }),
+    ...((content?.defaults?.[p.name] ?? defaultOf(p)) !== undefined && {
+      default: content?.defaults?.[p.name] ?? defaultOf(p),
+    }),
     required: p.required,
     inherited: !isOwn(p),
   }));
