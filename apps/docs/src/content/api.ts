@@ -207,4 +207,135 @@ export const API: Record<string, ComponentApi> = {
       variant: "Fill color.",
     },
   },
+  Dialog: {
+    inherited: [
+      "isOpen",
+      "defaultOpen",
+      "onOpenChange",
+      "isKeyboardDismissDisabled",
+    ],
+    defaults: {
+      countdownLabel: '"Continue?"',
+      countdownMessage: "`${seconds} seconds left`",
+    },
+    props: {
+      title:
+        "Heading, also the dialog's accessible name. In Retro it sits in the window's title bar.",
+      description:
+        "Text under the title, linked to the dialog as its description.",
+      footer:
+        "Bottom row, usually buttons. Pass a function to get `close`: `({ close }) => …`.",
+      size: "Maximum width: `sm` for confirmations, `lg` for long content.",
+      role: "`alertdialog` for decisions the user has to make: no close box, and clicking outside doesn't close it.",
+      isDismissable: "Close when clicking outside.",
+      hideClose: "Hides the close box.",
+      closeLabel: "Accessible name of the close box.",
+      countdown:
+        "Seconds to count down from, shown big in the dialog. Use at least 20 and offer a button that resets it.",
+      onCountdownEnd:
+        "Called when the countdown reaches zero, with `close`. Without it, the dialog closes.",
+      countdownLabel: "Text next to the number. Translate it for your app.",
+      countdownMessage:
+        "What screen readers hear at 10 and 5 seconds left. Translate it for your app.",
+      "aria-label": "Accessible name. Required when there's no `title`.",
+      className: "Extra classes for the dialog's card.",
+      isOpen: "Controlled open state. Use with `onOpenChange`.",
+      defaultOpen: "Open on first render, when uncontrolled.",
+      onOpenChange: "Called with `true` or `false` when it opens or closes.",
+      isKeyboardDismissDisabled: "Stops `Esc` from closing it.",
+    },
+  },
+  DialogTrigger: {
+    inherited: ["isOpen", "defaultOpen", "onOpenChange"],
+    props: {
+      isOpen: "Controlled open state. Use with `onOpenChange`.",
+      defaultOpen: "Open on first render, when uncontrolled.",
+      onOpenChange: "Called with `true` or `false` when it opens or closes.",
+    },
+  },
+  Drawer: {
+    inherited: [
+      "isOpen",
+      "defaultOpen",
+      "onOpenChange",
+      "isKeyboardDismissDisabled",
+    ],
+    props: {
+      title: "Heading, also the drawer's accessible name.",
+      description:
+        "Text under the title, linked to the drawer as its description.",
+      footer:
+        "Bottom row, pinned under the scrolling content. Pass a function to get `close`.",
+      placement:
+        "Edge it slides in from. `bottom` works well as a sheet on phones.",
+      isDismissable: "Close when clicking outside.",
+      hideClose: "Hides the close box.",
+      closeLabel: "Accessible name of the close box.",
+      "aria-label": "Accessible name. Required when there's no `title`.",
+      className: "Extra classes for the panel.",
+      isOpen: "Controlled open state. Use with `onOpenChange`.",
+      defaultOpen: "Open on first render, when uncontrolled.",
+      onOpenChange: "Called with `true` or `false` when it opens or closes.",
+      isKeyboardDismissDisabled: "Stops `Esc` from closing it.",
+    },
+  },
+  Popover: {
+    defaults: { offset: "12" },
+    inherited: [
+      "placement",
+      "offset",
+      "crossOffset",
+      "shouldFlip",
+      "isOpen",
+      "onOpenChange",
+      "triggerRef",
+    ],
+    props: {
+      title: "Small heading, also the popover's accessible name.",
+      "aria-label": "Accessible name. Required when there's no `title`.",
+      className: "Extra classes for the panel.",
+      placement:
+        "Preferred side of the trigger. It flips when there's no room.",
+      offset: "Gap to the trigger, in pixels.",
+      crossOffset: "Shift along the trigger's edge, in pixels.",
+      shouldFlip: "Flip to the other side when it doesn't fit.",
+      isOpen: "Controlled open state, for popovers without a `DialogTrigger`.",
+      onOpenChange: "Called when it opens or closes.",
+      triggerRef:
+        "Element to anchor to when there's no `DialogTrigger`, for example a table cell.",
+    },
+  },
+  Tooltip: {
+    inherited: ["placement", "offset", "crossOffset", "shouldFlip"],
+    props: {
+      className: "Extra classes for the bubble.",
+      placement: "Preferred side. It flips when there's no room.",
+      offset: "Gap to the trigger, in pixels.",
+      crossOffset: "Shift along the trigger's edge, in pixels.",
+      shouldFlip: "Flip to the other side when it doesn't fit.",
+    },
+  },
+  TooltipTrigger: {
+    defaults: { trigger: "hover and focus" },
+    inherited: [
+      "delay",
+      "closeDelay",
+      "trigger",
+      "isDisabled",
+      "isOpen",
+      "defaultOpen",
+      "onOpenChange",
+    ],
+    props: {
+      delay:
+        "Milliseconds of hovering before it opens. Once one tooltip is open, the next opens right away.",
+      closeDelay: "Milliseconds before it closes after the pointer leaves.",
+      trigger:
+        "By default it opens on hover and on focus. `focus` opens it on focus only.",
+      isDisabled: "Never shows the tooltip.",
+      isOpen: "Controlled open state. Use with `onOpenChange`.",
+      defaultOpen: "Open on first render, when uncontrolled.",
+      onOpenChange: "Called with `true` or `false` when it opens or closes.",
+    },
+  },
 };

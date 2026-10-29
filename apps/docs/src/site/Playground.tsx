@@ -47,6 +47,17 @@ export interface PlaygroundProps<C extends Record<string, Control>> {
    * kontrolü olmayan bileşenler için. Satırlar olduğu gibi girintilenir.
    */
   childrenCode?: string;
+  /**
+   * Üretilen kodu sarar; katmanlar tetikleyicisiyle birlikte yazılır:
+   * `(jsx) => \`<DialogTrigger>…${jsx}</DialogTrigger>\``. `indent` ile
+   * girintilenmiş hâli de verilir.
+   */
+  /** Koda her zaman yazılan sabit prop'lar, ör. `footer={…}`. */
+  extraCode?: string[];
+  wrapCode?: (
+    jsx: string,
+    indent: (code: string, depth?: number) => string,
+  ) => string;
 }
 
 /**
@@ -62,6 +73,8 @@ export function Playground<const C extends Record<string, Control>>({
   controls,
   render,
   childrenCode,
+  extraCode,
+  wrapCode,
 }: PlaygroundProps<C>) {
   const [values, setValues] = useState(
     () =>
@@ -71,7 +84,8 @@ export function Playground<const C extends Record<string, Control>>({
   );
   const set = (key: keyof C, value: unknown) =>
     setValues((current) => ({ ...current, [key]: value }));
-  const code = toJsx(component, controls, values, childrenCode);
+  const jsx = toJsx(component, controls, values, childrenCode, extraCode);
+  const code = wrapCode ? wrapCode(jsx, indent) : jsx;
 
   return (
     <Exhibit
@@ -184,13 +198,18 @@ function ControlField({
   );
 }
 
+/** Her satırı `depth` kez iki boşlukla girintiler. */
+const indent = (code: string, depth = 1) =>
+  code.replace(/^/gm, "  ".repeat(depth));
+
 function toJsx<C extends Record<string, Control>>(
   component: string,
   controls: C,
   values: Values<C>,
   childrenCode?: string,
+  extraCode: string[] = [],
 ) {
-  const props = Object.entries(controls)
+  const fromControls = Object.entries(controls)
     .filter(([key, c]) => {
       if (key === "children") return false;
       const value = values[key];
@@ -205,6 +224,7 @@ function toJsx<C extends Record<string, Control>>(
       if (c.type === "number") return `${key}={${String(value)}}`;
       return `${key}="${String(value)}"`;
     });
+  const props = [...fromControls, ...extraCode];
   // Uzun açılış etiketinde her prop kendi satırında (Prettier gibi).
   const inline = [component, ...props].join(" ");
   const open =
@@ -215,7 +235,7 @@ function toJsx<C extends Record<string, Control>>(
     childrenCode ?? ("children" in controls ? String(values.children) : "");
   if (!children) return open.endsWith("\n") ? `<${open}/>` : `<${open} />`;
   if (childrenCode !== undefined) {
-    const body = childrenCode.replace(/^/gm, "  ");
+    const body = indent(childrenCode);
     return `<${open}>\n${body}\n</${component}>`;
   }
   const line = `<${open}>${children}</${component}>`;
@@ -226,13 +246,13 @@ function toJsx<C extends Record<string, Control>>(
 
 /*
  * Oyun alanının ürettiği küçük JSX için hafif renklendirme (Shiki'yi tarayıcıya
- * taşımaya değmez). Renkler kod kutusunun temasıyla aynı. Önce etiketler
- * ayrılır; prop adları sadece etiketin içinde renklenir, aradaki düz metin
+ * taşımaya değmez). Renkler kod kutusunun temasıyla aynı. Etiketler süslü
+ * parantez derinliği sayılarak ayrılır (prop içindeki `=>` ve iç JSX etiketi
+ * bitirmesin); prop adları sadece etiketin içinde renklenir, aradaki düz metin
  * (children) olduğu gibi kalır.
  */
-const TAG = /<\/?[A-Za-z][^>]*>/g;
 const IN_TAG =
-  /^(<\/?)([A-Za-z][\w.]*)|(\s)([a-zA-Z][\w-]*)(?=[=\s/>])|("[^"]*")|(\{[^}]*\})|(\/?>)$/g;
+  /(<\/?)([A-Za-z][\w.]*)|(\s)([a-zA-Z][\w-]*)(?=[=\s/>]|$)|("[^"]*")|(\/?>)/g;
 const COLORS = {
   tag: "#7ee787",
   attr: "#79c0ff",
@@ -240,25 +260,67 @@ const COLORS = {
   punct: "#e6edf3",
 };
 
+/** `from`'daki `{`in eşi olan `}`in yeri (yoksa son karakter). */
+function closingBrace(code: string, from: number) {
+  let depth = 0;
+  for (let i = from; i < code.length; i++) {
+    if (code[i] === "{") depth++;
+    else if (code[i] === "}" && --depth === 0) return i;
+  }
+  return code.length - 1;
+}
+
 function Jsx({ code }: { code: string }) {
   const parts: ReactNode[] = [];
-  let last = 0;
-  for (const tag of code.matchAll(TAG)) {
-    if (tag.index > last) parts.push(code.slice(last, tag.index));
-    parts.push(...highlightTag(tag[0]));
-    last = tag.index + tag[0].length;
+  let text = "";
+  let i = 0;
+  while (i < code.length) {
+    if (code[i] === "<" && /[A-Za-z/]/.test(code[i + 1] ?? "")) {
+      parts.push(text);
+      text = "";
+      let end = i;
+      while (end < code.length && code[end] !== ">") {
+        end = code[end] === "{" ? closingBrace(code, end) + 1 : end + 1;
+      }
+      parts.push(...highlightTag(code.slice(i, end + 1)));
+      i = end + 1;
+    } else {
+      text += code[i++];
+    }
   }
-  parts.push(code.slice(last));
+  parts.push(text);
   return parts.map((part, i) => <Fragment key={i}>{part}</Fragment>);
 }
 
+/** Etiketin içi: `{…}` ifadeleri bütün olarak, kalanı prop adı/dizgi olarak. */
 function highlightTag(tag: string) {
   const parts: ReactNode[] = [];
+  let plain = "";
+  let i = 0;
+  while (i < tag.length) {
+    if (tag[i] === "{") {
+      parts.push(...highlightPlain(plain));
+      plain = "";
+      const end = closingBrace(tag, i);
+      parts.push(
+        <span style={{ color: COLORS.attr }}>{tag.slice(i, end + 1)}</span>,
+      );
+      i = end + 1;
+    } else {
+      plain += tag[i++];
+    }
+  }
+  parts.push(...highlightPlain(plain));
+  return parts;
+}
+
+function highlightPlain(code: string) {
+  const parts: ReactNode[] = [];
   let last = 0;
-  for (const match of tag.matchAll(IN_TAG)) {
+  for (const match of code.matchAll(IN_TAG)) {
     const index = match.index;
-    if (index > last) parts.push(tag.slice(last, index));
-    const [, bracket, name, space, attr, string, expr, close] = match;
+    if (index > last) parts.push(code.slice(last, index));
+    const [, bracket, name, space, attr, string, close] = match;
     if (name) {
       parts.push(
         <span style={{ color: COLORS.punct }}>{bracket}</span>,
@@ -268,13 +330,11 @@ function highlightTag(tag: string) {
       parts.push(space, <span style={{ color: COLORS.attr }}>{attr}</span>);
     } else if (string) {
       parts.push(<span style={{ color: COLORS.string }}>{string}</span>);
-    } else if (expr) {
-      parts.push(<span style={{ color: COLORS.attr }}>{expr}</span>);
     } else if (close) {
       parts.push(<span style={{ color: COLORS.punct }}>{close}</span>);
     }
     last = index + match[0].length;
   }
-  parts.push(tag.slice(last));
+  parts.push(code.slice(last));
   return parts;
 }

@@ -1,0 +1,73 @@
+import DrawerPlayground from "@/examples/drawer/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Drawer",
+  description: "A panel that slides in from the edge of the screen.",
+};
+
+<PageHeader crumb="Components / Overlays" title="Drawer" number="12">
+  A panel that slides in from an edge, for filters, settings and details next to
+  the page. It springs in and overshoots a little in Sticker, without ever
+  showing a gap at the edge.
+</PageHeader>
+
+<DrawerPlayground />
+
+## Usage
+
+```tsx
+import { Button, DialogTrigger, Drawer } from "plonk";
+
+export function Notifications() {
+  return (
+    <DialogTrigger>
+      <Button>Notifications</Button>
+      <Drawer title="Notifications">…</Drawer>
+    </DialogTrigger>
+  );
+}
+```
+
+A drawer is a [Dialog](/docs/components/dialog) on the edge: the same
+`DialogTrigger`, the same `title`, `description`, `footer` and `close`, and the
+same focus behavior.
+
+### Filters
+
+A form inside a drawer. Children as a function get `close`, so the drawer can
+close after the form is applied.
+
+<Example name="drawer/filters" title="Drawer · Filters" />
+
+### Bottom sheet
+
+`placement="bottom"` slides up from the bottom, which is where thumbs are on a
+phone. It's as tall as its content, up to 85% of the screen.
+
+<Example name="drawer/bottom" title="Drawer · Bottom sheet" />
+
+## Personalities
+
+Sticker springs the panel in with a small overshoot; the panel is drawn wider
+than it looks, so the overshoot never opens a gap at the edge. Retro slides it
+in steps and frames it as a window. Comic and Arcade bring their dialog
+backdrops along: dark halftone and scanlines. With reduced motion, the panel
+slides in short and plain.
+
+## Accessibility
+
+- Focus moves into the drawer, stays inside while it's open, and returns to the
+  trigger when it closes.
+- `Esc` and clicking outside close it. Turn those off with
+  `isKeyboardDismissDisabled` and `isDismissable={false}`.
+- `title` names the drawer; without one, pass `aria-label`.
+
+## API
+
+Use it inside a [DialogTrigger](/docs/components/dialog#dialogtrigger), or
+control it with `isOpen`.
+
+<ApiTable component="Drawer" />

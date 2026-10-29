@@ -1,0 +1,80 @@
+import TooltipPlayground from "@/examples/tooltip/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Tooltip",
+  description: "A short hint on hover and focus.",
+};
+
+<PageHeader crumb="Components / Overlays" title="Tooltip" number="25">
+  A short hint that appears on hover and keyboard focus. Sticker slaps it on
+  like a tilted label, Comic writes it in a yellow caption box, Arcade shows it
+  on a neon screen.
+</PageHeader>
+
+<TooltipPlayground />
+
+## Usage
+
+```tsx
+import { Button, Tooltip, TooltipTrigger } from "plonk";
+
+export function CopyButton() {
+  return (
+    <TooltipTrigger>
+      <Button aria-label="Copy link">…</Button>
+      <Tooltip>Copy link</Tooltip>
+    </TooltipTrigger>
+  );
+}
+```
+
+`TooltipTrigger` takes the trigger and the tooltip. It opens after 500ms of
+hovering, or right away on keyboard focus. Once one tooltip is open, moving to
+the next one doesn't wait again.
+
+### Icon buttons
+
+The classic use: an icon button names itself with `aria-label`, and the tooltip
+shows the same name to sighted users.
+
+<Example name="tooltip/icons" title="Tooltip · Icon buttons" />
+
+### Shortcuts
+
+A tooltip can hold a [Kbd](/docs/components/kbd) to teach a keyboard shortcut.
+
+<Example name="tooltip/shortcut" title="Tooltip · Shortcut" />
+
+## When not to use it
+
+A tooltip disappears as soon as the pointer leaves, and touch screens have no
+hover. Keep it for hints people can do without, and never put buttons or links
+in it. For something to click or read at length, use a
+[Popover](/docs/components/popover).
+
+## Personalities
+
+Sticker sticks the tooltip on at an angle with a little bounce, Retro shows it
+instantly in mono type, Comic prints it in a yellow caption box and Arcade shows it on a dark
+screen with a neon frame.
+
+## Accessibility
+
+- It opens on keyboard focus as well as hover, and `Esc` closes it.
+- The trigger is described by the tooltip (`aria-describedby`), so screen
+  readers read it after the trigger's name.
+- Don't put the only label of a control in a tooltip: give the trigger its own
+  name too.
+
+## API
+
+### Tooltip
+
+<ApiTable component="Tooltip" />
+
+### TooltipTrigger
+
+<ApiTable component="TooltipTrigger" />

@@ -14,6 +14,11 @@ import CardClosable from "./card/closable";
 import CardTilt from "./card/tilt";
 import CheckboxSelectAll from "./checkbox/select-all";
 import CheckboxTerms from "./checkbox/terms";
+import DialogAlert from "./dialog/alert";
+import DialogCountdown from "./dialog/countdown";
+import DialogForm from "./dialog/form";
+import DrawerBottom from "./drawer/bottom";
+import DrawerFilters from "./drawer/filters";
 import FontsCustom from "./fonts/custom";
 import InputDetails from "./input/details";
 import InputIcons from "./input/icons";
@@ -23,6 +28,7 @@ import KbdInline from "./kbd/inline";
 import KbdShortcuts from "./kbd/shortcuts";
 import PersonalitiesMoments from "./personalities/moments";
 import PersonalitiesTape from "./personalities/tape";
+import PopoverShare from "./popover/share";
 import ProgressIndeterminate from "./progress/indeterminate";
 import ProgressUpload from "./progress/upload";
 import RadioGroupControlled from "./radio-group/controlled";
@@ -31,6 +37,8 @@ import SwitchForm from "./switch/form";
 import SwitchSettings from "./switch/settings";
 import TextareaAutoResize from "./textarea/auto-resize";
 import TextareaCount from "./textarea/count";
+import TooltipIcons from "./tooltip/icons";
+import TooltipShortcut from "./tooltip/shortcut";
 
 /**
  * Docs örnekleri. Her biri hem canlı çalışır hem kaynak kodu sayfada gösterilir
@@ -56,6 +64,11 @@ export const EXAMPLES = {
   "card/tilt": CardTilt,
   "checkbox/select-all": CheckboxSelectAll,
   "checkbox/terms": CheckboxTerms,
+  "dialog/alert": DialogAlert,
+  "dialog/countdown": DialogCountdown,
+  "dialog/form": DialogForm,
+  "drawer/bottom": DrawerBottom,
+  "drawer/filters": DrawerFilters,
   "fonts/custom": FontsCustom,
   "input/details": InputDetails,
   "input/icons": InputIcons,
@@ -65,6 +78,7 @@ export const EXAMPLES = {
   "kbd/shortcuts": KbdShortcuts,
   "personalities/moments": PersonalitiesMoments,
   "personalities/tape": PersonalitiesTape,
+  "popover/share": PopoverShare,
   "progress/indeterminate": ProgressIndeterminate,
   "progress/upload": ProgressUpload,
   "radio-group/controlled": RadioGroupControlled,
@@ -73,6 +87,8 @@ export const EXAMPLES = {
   "switch/settings": SwitchSettings,
   "textarea/auto-resize": TextareaAutoResize,
   "textarea/count": TextareaCount,
+  "tooltip/icons": TooltipIcons,
+  "tooltip/shortcut": TooltipShortcut,
 } satisfies Record<string, ComponentType>;
 
 export type ExampleName = keyof typeof EXAMPLES;

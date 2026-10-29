@@ -1,0 +1,78 @@
+import PopoverPlayground from "@/examples/popover/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Popover",
+  description: "A small panel next to its trigger. In Comic, a speech bubble.",
+};
+
+<PageHeader crumb="Components / Overlays" title="Popover" number="16">
+  A small panel that opens next to its trigger, for a bit of detail or a quick
+  action. It grows out of the spot you clicked. In Comic it's a speech bubble
+  whose tail points at the trigger.
+</PageHeader>
+
+<PopoverPlayground />
+
+## Usage
+
+```tsx
+import { Button, DialogTrigger, Popover } from "plonk";
+
+export function PlanInfo() {
+  return (
+    <DialogTrigger>
+      <Button>Plan details</Button>
+      <Popover title="Pro plan">
+        10 team members and unlimited projects.
+      </Popover>
+    </DialogTrigger>
+  );
+}
+```
+
+A popover is a small, non-modal dialog: it uses `DialogTrigger` too, and the
+page around it stays usable. It opens on the side given by `placement` and
+flips when there's no room.
+
+### Actions inside
+
+Children as a function get `close`. Here the popover closes itself a moment
+after the link is copied.
+
+<Example name="popover/share" title="Popover · Share" />
+
+For text only, with nothing to click, use a [Tooltip](/docs/components/tooltip)
+instead.
+
+## Personalities
+
+Sticker grows the panel out of the point you clicked, with a slight twist.
+Retro shows it instantly, like a system menu. Comic turns it into a speech
+bubble with a tail that points at the trigger, and Arcade grows it in hard
+steps. With reduced motion it fades in.
+
+### Corner hook
+
+Like the dialog, the popover reads its corner radius from a variable,
+`--plonk-popover-radius`:
+
+```css
+.plonk-popover {
+  --plonk-popover-radius: 0;
+}
+```
+
+## Accessibility
+
+- It's a dialog: focus moves into it when it opens and returns to the trigger
+  when it closes.
+- `Esc` and clicking outside close it.
+- `title` names it. Without a title, pass `aria-label`.
+- The tail is decoration and is hidden from screen readers.
+
+## API
+
+<ApiTable component="Popover" />

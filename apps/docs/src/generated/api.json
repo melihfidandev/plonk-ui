@@ -716,14 +716,14 @@
     {
       "name": "countdownLabel",
       "type": "ReactNode",
-      "default": "Continue?",
+      "default": "\"Continue?\"",
       "required": false,
       "inherited": false
     },
     {
       "name": "countdownMessage",
       "type": "(seconds: number) => string",
-      "default": "(seconds: number) => `${seconds} seconds left`",
+      "default": "`${seconds} seconds left`",
       "required": false,
       "inherited": false
     },
@@ -738,9 +738,53 @@
       "type": "string",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "isOpen",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onOpenChange",
+      "type": "(isOpen: boolean) => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isKeyboardDismissDisabled",
+      "type": "boolean",
+      "default": "false",
+      "required": false,
+      "inherited": true
     }
   ],
-  "DialogTrigger": [],
+  "DialogTrigger": [
+    {
+      "name": "isOpen",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onOpenChange",
+      "type": "(isOpen: boolean) => void",
+      "required": false,
+      "inherited": true
+    }
+  ],
   "DialogFrame": [
     {
       "name": "close",
@@ -849,6 +893,31 @@
       "type": "string",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "isOpen",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onOpenChange",
+      "type": "(isOpen: boolean) => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isKeyboardDismissDisabled",
+      "type": "boolean",
+      "default": "false",
+      "required": false,
+      "inherited": true
     }
   ],
   "FieldLabel": [
@@ -1031,6 +1100,52 @@
       "type": "string",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "placement",
+      "type": "\"left\" | \"right\" | \"bottom\" | \"bottom left\" | \"bottom right\" | \"bottom start\" | \"bottom end\" | \"top\" | \"top left\" | \"top right\" | \"top start\" | \"top end\" | \"left top\" | \"left bottom\" | \"start\" | \"start top\" | \"start bottom\" | \"right top\" | \"right bottom\" | \"end\" | \"end top\" | \"end bottom\"",
+      "default": "\"bottom\"",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "offset",
+      "type": "number",
+      "default": "12",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "crossOffset",
+      "type": "number",
+      "default": "0",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "shouldFlip",
+      "type": "boolean",
+      "default": "true",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isOpen",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onOpenChange",
+      "type": "(isOpen: boolean) => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "triggerRef",
+      "type": "RefObject<Element | null>",
+      "required": false,
+      "inherited": true
     }
   ],
   "Progress": [
@@ -1686,13 +1801,87 @@
       "inherited": false
     }
   ],
-  "TooltipTrigger": [],
+  "TooltipTrigger": [
+    {
+      "name": "delay",
+      "type": "number",
+      "default": "500",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "closeDelay",
+      "type": "number",
+      "default": "200",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "trigger",
+      "type": "\"focus\" | \"hover\"",
+      "default": "hover and focus",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isOpen",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onOpenChange",
+      "type": "(isOpen: boolean) => void",
+      "required": false,
+      "inherited": true
+    }
+  ],
   "Tooltip": [
     {
       "name": "className",
       "type": "string",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "placement",
+      "type": "\"left\" | \"right\" | \"bottom\" | \"bottom left\" | \"bottom right\" | \"bottom start\" | \"bottom end\" | \"top\" | \"top left\" | \"top right\" | \"top start\" | \"top end\" | \"left top\" | \"left bottom\" | \"start\" | \"start top\" | \"start bottom\" | \"right top\" | \"right bottom\" | \"end\" | \"end top\" | \"end bottom\"",
+      "default": "\"top\"",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "offset",
+      "type": "number",
+      "default": "10",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "crossOffset",
+      "type": "number",
+      "default": "0",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "shouldFlip",
+      "type": "boolean",
+      "default": "true",
+      "required": false,
+      "inherited": true
     }
   ]
 }

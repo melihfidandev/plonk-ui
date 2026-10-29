@@ -1,0 +1,153 @@
+import DialogPlayground from "@/examples/dialog/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Dialog",
+  description: "A window over the page, with an optional countdown.",
+};
+
+<PageHeader crumb="Components / Overlays" title="Dialog" number="11">
+  A window over the page for a focused task or a decision. Sticker throws it in
+  and lets it wobble, Retro zooms it open like an old Mac, Comic inflates a
+  speech bubble and Arcade boots it up like a screen. It can count down, too.
+</PageHeader>
+
+<DialogPlayground />
+
+## Usage
+
+```tsx
+import { Button, Dialog, DialogTrigger } from "plonk";
+
+export function Rename() {
+  return (
+    <DialogTrigger>
+      <Button>Rename</Button>
+      <Dialog
+        title="Rename project"
+        footer={({ close }) => <Button onPress={close}>Save</Button>}
+      >
+        …
+      </Dialog>
+    </DialogTrigger>
+  );
+}
+```
+
+`DialogTrigger` connects a button to the dialog: pressing it opens the dialog,
+and closing returns focus to it. `children` and `footer` can be functions that
+receive `close`, so a button inside can close the dialog after it's done.
+
+### With a form
+
+The body scrolls when it's taller than the screen; the title and the footer
+stay put.
+
+<Example name="dialog/form" title="Dialog · Form" />
+
+### Alert dialog
+
+`role="alertdialog"` is for decisions the user has to make, like deleting
+something. It has no close box and clicking outside doesn't close it; the
+buttons are the way out. Put `autoFocus` on the safe choice.
+
+<Example name="dialog/alert" title="Dialog · Alert" />
+
+### Opening without a trigger
+
+When something other than a button opens the dialog, like a timer or a
+response from the server, control it with `isOpen` and `onOpenChange`:
+
+```tsx
+function SavedNotice({ saved }: { saved: boolean }) {
+  const [open, setOpen] = useState(saved);
+  return (
+    <Dialog isOpen={open} onOpenChange={setOpen} title="Saved">
+      Your changes are live.
+    </Dialog>
+  );
+}
+```
+
+## Countdown
+
+Pass `countdown` with a number of seconds and the dialog counts down in big
+numbers. When it reaches zero, `onCountdownEnd` is called with `close`; without
+it, the dialog just closes. The classic use is a session that's about to time
+out:
+
+<Example name="dialog/countdown" title="Dialog · Countdown" />
+
+Each personality counts in its own style: a number sticker in Sticker, an
+inverted box in Retro, a "BAM" burst in Comic and a giant "CONTINUE? 9" in
+Arcade. In the last three seconds the number turns urgent.
+
+The visible number is hidden from screen readers, who instead hear the time
+left at 10 and 5 seconds. Translate both texts for your app:
+
+```tsx
+<Dialog
+  title="Oturumun kapanmak üzere"
+  countdown={30}
+  countdownLabel="Devam?"
+  countdownMessage={(seconds) => `${seconds} saniye kaldı`}
+/>
+```
+
+A countdown is a time limit, so give people enough of it: WCAG asks that users
+can extend a time limit, which is what a "Stay signed in" button does. Use at
+least 20 seconds, and never count down on a dialog that asks for typing.
+
+## Personalities
+
+- **Sticker:** thrown in from below, lands with a wobble.
+- **Retro:** zoom outlines grow from the center like an old Mac, and the dialog
+  is a window with a striped title bar.
+- **Comic:** a speech bubble that inflates from its tail over a dark halftone
+  backdrop.
+- **Arcade:** grows in hard steps like a screen powering up, over a scanline
+  backdrop.
+
+With reduced motion, every dialog simply fades in, and the countdown number
+changes without animating.
+
+### Corner hook
+
+Comic draws the dialog as a speech bubble by changing its corner radius. You can
+do the same with `--plonk-dialog-radius`, for every dialog or just one:
+
+```css
+[data-plonk-personality="sticker"] .plonk-dialog .plonk-card {
+  --plonk-dialog-radius: 2rem;
+}
+```
+
+Why a variable and not a class? Tailwind utilities win over Plonk's component
+styles, so the dialog reads its radius from a variable that you can set
+anywhere.
+
+## Accessibility
+
+- Focus moves into the dialog when it opens, stays inside while it's open, and
+  returns to the trigger when it closes.
+- `Esc` closes it, unless `isKeyboardDismissDisabled` is set.
+- `title` is the dialog's name and `description` its description. Without a
+  title, pass `aria-label`.
+- The close box is a button named by `closeLabel` ("Close").
+- The page behind is hidden from screen readers and can't scroll while the
+  dialog is open.
+
+## API
+
+### Dialog
+
+<ApiTable component="Dialog" />
+
+### DialogTrigger
+
+Wraps the trigger and the dialog. The first child is the trigger: a `Button`,
+or any React Aria pressable.
+
+<ApiTable component="DialogTrigger" />
