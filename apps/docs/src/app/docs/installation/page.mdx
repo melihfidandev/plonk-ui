@@ -113,8 +113,9 @@ export default function RootLayout({
 ### Dates and prerendering
 
 With Cache Components, Next.js prerenders pages and refuses values that change
-on every render, like "today". `DatePicker` and `DateRangePicker` are safe:
-they render a stable placeholder on the server and fill in on the client.
+on every render, like "today". `DatePicker` and `DateRangePicker` are safe,
+with or without a value: on the server they render an empty field of the same
+size and fill in on the client.
 
 A `Calendar` or `RangeCalendar` placed directly on a page is different: the month
 it shows depends on today's date. Wrap it in `<Suspense>`, or render it only on

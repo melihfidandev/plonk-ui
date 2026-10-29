@@ -1,0 +1,103 @@
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Accessibility",
+  description: "Loud on the outside, careful on the inside.",
+};
+
+<PageHeader crumb="Guides" title="Accessibility" number="08">
+  Plonk looks loud, but it behaves quietly and correctly. Keyboard, focus and
+  screen reader behavior come from React Aria; the personalities only change how
+  things look and move.
+</PageHeader>
+
+## Built on React Aria
+
+Every interactive component is built on
+[React Aria](https://react-spectrum.adobe.com/react-aria/), Adobe's library of
+accessible behavior. That's where the hard parts come from: ARIA roles and
+states, keyboard interaction, focus management in overlays, and announcements
+for screen readers, tested across browsers and assistive technologies. The few
+components Plonk builds from scratch, the slider and the command palette, follow
+the same WAI-ARIA patterns.
+
+Personalities never change behavior. A Retro dialog and a Comic dialog have the
+same roles, the same focus order and the same keys.
+
+## Keyboard
+
+Everything works without a mouse:
+
+| Keys                    | Does                                                       |
+| ----------------------- | ---------------------------------------------------------- |
+| `Tab` / `Shift` + `Tab` | Move between controls                                      |
+| `Enter` / `Space`       | Press buttons, toggle checkboxes and switches              |
+| Arrow keys              | Move within menus, lists, tabs, radio groups and calendars |
+| `Home` / `End`          | Jump to the ends of sliders and lists                      |
+| `Esc`                   | Close a dialog, menu, popover or the command palette       |
+| `⌘` `K` / `Ctrl` `K`    | Open the command palette                                   |
+
+Component pages list the keys specific to each one.
+
+## Focus
+
+- The focus ring shows for keyboard users only. Clicking a button doesn't draw
+  one; tabbing to it does.
+- Its color is `--plonk-color-focus`, and every personality's focus color is
+  tested to stand out from its surfaces (at least 3:1).
+- Dialogs and drawers keep focus inside while open and return it to the button
+  that opened them when they close.
+
+## Color and contrast
+
+Every personality's text pairs are checked in Plonk's test suite: ink on canvas
+and surfaces, and each fill color with its `on-` partner, all at **4.5:1** or
+more (WCAG AA). If you change colors, keep the pairs together;
+[Colors](/docs/colors) has an editor that shows the ratio as you pick.
+
+Color is never the only signal. Toasts carry an icon and a label for their kind,
+invalid fields show a message, and selected items have a check or a marker as
+well as a color.
+
+## Reduced motion
+
+Plonk follows the system's "reduce motion" setting, and `motion="reduce"` turns
+it on for your app or part of it. Reduced motion means **less motion, not
+zero**: a press still goes down and comes back, so the interface still answers
+you. Springs, jelly and flying effects are what go away.
+
+<Example name="accessibility/reduced" title="Full and reduced motion" />
+
+If your system already reduces motion, both sides look the same. The
+[Motion](/docs/motion#reduced-motion) page lists exactly what changes.
+
+## Decoration stays silent
+
+Personalities add a lot of decoration, and none of it reaches a screen reader:
+
+- Press effects (POW!, +100) are hidden from assistive technology.
+- Tape, halftone dots and scanlines are drawn with CSS or hidden elements.
+- Arcade's accordion numbers (01, 02…) are generated so screen readers skip them.
+- A dialog's countdown number is hidden; the time left is announced only at 10
+  and 5 seconds, so the reader isn't interrupted every second.
+
+## Time limits
+
+- Toasts stay at least 5 seconds, pause while hovered or focused, and toasts
+  with an action never close on their own.
+- A dialog `countdown` should give people time to react. WCAG 2.2.1 asks that
+  time limits can be extended: use at least 20 seconds and offer a button that
+  continues.
+
+## Your part
+
+Plonk handles behavior; meaning is up to you.
+
+- Give icon-only buttons an `aria-label`.
+- Give every field a `label`, even if it's visually obvious.
+- Give dialogs a `title`, or an `aria-label` if there's no visible one.
+- Set `headingLevel` on accordion items so they fit your page's heading order.
+- Translate the built-in labels for your language; see
+  [Localization](/docs/localization#text-plonk-shows).
+- Test with a keyboard and a screen reader (VoiceOver, NVDA) before you ship.

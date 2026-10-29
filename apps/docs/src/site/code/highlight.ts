@@ -2,7 +2,8 @@ import "server-only";
 import { cacheLife } from "next/cache";
 import * as prettier from "prettier";
 import { createHighlighter, type Highlighter } from "shiki";
-import tsBlankSpace from "ts-blank-space";
+import { blankSourceFile } from "ts-blank-space";
+import typescript from "typescript";
 
 /*
  * Kod kutuları sunucuda (build'de) renklendirilir: tarayıcıya sadece hazır HTML
@@ -22,6 +23,22 @@ async function highlight(code: string, lang: CodeLang) {
 
 const FORMAT: prettier.Options = { printWidth: 80 };
 
+/*
+ * ts-blank-space'in varsayılanı kodu .ts sayar: JSX'teki `<DatePicker …>`'ı tip
+ * dönüşümü sanıp içindeki ifadeleri siliyordu. Dosya türünü biz veriyoruz.
+ */
+function stripTypes(code: string, lang: "ts" | "tsx") {
+  const { ScriptKind, ScriptTarget, createSourceFile } = typescript;
+  const source = createSourceFile(
+    `example.${lang}`,
+    code,
+    ScriptTarget.ESNext,
+    false,
+    lang === "tsx" ? ScriptKind.TSX : ScriptKind.TS,
+  );
+  return blankSourceFile(source);
+}
+
 /**
  * TypeScript örneğinden JavaScript sürümü: tipler silinir (ts-blank-space,
  * satırlar yerinde kalır), sonra iki sürüm de aynı biçimle düzenlenir. JS
@@ -33,7 +50,7 @@ async function withJavaScript(code: string, lang: CodeLang) {
     await prettier.format(code, { ...FORMAT, parser: "typescript" })
   ).trimEnd();
   const js = (
-    await prettier.format(tsBlankSpace(ts), { ...FORMAT, parser: "babel" })
+    await prettier.format(stripTypes(ts, lang), { ...FORMAT, parser: "babel" })
   ).trimEnd();
   return { ts, js: js === ts ? null : js };
 }

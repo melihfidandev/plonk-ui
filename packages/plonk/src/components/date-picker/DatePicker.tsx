@@ -37,14 +37,26 @@ const useIsClient = () =>
 /*
  * Sunucu ön-render'ı ve "şu an": React Aria değer yokken yer tutucu için
  * "bugün"ü okuyor (Date.now), her tarih parçası da ÖÖ/ÖS adını bulmak için
- * koşulsuz new Date() çağırıyor. Next 16 (Cache Components) bunları ön-render'da
- * görünce build'i durduruyor. Bu yüzden sunucuda ve hidrasyonda sabit bir yer
- * tutucu tarih verilir ve parçalar çizilmez (aynı boyda boş alan); hemen
- * ardından tarayıcıda gerçekleri gelir.
+ * koşulsuz new Date() çağırıyor. Değer varsa da her render'da value.toDate()
+ * çağırıyor; @internationalized/date bunu new Date() ile hesaplıyor. Sonuç
+ * "şu an"a bağlı değil, ama Next 16 (Cache Components) ayırt edemiyor ve
+ * ön-render'ı durduruyor. Bu yüzden sunucuda ve hidrasyonda alan değersiz,
+ * sabit bir yer tutucuyla çizilir ve parçalar yerine aynı boyda boş alan
+ * konur; tarayıcıya geçince alan gerçek değeriyle yeniden kurulur (`key`).
  */
-function useHydrationPlaceholder(placeholder: DateValue | null | undefined) {
+function useHydrationProps<V>(props: {
+  value?: V | null;
+  defaultValue?: V | null;
+  placeholderValue?: DateValue | null;
+}) {
   const isClient = useIsClient();
-  return placeholder ?? (isClient ? undefined : SERVER_PLACEHOLDER);
+  if (isClient) return { key: "client" };
+  return {
+    key: "server",
+    value: undefined,
+    defaultValue: undefined,
+    placeholderValue: props.placeholderValue ?? SERVER_PLACEHOLDER,
+  };
 }
 
 function Segments({
@@ -89,11 +101,12 @@ export function DatePicker<T extends DateValue>({
   ...props
 }: DatePickerProps<T>) {
   const invalid = hasError(error);
-  const placeholderValue = useHydrationPlaceholder(props.placeholderValue);
+  const { key, ...hydration } = useHydrationProps(props);
   return (
     <AriaDatePicker
+      key={key}
       {...props}
-      placeholderValue={placeholderValue as T | undefined}
+      {...(hydration as Partial<typeof props>)}
       isInvalid={invalid || props.isInvalid}
       className={cn("flex flex-col gap-1.5", className)}
     >
@@ -133,11 +146,12 @@ export function DateRangePicker<T extends DateValue>({
   ...props
 }: DateRangePickerProps<T>) {
   const invalid = hasError(error);
-  const placeholderValue = useHydrationPlaceholder(props.placeholderValue);
+  const { key, ...hydration } = useHydrationProps(props);
   return (
     <AriaDateRangePicker
+      key={key}
       {...props}
-      placeholderValue={placeholderValue as T | undefined}
+      {...(hydration as Partial<typeof props>)}
       isInvalid={invalid || props.isInvalid}
       className={cn("flex flex-col gap-1.5", className)}
     >

@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import AccessibilityReduced from "./accessibility/reduced";
 import ButtonForm from "./button/form";
 import ButtonIcons from "./button/icons";
 import ButtonLoading from "./button/loading";
@@ -18,6 +19,7 @@ import PersonalitiesTape from "./personalities/tape";
  * Sunucuda bunlar zaten küçük birer istemci referansı.
  */
 export const EXAMPLES = {
+  "accessibility/reduced": AccessibilityReduced,
   "button/variants": ButtonVariants,
   "button/sizes": ButtonSizes,
   "button/icons": ButtonIcons,

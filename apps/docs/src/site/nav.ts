@@ -35,8 +35,8 @@ export const NAV: NavSection[] = [
       { title: "Fonts", href: "/docs/fonts", ready: true },
       { title: "Tokens", href: "/docs/tokens", ready: true },
       { title: "Motion", href: "/docs/motion", ready: true },
-      { title: "Localization", href: "/docs/localization" },
-      { title: "Accessibility", href: "/docs/accessibility" },
+      { title: "Localization", href: "/docs/localization", ready: true },
+      { title: "Accessibility", href: "/docs/accessibility", ready: true },
     ],
   },
   {

@@ -1,0 +1,129 @@
+import { LocaleLab } from "@/site/LocaleLab";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Localization",
+  description:
+    "Dates, numbers, sorting and every built-in label, in any language.",
+};
+
+<PageHeader crumb="Guides" title="Localization" number="07">
+  One prop sets the language for dates, numbers, sorting, search and screen
+  reader announcements. The few words Plonk shows on screen are props you can
+  translate.
+</PageHeader>
+
+<LocaleLab />
+
+## Set the locale
+
+Pass a [BCP 47](https://developer.mozilla.org/en-US/docs/Glossary/BCP_47_language_tag)
+language tag to the provider. Without it, Plonk uses the browser's language.
+
+```tsx
+<PlonkProvider locale="tr-TR">
+  <App />
+</PlonkProvider>
+```
+
+The locale changes:
+
+- **Dates:** the order of day, month and year, month and weekday names, and the
+  first day of the week in calendars.
+- **Numbers:** slider values and anything formatted with `formatOptions`.
+- **Screen reader text:** announcements that come from React Aria, like "Next
+  month" or "Selected".
+- **Capitals:** the provider sets `lang`, so text drawn in capitals uses the
+  right letters. In Turkish, `i` becomes `İ`, not `I`.
+- **Sorting and search:** the data table sorts with the language's alphabet
+  ("Ç" comes after "C", not after "Z") and searches without regard to case,
+  using the language's rules. The command palette's fuzzy search does the same,
+  so in Turkish `i` and `ı` are different letters.
+
+## Dates
+
+Date components work with `@internationalized/date` values, not JavaScript
+`Date`s. A date without a time can't shift across time zones. Plonk re-exports
+what you need:
+
+```tsx
+import { DatePicker, getLocalTimeZone, parseDate, today } from "plonk";
+
+export function Trip() {
+  return (
+    <>
+      <DatePicker label="Start" defaultValue={parseDate("2026-10-27")} />
+      <DatePicker label="From today" minValue={today(getLocalTimeZone())} />
+    </>
+  );
+}
+```
+
+Ranges, limits and presets are covered on the Date Picker page.
+
+## Text Plonk shows
+
+Most text in your interface is yours. A few components add their own words, and
+some personalities show more than others: Retro writes a toast's kind in its
+title bar, Comic in a caption box, Arcade on a neon plate. Every one of them is a
+prop, in English by default.
+
+| Component       | Props                                                             |
+| --------------- | ----------------------------------------------------------------- |
+| Toast           | `label` per toast ("Success", "Warning", "Error", "Notice")       |
+| Dialog          | `closeLabel`, `countdownLabel`, `countdownMessage`                |
+| Card, Drawer    | `closeLabel`                                                      |
+| Command palette | `title`, `placeholder`, `emptyLabel`; `loadingLabel` on groups    |
+| Palette trigger | its children ("Search…")                                          |
+| ComboBox        | `emptyMessage`                                                    |
+| Data table      | `messages`: search, column menu, filters, selection and row count |
+
+A Turkish app, for example:
+
+```tsx
+toast.success("Fatura gönderildi", { label: "Tamam" });
+
+export function SessionWarning() {
+  return (
+    <Dialog
+      title="Oturumun kapanmak üzere"
+      closeLabel="Kapat"
+      countdown={20}
+      countdownLabel="Devam?"
+      countdownMessage={(s) => `${s} saniye kaldı`}
+    />
+  );
+}
+
+export function Invoices({ data, columns }: InvoiceTableProps) {
+  return (
+    <DataTable
+      data={data}
+      columns={columns}
+      messages={{
+        search: "Ara…",
+        clearFilters: "Filtreleri temizle",
+        rowCount: (shown, total) =>
+          shown === total ? `${total} satır` : `${total} satırdan ${shown}`,
+      }}
+    />
+  );
+}
+```
+
+`countdownMessage` is what a screen reader hears 10 and 5 seconds before the end,
+so translate it even if nobody sees it.
+
+## Capitals-only fonts
+
+Comic and Arcade draw headings in fonts that only have capital letters. Plonk
+uppercases that text with CSS, and CSS picks the capital from the page's
+language. Setting `locale` is enough; if you change the font, see
+[Fonts](/docs/fonts#fonts-with-only-capitals).
+
+## Right-to-left
+
+For Arabic, Hebrew or Persian, set `dir="rtl"` on your page along with the
+locale. Sliders flip their arrow keys and fill from the right, list cursors and
+the toast timer mirror, and React Aria handles keyboard navigation in the right
+direction.
