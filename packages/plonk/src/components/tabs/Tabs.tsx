@@ -128,7 +128,7 @@ export function Tab({ children, className, ...props }: TabProps) {
       {...props}
       className={cn(
         "plonk-tab relative cursor-pointer rounded-[var(--plonk-tabs-radius,var(--plonk-radius-pill))] px-4 py-1.5 font-plonk-display whitespace-nowrap outline-none select-none data-disabled:cursor-not-allowed data-disabled:opacity-50",
-        "outline-offset-2 data-focus-visible:outline-3 data-focus-visible:outline-plonk-focus",
+        "outline-offset-2 data-focus-visible:outline-3 data-focus-visible:outline-plonk-focus data-focus-visible:outline-solid",
         className,
       )}
     >
@@ -150,7 +150,7 @@ export function TabPanel({ className, ...props }: TabPanelProps) {
     <AriaTabPanel
       {...props}
       className={cn(
-        "plonk-tab-panel rounded-plonk-sm outline-offset-4 data-focus-visible:outline-3 data-focus-visible:outline-plonk-focus",
+        "plonk-tab-panel rounded-plonk-sm outline-offset-4 data-focus-visible:outline-3 data-focus-visible:outline-plonk-focus data-focus-visible:outline-solid",
         className,
       )}
     />

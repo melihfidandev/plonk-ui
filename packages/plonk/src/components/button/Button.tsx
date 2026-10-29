@@ -100,7 +100,7 @@ export function Button({
       onPress={handlePress}
       className={cn(
         "plonk-button relative inline-flex shrink-0 cursor-pointer items-center justify-center font-plonk-display leading-none whitespace-nowrap outline-none select-none",
-        "outline-offset-3 data-focus-visible:outline-3 data-focus-visible:outline-plonk-focus",
+        "outline-offset-3 data-focus-visible:outline-3 data-focus-visible:outline-plonk-focus data-focus-visible:outline-solid",
         "disabled:cursor-not-allowed disabled:border-dashed! disabled:bg-plonk-sunken disabled:text-plonk-ink-muted",
         "data-pending:cursor-progress",
         VARIANTS[variant],
