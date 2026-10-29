@@ -1,0 +1,90 @@
+import SliderPlayground from "@/examples/slider/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Slider",
+  description: "Pick a value or a range by dragging. The thumb has weight.",
+};
+
+<PageHeader crumb="Components / Forms" title="Slider" number="20">
+  Pick a value, or a range, by dragging. In Sticker the thumb has weight: it
+  lags behind, stretches and sways as you pull it. Retro hops from step to step,
+  Comic leaves speed lines and Arcade lights up a row of LEDs.
+</PageHeader>
+
+<SliderPlayground />
+
+## Usage
+
+```tsx
+import { Slider } from "plonk";
+
+export function Volume() {
+  return <Slider label="Volume" defaultValue={40} />;
+}
+```
+
+`onChange` fires on every move, also while dragging. `onChangeEnd` fires once
+the drag ends, and on every keyboard step: use it to save or to search.
+
+### Ranges
+
+Pass `[start, end]` as the value and the slider gets two thumbs. `minGap` keeps
+them apart, like a price range at least $100 wide. `formatOptions` formats the
+bubbles, the marks and what screen readers hear with `Intl.NumberFormat`, in
+the provider's `locale`.
+
+<Example name="slider/range" title="Slider · Price range" />
+
+When the thumbs get so close that their bubbles would overlap, the bubbles
+merge into one ("$650 – $800") between the thumbs, and split again as the thumbs
+move apart.
+
+Name the two thumbs for screen readers with `thumbLabels`, in your app's
+language.
+
+### Marks and custom text
+
+`marks` draws ticks under the track, as numbers or `{ value, label }`.
+`formatValue` writes the text yourself, for steps that aren't numbers.
+`valueBubble="active"` shows the bubble only while the slider is used.
+
+<Example name="slider/marks" title="Slider · Marks" />
+
+### In a form
+
+With a `name`, the value goes into a hidden input. A range sends both values
+under the same name; read them with `getAll`.
+
+<Example name="slider/form" title="Slider · Form" />
+
+## Personalities
+
+- **Sticker:** the thumb lags a little behind the pointer, stretches in the
+  direction you pull and sways when you let go, then lands with a wobble.
+- **Retro:** the thumb hops from step to step, one frame each.
+- **Comic:** a red ball that leaves speed lines when moved fast, a halftone fill
+  and a speech bubble for the value.
+- **Arcade:** the track is a row of LED blocks, the thumb a joystick ball, and
+  the bubble a scoreboard that flashes on every step.
+
+With reduced motion the thumb follows the pointer exactly, without lag or
+stretch.
+
+## Accessibility
+
+- Every thumb is a `slider` with its value, minimum and maximum; the text read
+  is the formatted value ("$200").
+- `←` `↓` and `→` `↑` move one step, `Page Up` and `Page Down` a tenth of the
+  range, `Home` and `End` jump to the ends. In right-to-left languages, `←` and
+  `→` are reversed.
+- In a range, each thumb's limits follow the other thumb and `minGap`, and
+  screen readers hear those limits too.
+- The focus ring shows for keyboard users only; dragging with a mouse doesn't
+  leave one behind.
+
+## API
+
+<ApiTable component="Slider" />

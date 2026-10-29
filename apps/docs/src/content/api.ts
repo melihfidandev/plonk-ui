@@ -575,4 +575,177 @@ export const API: Record<string, ComponentApi> = {
       isDisabled: "Can't be opened or closed.",
     },
   },
+  DatePicker: {
+    // Docgen değer tipini başka bileşenden (Key) çözüyor.
+    types: {
+      value: "DateValue | null",
+      defaultValue: "DateValue | null",
+      onChange: "(value: DateValue | null) => void",
+    },
+    inherited: [
+      "value",
+      "defaultValue",
+      "onChange",
+      "minValue",
+      "maxValue",
+      "isDateUnavailable",
+      "placeholderValue",
+      "name",
+      "isRequired",
+      "isDisabled",
+      "isReadOnly",
+    ],
+    props: {
+      label: "Visible label, linked to the field.",
+      description: "Help text under the field.",
+      error:
+        "Error message. Marks the field invalid and shakes it once. Pass `true` to mark it without a message.",
+      className: "Extra classes for the outer wrapper.",
+      value:
+        'Controlled date, a `CalendarDate` (`parseDate("2026-11-14")`) or `null`.',
+      defaultValue: "Date on first render, when uncontrolled.",
+      onChange: "Called with the new date, or `null` when cleared.",
+      minValue: "Earliest date that can be picked.",
+      maxValue: "Latest date that can be picked.",
+      isDateUnavailable:
+        "Return `true` for dates that can't be picked, like booked nights. They stay visible but crossed out.",
+      placeholderValue:
+        "Date the empty field and the calendar start from. Defaults to today.",
+      name: "Field name: the date is submitted as `YYYY-MM-DD`.",
+      isRequired: "Marks the field required, with an asterisk in the label.",
+      isDisabled: "Disables the field.",
+      isReadOnly: "Shows the date but doesn't let it change.",
+    },
+  },
+  DateRangePicker: {
+    // Docgen değer tipini başka bileşenden (Key) çözüyor.
+    types: {
+      value: "DateRange | null",
+      defaultValue: "DateRange | null",
+      onChange: "(value: DateRange | null) => void",
+    },
+    inherited: [
+      "value",
+      "defaultValue",
+      "onChange",
+      "minValue",
+      "maxValue",
+      "isDateUnavailable",
+      "startName",
+      "endName",
+      "isRequired",
+      "isDisabled",
+    ],
+    props: {
+      presets:
+        "Ready-made ranges next to the calendar: `{ label, range }`. Pass `range` as a function to compute it when pressed.",
+      label: "Visible label, linked to the field.",
+      description: "Help text under the field.",
+      error:
+        "Error message. Marks the field invalid and shakes it once. Pass `true` to mark it without a message.",
+      className: "Extra classes for the outer wrapper.",
+      value: "Controlled range, `{ start, end }`, or `null`.",
+      defaultValue: "Range on first render, when uncontrolled.",
+      onChange: "Called with the new range once both ends are picked.",
+      minValue: "Earliest date that can be picked.",
+      maxValue: "Latest date that can be picked.",
+      isDateUnavailable:
+        "Return `true` for dates that can't be picked, like booked nights. They stay visible but crossed out.",
+      startName: "Field name for the start date in form data.",
+      endName: "Field name for the end date in form data.",
+      isRequired: "Marks the field required, with an asterisk in the label.",
+      isDisabled: "Disables the field.",
+    },
+  },
+  Calendar: {
+    // Docgen değer tipini başka bileşenden (Key) çözüyor.
+    types: {
+      value: "DateValue | null",
+      defaultValue: "DateValue | null",
+      onChange: "(value: DateValue) => void",
+    },
+    inherited: [
+      "value",
+      "defaultValue",
+      "onChange",
+      "minValue",
+      "maxValue",
+      "isDateUnavailable",
+      "isDisabled",
+      "aria-label",
+    ],
+    props: {
+      className: "Extra classes for the calendar.",
+      value: "Controlled date.",
+      defaultValue: "Date on first render, when uncontrolled.",
+      onChange: "Called with the picked date.",
+      minValue: "Earliest date that can be picked.",
+      maxValue: "Latest date that can be picked.",
+      isDateUnavailable:
+        "Return `true` for dates that can't be picked, like booked nights. They stay visible but crossed out.",
+      isDisabled: "Disables the whole calendar.",
+      "aria-label": "Name of the calendar, for screen readers.",
+    },
+  },
+  RangeCalendar: {
+    // Docgen değer tipini başka bileşenden (Key) çözüyor.
+    types: {
+      value: "DateRange | null",
+      defaultValue: "DateRange | null",
+      onChange: "(value: DateRange) => void",
+    },
+    inherited: [
+      "value",
+      "defaultValue",
+      "onChange",
+      "minValue",
+      "maxValue",
+      "isDateUnavailable",
+      "isDisabled",
+      "aria-label",
+    ],
+    props: {
+      presets: "Ready-made ranges next to the calendar.",
+      className: "Extra classes for the calendar.",
+      value: "Controlled range, `{ start, end }`.",
+      defaultValue: "Range on first render, when uncontrolled.",
+      onChange: "Called once both ends are picked.",
+      minValue: "Earliest date that can be picked.",
+      maxValue: "Latest date that can be picked.",
+      isDateUnavailable:
+        "Return `true` for dates that can't be picked, like booked nights. They stay visible but crossed out.",
+      isDisabled: "Disables the whole calendar.",
+      "aria-label": "Name of the calendar, for screen readers.",
+    },
+  },
+  Slider: {
+    props: {
+      value:
+        "Controlled value: a number, or `[start, end]` for a range with two thumbs.",
+      defaultValue: "Value on first render, when uncontrolled.",
+      onChange: "Called on every change, also while dragging.",
+      onChangeEnd:
+        "Called when a drag ends, and on every keyboard step. Use it to save or to search.",
+      min: "Smallest value.",
+      max: "Largest value.",
+      step: "Distance between values.",
+      minGap:
+        "In a range, the smallest distance the two thumbs keep, like a price range at least $100 wide. A multiple of `step`.",
+      formatOptions:
+        '`Intl.NumberFormat` options for the bubble, the marks and screen readers, like `{ style: "currency", currency: "USD" }`. Uses the provider\'s `locale`.',
+      formatValue:
+        'Write the text yourself: `(value) => ["Off", "Low", "High"][value]`. Wins over `formatOptions`.',
+      marks: "Ticks under the track: numbers, or `{ value, label }`.",
+      valueBubble:
+        "The value above the thumb: always, only while it's used, or never.",
+      thumbLabels:
+        "Screen reader names of the two thumbs in a range. Translate them for your app.",
+      name: "Field name: the value goes into a hidden input; a range sends two values under the same name.",
+      isDisabled: "Disables the slider.",
+      "aria-label": "Accessible name. Required when there's no `label`.",
+      className: "Extra classes for the outer wrapper.",
+      label: "Visible label, linked to the slider.",
+      description: "Help text under the slider.",
+    },
+  },
 };

@@ -17,6 +17,9 @@ import CheckboxSelectAll from "./checkbox/select-all";
 import CheckboxTerms from "./checkbox/terms";
 import ComboBoxCustom from "./combo-box/custom";
 import ComboBoxItems from "./combo-box/items";
+import DatePickerCalendar from "./date-picker/calendar";
+import DatePickerLimits from "./date-picker/limits";
+import DatePickerRange from "./date-picker/range";
 import DialogAlert from "./dialog/alert";
 import DialogCountdown from "./dialog/countdown";
 import DialogForm from "./dialog/form";
@@ -41,12 +44,18 @@ import RadioGroupDescriptions from "./radio-group/descriptions";
 import SelectDescriptions from "./select/descriptions";
 import SelectForm from "./select/form";
 import SelectSections from "./select/sections";
+import SliderForm from "./slider/form";
+import SliderMarks from "./slider/marks";
+import SliderRange from "./slider/range";
 import SwitchForm from "./switch/form";
 import SwitchSettings from "./switch/settings";
 import TabsControlled from "./tabs/controlled";
 import TabsSettings from "./tabs/settings";
 import TextareaAutoResize from "./textarea/auto-resize";
 import TextareaCount from "./textarea/count";
+import ToastProgress from "./toast/progress";
+import ToastUndo from "./toast/undo";
+import ToastVariants from "./toast/variants";
 import TooltipIcons from "./tooltip/icons";
 import TooltipShortcut from "./tooltip/shortcut";
 
@@ -77,6 +86,9 @@ export const EXAMPLES = {
   "checkbox/terms": CheckboxTerms,
   "combo-box/custom": ComboBoxCustom,
   "combo-box/items": ComboBoxItems,
+  "date-picker/calendar": DatePickerCalendar,
+  "date-picker/limits": DatePickerLimits,
+  "date-picker/range": DatePickerRange,
   "dialog/alert": DialogAlert,
   "dialog/countdown": DialogCountdown,
   "dialog/form": DialogForm,
@@ -101,12 +113,18 @@ export const EXAMPLES = {
   "select/descriptions": SelectDescriptions,
   "select/form": SelectForm,
   "select/sections": SelectSections,
+  "slider/form": SliderForm,
+  "slider/marks": SliderMarks,
+  "slider/range": SliderRange,
   "switch/form": SwitchForm,
   "switch/settings": SwitchSettings,
   "tabs/controlled": TabsControlled,
   "tabs/settings": TabsSettings,
   "textarea/auto-resize": TextareaAutoResize,
   "textarea/count": TextareaCount,
+  "toast/progress": ToastProgress,
+  "toast/undo": ToastUndo,
+  "toast/variants": ToastVariants,
   "tooltip/icons": TooltipIcons,
   "tooltip/shortcut": TooltipShortcut,
 } satisfies Record<string, ComponentType>;

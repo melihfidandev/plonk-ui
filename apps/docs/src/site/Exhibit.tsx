@@ -7,6 +7,7 @@ import {
   PlonkProvider,
   personalities,
   type PersonalityName,
+  type ToastPlacement,
 } from "plonk";
 import { createStore } from "./store";
 
@@ -55,6 +56,8 @@ export interface ExhibitProps {
   align?: "center" | "start";
   /** Bu sergi toast bölgesi açsın mı (toast örnekleri için). */
   toaster?: boolean;
+  /** Toast bölgesinin yeri (Toast sayfasının oyun alanı). */
+  toastPlacement?: ToastPlacement;
 }
 
 /**
@@ -68,6 +71,7 @@ export function Exhibit({
   footer,
   align = "center",
   toaster = false,
+  toastPlacement,
 }: ExhibitProps) {
   const personality = exhibitPersonality.use();
   const tokens = personalities[personality];
@@ -82,6 +86,7 @@ export function Exhibit({
       <PlonkProvider
         personality={personality}
         toaster={toaster}
+        toastPlacement={toastPlacement}
         className="site-stage"
         data-align={align}
       >

@@ -11,7 +11,7 @@ import {
   TextField,
 } from "react-aria-components";
 import { CopyButton } from "./code/CodeTabs";
-import { Exhibit } from "./Exhibit";
+import { Exhibit, type ExhibitProps } from "./Exhibit";
 
 export type Control =
   | { type: "enum"; options: readonly string[]; default: string }
@@ -20,6 +20,8 @@ export type Control =
   | {
       type: "number";
       default: number;
+      /** `default` bileşenin kendi varsayılanı: ona eşitse koda yazılmaz. */
+      omitDefault?: boolean;
       min?: number;
       max?: number;
       step?: number;
@@ -52,6 +54,15 @@ export interface PlaygroundProps<C extends Record<string, Control>> {
    * `(jsx) => \`<DialogTrigger>…${jsx}</DialogTrigger>\``. `indent` ile
    * girintilenmiş hâli de verilir.
    */
+  /**
+   * Kodu kendin yaz: JSX olmayan API'ler için (ör. `toast.success(…)`).
+   * Verilince `childrenCode`, `extraCode` ve `wrapCode` kullanılmaz.
+   */
+  code?: (values: Values<C>) => string;
+  /** Sergiye geçen ayarlar, kontrollere bağlı olabilir (ör. toast bölgesi). */
+  stage?: (
+    values: Values<C>,
+  ) => Pick<ExhibitProps, "toaster" | "toastPlacement">;
   /** Koda her zaman yazılan sabit prop'lar, ör. `footer={…}`. */
   extraCode?: string[];
   wrapCode?: (
@@ -75,6 +86,8 @@ export function Playground<const C extends Record<string, Control>>({
   childrenCode,
   extraCode,
   wrapCode,
+  code: writeCode,
+  stage,
 }: PlaygroundProps<C>) {
   const [values, setValues] = useState(
     () =>
@@ -85,10 +98,15 @@ export function Playground<const C extends Record<string, Control>>({
   const set = (key: keyof C, value: unknown) =>
     setValues((current) => ({ ...current, [key]: value }));
   const jsx = toJsx(component, controls, values, childrenCode, extraCode);
-  const code = wrapCode ? wrapCode(jsx, indent) : jsx;
+  const code = writeCode
+    ? writeCode(values)
+    : wrapCode
+      ? wrapCode(jsx, indent)
+      : jsx;
 
   return (
     <Exhibit
+      {...stage?.(values)}
       title={`${component} · Playground`}
       footer={
         <>
@@ -105,12 +123,12 @@ export function Playground<const C extends Record<string, Control>>({
           </div>
           <div className="site-code">
             <div className="site-code-bar">
-              <span className="lang">JSX</span>
+              <span className="lang">{writeCode ? "TS" : "JSX"}</span>
               <CopyButton text={code} />
             </div>
             <pre>
               <code>
-                <Jsx code={code} />
+                {writeCode ? <Script code={code} /> : <Jsx code={code} />}
               </code>
             </pre>
           </div>
@@ -216,7 +234,7 @@ function toJsx<C extends Record<string, Control>>(
       if (c.type === "text") return value !== "";
       if (c.type === "boolean") return value === true;
       if (c.type === "enum") return value !== c.default;
-      return true;
+      return !(c.omitDefault && value === c.default);
     })
     .map(([key, c]) => {
       const value = values[key];
@@ -337,4 +355,25 @@ function highlightPlain(code: string) {
   }
   parts.push(code.slice(last));
   return parts;
+}
+
+/*
+ * JSX olmayan kod (ör. `toast.success("…", { … })`) için: dizgiler, nesne
+ * anahtarları ve fonksiyon adları renklenir, gerisi düz kalır.
+ */
+const SCRIPT =
+  /("[^"]*"|`[^`]*`)|\b([A-Za-z_]\w*)(?=\s*:)|\b([A-Za-z_][\w.]*)(?=\()/g;
+
+function Script({ code }: { code: string }) {
+  const parts: ReactNode[] = [];
+  let last = 0;
+  for (const match of code.matchAll(SCRIPT)) {
+    const [whole, string, key, call] = match;
+    if (match.index > last) parts.push(code.slice(last, match.index));
+    const color = string ? COLORS.string : key ? COLORS.attr : COLORS.tag;
+    parts.push(<span style={{ color }}>{string ?? key ?? call ?? whole}</span>);
+    last = match.index + whole.length;
+  }
+  parts.push(code.slice(last));
+  return parts.map((part, i) => <Fragment key={i}>{part}</Fragment>);
 }

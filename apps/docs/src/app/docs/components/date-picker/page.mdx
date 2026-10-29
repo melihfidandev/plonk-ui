@@ -1,0 +1,142 @@
+import DatePickerPlayground from "@/examples/date-picker/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Date Picker",
+  description: "Date fields with a calendar, for single dates and ranges.",
+};
+
+<PageHeader crumb="Components / Date and time" title="Date Picker" number="10">
+  A date field with a calendar behind a button, for single dates and ranges. In
+  Sticker it's a desk calendar: pages tear off as you go forward and the picked
+  day gets a sticker. Retro slides pages in steps, Comic bursts the day you pick
+  and Arcade rewrites the month row by row.
+</PageHeader>
+
+<DatePickerPlayground />
+
+## Usage
+
+```tsx
+import { DatePicker, parseDate } from "plonk";
+
+export function Departure() {
+  return (
+    <DatePicker
+      label="Departure"
+      name="departure"
+      defaultValue={parseDate("2026-11-14")}
+    />
+  );
+}
+```
+
+Type the date part by part, change a part with the arrow keys, or open the
+calendar with the button. The field submits the date as `YYYY-MM-DD` under its
+`name`.
+
+### Date values
+
+Dates aren't JavaScript `Date`s: they're `CalendarDate` objects from
+`@internationalized/date`, without a time or a time zone, so November 14 stays
+November 14 everywhere. Plonk re-exports what you need most:
+
+```ts
+import { CalendarDate, getLocalTimeZone, parseDate, today } from "plonk";
+
+parseDate("2026-11-14"); // from an ISO string
+new CalendarDate(2026, 11, 14); // year, month, day
+today(getLocalTimeZone()); // today in the user's time zone
+
+date.add({ days: 7 }); // math returns a new date
+date.toString(); // "2026-11-14"
+date.toDate(getLocalTimeZone()); // back to a JavaScript Date
+```
+
+The format, the month names and the first day of the week follow the
+provider's `locale`; see [Localization](/docs/localization).
+
+### Limits
+
+`minValue` and `maxValue` set the earliest and latest dates.
+`isDateUnavailable` crosses out single days, like booked nights. Picking one
+marks the field invalid.
+
+<Example name="date-picker/limits" title="Date Picker · Limits" />
+
+### Ranges and presets
+
+`DateRangePicker` picks a start and an end, and its value is `{ start, end }`.
+`presets` adds ready-made ranges next to the calendar. Give a preset's `range`
+as a function, and it's computed when pressed, so "today" is always today.
+
+<Example name="date-picker/range" title="Date Picker · Range" />
+
+In a form, name both ends with `startName` and `endName`.
+
+## Calendar
+
+`Calendar` and `RangeCalendar` are the calendars on their own, to put right on
+the page, like a delivery date picker.
+
+<Example name="date-picker/calendar" title="Date Picker · Calendar" />
+
+### Server rendering
+
+A calendar on the page decides which month to show, and which day is today,
+while it renders. With Next.js Cache Components, reading "now" during a
+prerender stops the build ("used `Date.now()`"). So:
+
+- `DatePicker` and `DateRangePicker` are safe: Plonk renders their fields
+  without reading the clock on the server.
+- `Calendar` and `RangeCalendar` on the page read it: render them in the
+  browser only, as in the example above, or wrap them in `<Suspense>`.
+- Don't call `today()` while rendering either. Call it in an event handler, or
+  in a preset's `range` function.
+
+## Personalities
+
+- **Sticker:** going forward, the page tears off at a ragged edge and falls;
+  going back, it sticks on from the top. The picked day gets a sticker, a range
+  is drawn with a highlighter and today has a pen circle.
+- **Retro:** pages slide in steps, the picked day is inverted and a range fills
+  with a dither pattern.
+- **Comic:** a halftone panel with the month in a caption box. The picked day is
+  a burst, a range a strip of blue halftone, and today is marked in yellow.
+- **Arcade:** the month is wiped and retyped row by row. The picked day is a pink
+  neon box with a blinking cursor, a range a cyan neon strip, and today has a
+  star.
+
+With reduced motion, pages change without flying and selections appear without
+animating.
+
+## Accessibility
+
+- Each part of the field (day, month, year) is a spin button: type a number, or
+  use `↑` and `↓`. `←` and `→` move between parts.
+- In the calendar, arrow keys move by day and week, `Page Up` and `Page Down` by
+  month, and `Enter` picks.
+- Screen readers hear full dates ("Saturday, November 14, 2026"), and
+  unavailable days are announced as such.
+- The calendar opens in a dialog that keeps focus inside and returns it to the
+  button when it closes.
+
+## API
+
+### DatePicker
+
+<ApiTable component="DatePicker" />
+
+### DateRangePicker
+
+<ApiTable component="DateRangePicker" />
+
+### Calendar
+
+<ApiTable component="Calendar" />
+
+### RangeCalendar
+
+<ApiTable component="RangeCalendar" />

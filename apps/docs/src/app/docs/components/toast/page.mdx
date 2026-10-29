@@ -1,0 +1,160 @@
+import ToastPlayground from "@/examples/toast/playground";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Toast",
+  description: "Short notifications you can call from anywhere.",
+};
+
+<PageHeader crumb="Components / Feedback" title="Toast" number="24">
+  A short notification that comes and goes on its own. Call `toast()` from
+  anywhere, no hook needed. Sticker drops it in on a strip of tape and peels it
+  off the corner, Retro opens a window, Comic tears it in half and Arcade
+  switches it off like a CRT.
+</PageHeader>
+
+<ToastPlayground />
+
+## Usage
+
+```tsx
+import { toast } from "plonk";
+
+export function save() {
+  toast.success("Changes saved");
+}
+```
+
+`toast()` is a plain function: call it from an event handler, after a `fetch`,
+inside a store, anywhere. It returns the toast's id. The shortcuts
+`toast.success`, `toast.warning`, `toast.danger` and `toast.info` set the kind.
+
+Toasts appear in a region that the outermost `PlonkProvider` opens, so wrap
+your app once. Without a provider, `toast()` still queues but nothing shows up.
+
+### Kinds
+
+Each kind has its own color, icon and label, so it never depends on color
+alone.
+
+<Example name="toast/variants" title="Toast · Kinds" />
+
+### With an action
+
+A toast can carry one action, like "Undo" or "Retry". Pressing it runs the
+action and closes the toast. Toasts with an action stay until they're handled,
+so nobody has to race a timer to undo.
+
+<Example name="toast/undo" title="Toast · Undo" />
+
+### Closing it yourself
+
+`timeout: 0` keeps a toast on screen until you close it with
+`toast.dismiss(id)`. Here a loading toast is replaced by the result:
+
+<Example name="toast/progress" title="Toast · Progress" />
+
+`toast.dismiss()` without an id clears them all.
+
+## Timing and placement
+
+- A toast closes after **5 seconds** by default. Shorter timeouts are raised to
+  5 seconds, so there's time to read and act (WCAG 2.2.1).
+- With an `action`, or with `timeout: 0`, it stays until it's closed.
+- Pointing at a toast, or focusing it, pauses every timer. So does dragging.
+- At most **three** are visible; the rest wait in line.
+
+The region sits at the bottom end of the screen. Move it, or change the default
+timeout, on the provider:
+
+```tsx
+<PlonkProvider toastPlacement="top" toastTimeout={8000}>
+  <App />
+</PlonkProvider>
+```
+
+| Provider prop    | Default        | Does                                                                     |
+| ---------------- | -------------- | ------------------------------------------------------------------------ |
+| `toaster`        | `true`         | Opens the toast region. Nested providers never open a second one.        |
+| `toastPlacement` | `"bottom-end"` | `top-start`, `top`, `top-end`, `bottom-start`, `bottom` or `bottom-end`. |
+| `toastTimeout`   | `5000`         | Default timeout in milliseconds, at least 5000.                          |
+| `tape`           | `true`         | Tape on toasts and the data table's action bar.                          |
+
+## Swipe to dismiss
+
+Drag a toast sideways with the mouse or a finger and let go to throw it away. A
+short drag springs back. Every personality throws it differently: Sticker spins
+it off, Comic zips it away with speed lines, Arcade sends it off in steps.
+
+## Labels
+
+Some personalities print the kind as a label: Retro in the window's title bar,
+Comic in a caption box, Arcade on a neon plate. The default is English
+("Notice", "Success", "Warning", "Error"). Translate it per toast:
+
+```tsx
+toast.success("Kaydedildi", { label: "Başarılı" });
+```
+
+## Tape
+
+In Sticker, toasts are taped to the screen; the other personalities draw their
+own version: a dithered strip in Retro, blue halftone in Comic and a "1UP"
+plate in Arcade. Turn it off for one toast or for the whole app:
+
+```tsx
+toast("No tape this time", { tape: false });
+```
+
+```tsx
+export function App() {
+  return <PlonkProvider tape={false}>…</PlonkProvider>;
+}
+```
+
+A toast's own `tape` always wins over the provider's.
+
+## Personalities
+
+- **Sticker:** drops in, wobbles and gets taped down; the toasts below shake a
+  little. Dismissed, it peels off from the corner and flies away.
+- **Retro:** zoom outlines open a window that flashes in inverse colors; it
+  closes by rolling up into its title bar and shrinking into the close box.
+- **Comic:** slams in with a small burst in the corner; dots count down the
+  time. Dismissed, it tears in half.
+- **Arcade:** slides in in steps with pixel icons and an energy bar for the
+  time left, and switches off like a CRT.
+
+With reduced motion, toasts fade in and out.
+
+## Accessibility
+
+- The toasts live in a landmark region named "Notifications"; `F6` moves focus
+  into it and back.
+- New toasts are announced politely, without moving focus.
+- Every toast has a close button. The action and the close button are reachable
+  with `Tab` while focus is in the region.
+- Timers pause while a toast is hovered or focused.
+- Don't put the only way to do something in a toast: it may be gone before it's
+  read.
+
+## API
+
+```ts
+const id = toast("Saved", { description: "All changes are live." });
+toast.success("Invoice sent"); // also .warning, .danger and .info
+toast.dismiss(id); // or toast.dismiss() to close them all
+```
+
+`toast()` takes the title and an options object, and returns the toast's id.
+
+| Option        | Type                                           | Default                    | Does                                                       |
+| ------------- | ---------------------------------------------- | -------------------------- | ---------------------------------------------------------- |
+| `description` | `ReactNode`                                    | —                          | Second line under the title.                               |
+| `variant`     | `"info" \| "success" \| "warning" \| "danger"` | `"info"`                   | Kind: color, icon and label. The shortcuts set it for you. |
+| `action`      | `{ label, onPress }`                           | —                          | One button. Runs `onPress`, then closes the toast.         |
+| `timeout`     | `number`                                       | `5000`, `0` with an action | Milliseconds before it closes; `0` keeps it open.          |
+| `label`       | `ReactNode`                                    | `"Notice"`, `"Success"`…   | Kind label shown by Retro, Comic and Arcade.               |
+| `tape`        | `boolean`                                      | provider's `tape`          | Decorative tape on top.                                    |
+| `onClose`     | `() => void`                                   | —                          | Called when it closes, by the user or the timer.           |

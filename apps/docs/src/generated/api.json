@@ -693,6 +693,55 @@
       "type": "string",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "value",
+      "type": "DateValue | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultValue",
+      "type": "DateValue | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onChange",
+      "type": "(value: DateValue) => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "minValue",
+      "type": "DateValue | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "maxValue",
+      "type": "DateValue | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDateUnavailable",
+      "type": "(date: DateValue) => boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "default": "false",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "required": false,
+      "inherited": true
     }
   ],
   "RangeCalendar": [
@@ -707,6 +756,55 @@
       "type": "string",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "value",
+      "type": "DateRange | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultValue",
+      "type": "DateRange | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onChange",
+      "type": "(value: DateRange) => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "minValue",
+      "type": "DateValue | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "maxValue",
+      "type": "DateValue | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDateUnavailable",
+      "type": "(date: DateValue, anchorDate: CalendarDate | null) => boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "default": "false",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "required": false,
+      "inherited": true
     }
   ],
   "DatePicker": [
@@ -733,6 +831,72 @@
       "type": "ReactNode",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "value",
+      "type": "DateValue | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultValue",
+      "type": "DateValue | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onChange",
+      "type": "(value: DateValue | null) => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "minValue",
+      "type": "DateValue | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "maxValue",
+      "type": "DateValue | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDateUnavailable",
+      "type": "(date: DateValue) => boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "placeholderValue",
+      "type": "DateValue | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isRequired",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isReadOnly",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
     }
   ],
   "DateRangePicker": [
@@ -765,6 +929,66 @@
       "type": "ReactNode",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "value",
+      "type": "DateRange | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultValue",
+      "type": "DateRange | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onChange",
+      "type": "(value: DateRange | null) => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "minValue",
+      "type": "DateValue | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "maxValue",
+      "type": "DateValue | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDateUnavailable",
+      "type": "(date: DateValue) => boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "startName",
+      "type": "string",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "endName",
+      "type": "string",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isRequired",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
     }
   ],
   "Countdown": [
