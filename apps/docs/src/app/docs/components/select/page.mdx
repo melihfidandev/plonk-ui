@@ -1,0 +1,98 @@
+import SelectPlayground from "@/examples/select/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Select",
+  description: "Pick one option from a list that opens below the field.",
+};
+
+<PageHeader crumb="Components / Selection" title="Select" number="19">
+  Pick one option from a list. It looks like a field, opens like a menu and
+  submits like a native `<select>`.
+</PageHeader>
+
+<SelectPlayground />
+
+## Usage
+
+```tsx
+import { Select, SelectItem } from "plonk";
+
+export function Plan() {
+  return (
+    <Select label="Plan" name="plan" defaultValue="free">
+      <SelectItem id="free">Free</SelectItem>
+      <SelectItem id="pro">Pro</SelectItem>
+    </Select>
+  );
+}
+```
+
+Each `SelectItem` has an `id`; that's the value you get back and the value the
+form submits under `name`. For a handful of options that should all be visible,
+a [Radio Group](/docs/components/radio-group) is quicker to scan.
+
+### Descriptions
+
+Options can have a `description` and an `icon`. The closed field shows only the
+option's name.
+
+<Example name="select/descriptions" title="Select · Descriptions" />
+
+### Sections
+
+Group long lists with `SelectSection`.
+
+<Example name="select/sections" title="Select · Sections" />
+
+### Controlled, in a form
+
+Control the value with `value` and `onChange`. Validation works like
+[Input](/docs/components/input#forms-and-validation): you decide, then pass the
+message to `error`.
+
+<Example name="select/form" title="Select · Form" />
+
+### Options from data
+
+Pass `items` and a render function to build the list from an array. Each item
+needs an `id`:
+
+```tsx
+<Select label="Owner" items={members}>
+  {(member) => <SelectItem>{member.name}</SelectItem>}
+</Select>
+```
+
+## Personalities
+
+The field lifts on focus like [Input](/docs/components/input), and the list
+opens like a [Menu](/docs/components/menu#personalities): from the edge facing
+the field, without tilting, in each personality's own style. The selected
+option has a tick (a star in Arcade). The
+[highlight hooks](/docs/components/menu#highlight-hooks) work here too.
+
+## Accessibility
+
+- A button with a listbox: `Enter`, `Space` or the arrow keys open it, and
+  typing a letter selects the matching option even while closed.
+- The label, description and error are linked to the button.
+- A hidden native `<select>` carries the value for forms and autofill.
+- The focus shadow shows for keyboard users only; clicking doesn't leave it
+  behind.
+
+## API
+
+### Select
+
+<ApiTable component="Select" />
+
+### SelectItem
+
+<ApiTable component="SelectItem" />
+
+### SelectSection
+
+<ApiTable component="SelectSection" />

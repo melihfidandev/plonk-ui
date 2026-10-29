@@ -1,0 +1,101 @@
+import TabsPlayground from "@/examples/tabs/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Tabs",
+  description: "Switch between panels. The indicator springs across.",
+};
+
+<PageHeader crumb="Components / Structure" title="Tabs" number="22">
+  Switch between views of the same thing. The indicator springs to the new tab
+  and squashes on the way in Sticker, becomes a slanted red panel in Comic and
+  blinks into place in Arcade.
+</PageHeader>
+
+<TabsPlayground />
+
+## Usage
+
+```tsx
+import { Tab, TabList, TabPanel, Tabs } from "plonk";
+
+export function Project() {
+  return (
+    <Tabs>
+      <TabList aria-label="Project">
+        <Tab id="overview">Overview</Tab>
+        <Tab id="settings">Settings</Tab>
+      </TabList>
+      <TabPanel id="overview">…</TabPanel>
+      <TabPanel id="settings">…</TabPanel>
+    </Tabs>
+  );
+}
+```
+
+Each `Tab` and its `TabPanel` share an `id`. Give the `TabList` an
+`aria-label` that says what the tabs switch between. On narrow screens the bar
+scrolls sideways instead of wrapping.
+
+### Panels with content
+
+Panels can hold anything, like forms. A tab can be disabled with `isDisabled`.
+
+<Example name="tabs/settings" title="Tabs · Settings" />
+
+### Controlled
+
+`selectedKey` and `onSelectionChange` let other controls switch tabs, like a
+"Next" button in a multi-step form.
+
+<Example name="tabs/controlled" title="Tabs · Controlled" />
+
+## Personalities
+
+- **Sticker:** the indicator springs to the new tab and squashes like jelly;
+  the panel rises in.
+- **Retro:** the indicator jumps in steps.
+- **Comic:** square panels, a slanted red indicator, and content that slides in
+  like the next frame of a strip.
+- **Arcade:** a neon indicator that blinks three times when it lands, and a
+  panel that's wiped in from the top.
+
+### Corner hook
+
+Comic squares the tabs by setting `--plonk-tabs-radius`. It rounds the bar, the
+tabs and the indicator together:
+
+```css
+.plonk-tablist {
+  --plonk-tabs-radius: var(--plonk-radius-sm);
+}
+```
+
+## Accessibility
+
+- `Tab` moves into the tab list at the selected tab and then into the panel.
+- `←` and `→` move between tabs (reversed in right-to-left languages), and
+  `Home` and `End` jump to the ends.
+- With `keyboardActivation="manual"`, arrows only move focus; `Enter` or
+  `Space` selects.
+- Tabs and panels are linked with `aria-controls` and `aria-labelledby`.
+
+## API
+
+### Tabs
+
+<ApiTable component="Tabs" />
+
+### TabList
+
+<ApiTable component="TabList" />
+
+### Tab
+
+<ApiTable component="Tab" />
+
+### TabPanel
+
+<ApiTable component="TabPanel" />

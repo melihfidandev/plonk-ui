@@ -5,6 +5,36 @@
       "type": "string",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "allowsMultipleExpanded",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "expandedKeys",
+      "type": "Iterable<Key>",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultExpandedKeys",
+      "type": "Iterable<Key>",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onExpandedChange",
+      "type": "(keys: Set<Key>) => any",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
     }
   ],
   "AccordionItem": [
@@ -26,6 +56,36 @@
       "type": "string",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "id",
+      "type": "Key",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isExpanded",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultExpanded",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onExpandedChange",
+      "type": "(isExpanded: boolean) => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
     }
   ],
   "Avatar": [
@@ -214,6 +274,13 @@
       "type": "\"left\" | \"right\"",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "headingLevel",
+      "type": "2 | 3 | 4 | 5 | 6",
+      "default": "3",
+      "required": false,
+      "inherited": false
     }
   ],
   "CloseIcon": [],
@@ -331,7 +398,7 @@
     {
       "name": "emptyMessage",
       "type": "ReactNode",
-      "default": "No results",
+      "default": "\"No results\"",
       "required": false,
       "inherited": false
     },
@@ -358,6 +425,73 @@
       "type": "ReactNode",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "value",
+      "type": "Key | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultValue",
+      "type": "Key | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onChange",
+      "type": "(value: Key | null) => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "inputValue",
+      "type": "string",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onInputChange",
+      "type": "(value: string) => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultItems",
+      "type": "Iterable<T>",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "allowsCustomValue",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "menuTrigger",
+      "type": "\"input\" | \"manual\" | \"focus\"",
+      "default": "\"input\"",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isRequired",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
     }
   ],
   "ComboBoxItem": [
@@ -380,10 +514,22 @@
       "inherited": false
     },
     {
-      "name": "shortcut",
+      "name": "id",
+      "type": "Key",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "textValue",
       "type": "string",
       "required": false,
-      "inherited": false
+      "inherited": true
     }
   ],
   "CommandPalette": [
@@ -1038,6 +1184,48 @@
       "type": "string",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "onAction",
+      "type": "(key: Key, value: T) => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "selectionMode",
+      "type": "\"none\" | \"multiple\" | \"single\"",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "selectedKeys",
+      "type": "Iterable<Key> | \"all\"",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultSelectedKeys",
+      "type": "Iterable<Key> | \"all\"",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onSelectionChange",
+      "type": "(keys: Selection) => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "disabledKeys",
+      "type": "Iterable<Key>",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onClose",
+      "type": "() => void",
+      "required": false,
+      "inherited": true
     }
   ],
   "MenuItem": [
@@ -1071,6 +1259,30 @@
       "type": "string",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "id",
+      "type": "Key",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onAction",
+      "type": "() => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "textValue",
+      "type": "string",
+      "required": false,
+      "inherited": true
     }
   ],
   "MenuSection": [
@@ -1081,7 +1293,33 @@
       "inherited": false
     }
   ],
-  "MenuTrigger": [],
+  "MenuTrigger": [
+    {
+      "name": "isOpen",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onOpenChange",
+      "type": "(isOpen: boolean) => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "trigger",
+      "type": "\"contextMenu\" | \"press\" | \"longPress\"",
+      "default": "\"press\"",
+      "required": false,
+      "inherited": true
+    }
+  ],
   "Popover": [
     {
       "name": "title",
@@ -1311,6 +1549,55 @@
       "type": "ReactNode",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "value",
+      "type": "Key | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultValue",
+      "type": "Key | null",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onChange",
+      "type": "(value: Key | null) => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "\"Select an item\"",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isRequired",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "disabledKeys",
+      "type": "Iterable<Key>",
+      "required": false,
+      "inherited": true
     }
   ],
   "SelectItem": [
@@ -1333,10 +1620,22 @@
       "inherited": false
     },
     {
-      "name": "shortcut",
+      "name": "id",
+      "type": "Key",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "textValue",
       "type": "string",
       "required": false,
-      "inherited": false
+      "inherited": true
     }
   ],
   "SelectSection": [
@@ -1708,6 +2007,43 @@
       "type": "string",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "selectedKey",
+      "type": "Key",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "defaultSelectedKey",
+      "type": "Key",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "onSelectionChange",
+      "type": "(key: Key) => void",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "keyboardActivation",
+      "type": "\"manual\" | \"automatic\"",
+      "default": "\"automatic\"",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "disabledKeys",
+      "type": "Iterable<Key>",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
     }
   ],
   "TabList": [
@@ -1716,6 +2052,12 @@
       "type": "string",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "required": false,
+      "inherited": true
     }
   ],
   "Tab": [
@@ -1724,6 +2066,18 @@
       "type": "string",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "id",
+      "type": "Key",
+      "required": false,
+      "inherited": true
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "required": false,
+      "inherited": true
     }
   ],
   "TabPanel": [
@@ -1732,6 +2086,12 @@
       "type": "string",
       "required": false,
       "inherited": false
+    },
+    {
+      "name": "id",
+      "type": "Key",
+      "required": false,
+      "inherited": true
     }
   ],
   "Textarea": [

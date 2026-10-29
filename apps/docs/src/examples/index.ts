@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import AccessibilityReduced from "./accessibility/reduced";
+import AccordionFaq from "./accordion/faq";
 import AvatarFallback from "./avatar/fallback";
 import AvatarGroup from "./avatar/group";
 import BadgeStatus from "./badge/status";
@@ -14,6 +15,8 @@ import CardClosable from "./card/closable";
 import CardTilt from "./card/tilt";
 import CheckboxSelectAll from "./checkbox/select-all";
 import CheckboxTerms from "./checkbox/terms";
+import ComboBoxCustom from "./combo-box/custom";
+import ComboBoxItems from "./combo-box/items";
 import DialogAlert from "./dialog/alert";
 import DialogCountdown from "./dialog/countdown";
 import DialogForm from "./dialog/form";
@@ -26,6 +29,8 @@ import InputValidation from "./input/validation";
 import InstallationFirst from "./installation/first";
 import KbdInline from "./kbd/inline";
 import KbdShortcuts from "./kbd/shortcuts";
+import MenuActions from "./menu/actions";
+import MenuSelection from "./menu/selection";
 import PersonalitiesMoments from "./personalities/moments";
 import PersonalitiesTape from "./personalities/tape";
 import PopoverShare from "./popover/share";
@@ -33,8 +38,13 @@ import ProgressIndeterminate from "./progress/indeterminate";
 import ProgressUpload from "./progress/upload";
 import RadioGroupControlled from "./radio-group/controlled";
 import RadioGroupDescriptions from "./radio-group/descriptions";
+import SelectDescriptions from "./select/descriptions";
+import SelectForm from "./select/form";
+import SelectSections from "./select/sections";
 import SwitchForm from "./switch/form";
 import SwitchSettings from "./switch/settings";
+import TabsControlled from "./tabs/controlled";
+import TabsSettings from "./tabs/settings";
 import TextareaAutoResize from "./textarea/auto-resize";
 import TextareaCount from "./textarea/count";
 import TooltipIcons from "./tooltip/icons";
@@ -50,6 +60,7 @@ import TooltipShortcut from "./tooltip/shortcut";
  */
 export const EXAMPLES = {
   "accessibility/reduced": AccessibilityReduced,
+  "accordion/faq": AccordionFaq,
   "avatar/fallback": AvatarFallback,
   "avatar/group": AvatarGroup,
   "badge/status": BadgeStatus,
@@ -64,6 +75,8 @@ export const EXAMPLES = {
   "card/tilt": CardTilt,
   "checkbox/select-all": CheckboxSelectAll,
   "checkbox/terms": CheckboxTerms,
+  "combo-box/custom": ComboBoxCustom,
+  "combo-box/items": ComboBoxItems,
   "dialog/alert": DialogAlert,
   "dialog/countdown": DialogCountdown,
   "dialog/form": DialogForm,
@@ -76,6 +89,8 @@ export const EXAMPLES = {
   "installation/first": InstallationFirst,
   "kbd/inline": KbdInline,
   "kbd/shortcuts": KbdShortcuts,
+  "menu/actions": MenuActions,
+  "menu/selection": MenuSelection,
   "personalities/moments": PersonalitiesMoments,
   "personalities/tape": PersonalitiesTape,
   "popover/share": PopoverShare,
@@ -83,8 +98,13 @@ export const EXAMPLES = {
   "progress/upload": ProgressUpload,
   "radio-group/controlled": RadioGroupControlled,
   "radio-group/descriptions": RadioGroupDescriptions,
+  "select/descriptions": SelectDescriptions,
+  "select/form": SelectForm,
+  "select/sections": SelectSections,
   "switch/form": SwitchForm,
   "switch/settings": SwitchSettings,
+  "tabs/controlled": TabsControlled,
+  "tabs/settings": TabsSettings,
   "textarea/auto-resize": TextareaAutoResize,
   "textarea/count": TextareaCount,
   "tooltip/icons": TooltipIcons,

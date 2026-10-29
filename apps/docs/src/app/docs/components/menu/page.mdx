@@ -1,0 +1,125 @@
+import MenuPlayground from "@/examples/menu/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Menu",
+  description: "A list of actions that opens from a button.",
+};
+
+<PageHeader crumb="Components / Selection" title="Menu" number="15">
+  A list of actions behind a button: edit, duplicate, delete. Rows deal
+  themselves out one by one in Sticker, Comic highlights them in a slanted
+  caption box, and Arcade boots the list up like an old CRT.
+</PageHeader>
+
+<MenuPlayground />
+
+## Usage
+
+```tsx
+import { Button, Menu, MenuItem, MenuTrigger } from "plonk";
+
+export function ProjectActions() {
+  return (
+    <MenuTrigger>
+      <Button>Actions</Button>
+      <Menu onAction={(id) => run(id)}>
+        <MenuItem id="edit">Edit</MenuItem>
+        <MenuItem id="delete" variant="danger">
+          Delete
+        </MenuItem>
+      </Menu>
+    </MenuTrigger>
+  );
+}
+```
+
+`MenuTrigger` connects the button to the menu. Choosing an item calls
+`onAction` with its `id` and closes the menu; an item can also have its own
+`onAction`.
+
+### Icons, shortcuts and sections
+
+Items can have an `icon`, a `description` and a `shortcut`. Group them with
+`MenuSection` and `MenuSeparator`, and mark destructive ones with
+`variant="danger"`.
+
+<Example name="menu/actions" title="Menu · Actions" />
+
+A `shortcut` is only a hint. It doesn't register the key: wire it up yourself,
+for example with the command palette.
+
+### Selection
+
+With `selectionMode`, items become checkable: `single` for a choice like the
+view, `multiple` for toggles like visible columns. The selection is a `Set` of
+ids.
+
+<Example name="menu/selection" title="Menu · Selection" />
+
+For picking a value in a form, use a [Select](/docs/components/select) instead:
+it has a label and submits with the form.
+
+## Personalities
+
+Every list opens from the edge facing its trigger and never tilts, so it can't
+cover the button that opened it.
+
+- **Sticker:** rows slide in one after another; the highlight is a solid fill.
+- **Retro:** appears instantly, like a system menu, with inverted highlights.
+- **Comic:** a halftone list whose rows drop in "pat pat"; the highlight is a
+  yellow caption box leaning forward, with a red arrow.
+- **Arcade:** opens like a CRT, from a dot to a line to the full list, and types
+  the rows in; a blinking pixel arrow marks the highlight and a star marks
+  selected items.
+
+### Highlight hooks
+
+The highlighted row reads its look from four variables. Set them on
+`.plonk-item` to restyle every list (menus, selects, combo boxes):
+
+```css
+[data-plonk-personality="sticker"] .plonk-item {
+  --plonk-item-on-bg: var(--plonk-color-accent);
+  --plonk-item-on-ink: var(--plonk-color-on-accent);
+  --plonk-item-on-shadow: inset 0 0 0 2px var(--plonk-color-ink);
+  --plonk-item-on-transform: none;
+}
+```
+
+Variables instead of a `:hover` rule because the highlight has several states
+(hover, keyboard focus, closing), and the variables cover all of them at once.
+
+## Accessibility
+
+- `Enter`, `Space` or `↓` on the trigger opens the menu with the first item
+  focused; `↑` opens it at the last.
+- Arrow keys move, `Home` and `End` jump, and typing a letter jumps to the
+  matching item.
+- `Esc` closes the menu and returns focus to the trigger.
+- Icons are hidden from screen readers; descriptions and shortcuts are read
+  with the label.
+- The highlight follows the keyboard and the pointer, never only focus, so it
+  doesn't flash when the menu closes.
+
+## API
+
+### Menu
+
+<ApiTable component="Menu" />
+
+### MenuItem
+
+<ApiTable component="MenuItem" />
+
+### MenuSection
+
+<ApiTable component="MenuSection" />
+
+`MenuSeparator` draws a line between groups and takes no props.
+
+### MenuTrigger
+
+<ApiTable component="MenuTrigger" />

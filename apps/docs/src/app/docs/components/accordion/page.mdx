@@ -1,0 +1,76 @@
+import AccordionPlayground from "@/examples/accordion/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Accordion",
+  description: "Sections that open and close. The height springs open.",
+};
+
+<PageHeader crumb="Components / Structure" title="Accordion" number="01">
+  Sections that open and close, for FAQs and long settings pages. The height
+  springs open and the arrow turns and squashes. Arcade numbers the sections
+  like levels.
+</PageHeader>
+
+<AccordionPlayground />
+
+## Usage
+
+```tsx
+import { Accordion, AccordionItem } from "plonk";
+
+export function Faq() {
+  return (
+    <Accordion>
+      <AccordionItem id="ship" title="When does it ship?">
+        Orders leave the studio within two days.
+      </AccordionItem>
+      <AccordionItem id="return" title="Can I return it?">
+        Yes, for 30 days.
+      </AccordionItem>
+    </Accordion>
+  );
+}
+```
+
+By default one section is open at a time: opening another closes the first.
+`allowsMultipleExpanded` lets them stay open together.
+
+### Heading level
+
+Every section's title is a heading, `<h3>` by default. Set `headingLevel` so it
+fits the page around it: under an `<h3>`, the questions should be `<h4>`.
+
+<Example name="accordion/faq" title="Accordion · FAQ" />
+
+`defaultExpandedKeys` opens sections on first render; `expandedKeys` and
+`onExpandedChange` control them.
+
+## Personalities
+
+- **Sticker:** the height springs open and the arrow turns and squashes.
+- **Retro:** opens in steps.
+- **Comic:** the open section's title becomes a yellow caption box and the body
+  gets an ink line.
+- **Arcade:** sections are numbered 01, 02, 03 like levels, and the open one
+  gets a neon frame and a cursor.
+
+## Accessibility
+
+- Each title is a button inside a heading, so screen reader users can jump
+  between sections by heading.
+- `Enter` or `Space` opens and closes a section; the button says whether it's
+  expanded.
+- Arcade's numbers are decoration and aren't read.
+
+## API
+
+### Accordion
+
+<ApiTable component="Accordion" />
+
+### AccordionItem
+
+<ApiTable component="AccordionItem" />

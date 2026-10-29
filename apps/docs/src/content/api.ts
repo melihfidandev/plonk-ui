@@ -161,7 +161,9 @@ export const API: Record<string, ComponentApi> = {
   Card: {
     props: {
       title:
-        "Heading, rendered as an `<h3>` and used to name the card's region. In Retro it sits in the window's title bar.",
+        "Heading, used to name the card's region. In Retro it sits in the window's title bar.",
+      headingLevel:
+        "Heading level of the title, so it fits your page's outline.",
       description: "Muted line under the title.",
       actions:
         "Content on the right of the header, like a badge, a button or a menu.",
@@ -336,6 +338,241 @@ export const API: Record<string, ComponentApi> = {
       isOpen: "Controlled open state. Use with `onOpenChange`.",
       defaultOpen: "Open on first render, when uncontrolled.",
       onOpenChange: "Called with `true` or `false` when it opens or closes.",
+    },
+  },
+  Menu: {
+    inherited: [
+      "onAction",
+      "selectionMode",
+      "selectedKeys",
+      "defaultSelectedKeys",
+      "onSelectionChange",
+      "disabledKeys",
+      "onClose",
+    ],
+    props: {
+      placement: "Where the menu opens relative to its trigger.",
+      className: "Extra classes for the list.",
+      onAction:
+        "Called with the item's `id` when an item is chosen. The menu then closes.",
+      selectionMode:
+        "`single` or `multiple` makes the items checkable, like a view switcher or a column picker.",
+      selectedKeys: "Controlled selection: the checked items' ids.",
+      defaultSelectedKeys: "Checked items on first render, when uncontrolled.",
+      onSelectionChange:
+        'Called with the new selection, a `Set` of ids (`"all"` with select all).',
+      disabledKeys: "Ids of items that can't be chosen.",
+      onClose: "Called when the menu closes.",
+    },
+  },
+  MenuItem: {
+    inherited: ["id", "onAction", "isDisabled", "textValue"],
+    props: {
+      variant: "`danger` for destructive actions like delete.",
+      shortcut:
+        "Keyboard shortcut shown on the right, like `⌘E`. It's a hint only: wire the shortcut yourself.",
+      onAction: "Called when this item is chosen.",
+      icon: "Icon before the label. Hidden from screen readers.",
+      description: "Smaller text under the label, read with it.",
+      className: "Extra classes for the row.",
+      id: "Unique key, used for selection and in callbacks.",
+      isDisabled: "Can't be focused or chosen.",
+      textValue:
+        "Plain text for type-to-search. Set it when the label isn't a string.",
+    },
+  },
+  MenuSection: {
+    props: { title: "Group heading, read by screen readers." },
+  },
+  MenuTrigger: {
+    inherited: ["isOpen", "defaultOpen", "onOpenChange", "trigger"],
+    props: {
+      isOpen: "Controlled open state.",
+      defaultOpen: "Open on first render, when uncontrolled.",
+      onOpenChange: "Called when the menu opens or closes.",
+      trigger: "`longPress` opens it on a long press, for secondary actions.",
+    },
+  },
+  Select: {
+    defaults: { placeholder: '"Select an item"' },
+    inherited: [
+      "value",
+      "defaultValue",
+      "onChange",
+      "placeholder",
+      "name",
+      "isRequired",
+      "isDisabled",
+      "disabledKeys",
+    ],
+    props: {
+      label: "Visible label, linked to the field.",
+      description: "Help text under the field.",
+      error:
+        "Error message. Marks the field invalid and shakes it once. Pass `true` to mark it without a message.",
+      className: "Extra classes for the outer wrapper.",
+      items:
+        "Options as data, with a render function as `children`. Each item needs an `id`.",
+      value: "Controlled value: the selected option's `id`, or `null`.",
+      defaultValue: "Selected option on first render, when uncontrolled.",
+      onChange: "Called with the new option's `id`.",
+      placeholder:
+        "Shown while nothing is selected. The default is translated for the provider's `locale`.",
+      name: "Field name: the selected `id` is submitted with the form.",
+      isRequired: "Marks the field required, with an asterisk in the label.",
+      isDisabled: "Disables the field.",
+      disabledKeys: "Ids of options that can't be selected.",
+    },
+  },
+  SelectItem: {
+    // Tipte var (ItemContentProps) ama sadece MenuItem çiziyor.
+    hidden: ["shortcut"],
+    inherited: ["id", "isDisabled", "textValue"],
+    props: {
+      icon: "Icon before the label. Hidden from screen readers.",
+      description: "Smaller text under the label, read with it.",
+      className: "Extra classes for the row.",
+      id: "Unique key, used for selection and in callbacks.",
+      isDisabled: "Can't be focused or chosen.",
+      textValue:
+        "Plain text for type-to-search. Set it when the label isn't a string.",
+    },
+  },
+  SelectSection: {
+    props: { title: "Group heading, read by screen readers." },
+  },
+  ComboBox: {
+    defaults: { emptyMessage: '"No results"' },
+    inherited: [
+      "value",
+      "defaultValue",
+      "onChange",
+      "inputValue",
+      "onInputChange",
+      "defaultItems",
+      "allowsCustomValue",
+      "menuTrigger",
+      "name",
+      "isRequired",
+      "isDisabled",
+    ],
+    props: {
+      label: "Visible label, linked to the field.",
+      description: "Help text under the field.",
+      error:
+        "Error message. Marks the field invalid and shakes it once. Pass `true` to mark it without a message.",
+      className: "Extra classes for the outer wrapper.",
+      placeholder: "Shown while the field is empty.",
+      emptyMessage: "Shown in the list when nothing matches.",
+      value: "Controlled value: the selected option's `id`, or `null`.",
+      defaultValue: "Selected option on first render, when uncontrolled.",
+      onChange: "Called with the new option's `id`.",
+      inputValue: "Controlled text in the field.",
+      onInputChange: "Called as the text changes.",
+      defaultItems:
+        "Options as data, with a render function as `children`. The combo box filters them as you type.",
+      allowsCustomValue:
+        "Keeps text that matches no option instead of resetting it.",
+      menuTrigger:
+        "When the list opens: `input` (as you type), `focus`, or `manual` (arrow keys and the button only).",
+      name: "Field name for form submission.",
+      isRequired: "Marks the field required, with an asterisk in the label.",
+      isDisabled: "Disables the field.",
+    },
+  },
+  ComboBoxItem: {
+    // Tipte var (ItemContentProps) ama sadece MenuItem çiziyor.
+    hidden: ["shortcut"],
+    inherited: ["id", "isDisabled", "textValue"],
+    props: {
+      icon: "Icon before the label. Hidden from screen readers.",
+      description: "Smaller text under the label, read with it.",
+      className: "Extra classes for the row.",
+      id: "Unique key, used for selection and in callbacks.",
+      isDisabled: "Can't be focused or chosen.",
+      textValue:
+        "Plain text for type-to-search. Set it when the label isn't a string.",
+    },
+  },
+  Tabs: {
+    inherited: [
+      "selectedKey",
+      "defaultSelectedKey",
+      "onSelectionChange",
+      "keyboardActivation",
+      "disabledKeys",
+      "isDisabled",
+    ],
+    props: {
+      className: "Extra classes for the wrapper.",
+      selectedKey: "Controlled selected tab's `id`.",
+      defaultSelectedKey:
+        "Selected tab on first render. Defaults to the first one.",
+      onSelectionChange: "Called with the new tab's `id`.",
+      keyboardActivation:
+        "`manual`: arrow keys only move focus, and Enter or Space selects. Use it when panels are slow to render.",
+      disabledKeys: "Ids of tabs that can't be selected.",
+      isDisabled: "Disables every tab.",
+    },
+  },
+  TabList: {
+    inherited: ["aria-label"],
+    props: {
+      className: "Extra classes for the bar.",
+      "aria-label": "Name of the tab list, for screen readers.",
+    },
+  },
+  Tab: {
+    inherited: ["id", "isDisabled"],
+    props: {
+      className: "Extra classes for the tab.",
+      id: "Matches the `id` of its `TabPanel`.",
+      isDisabled: "Can't be selected.",
+    },
+  },
+  TabPanel: {
+    inherited: ["id"],
+    props: {
+      className: "Extra classes for the panel.",
+      id: "Matches the `id` of its `Tab`.",
+    },
+  },
+  Accordion: {
+    inherited: [
+      "allowsMultipleExpanded",
+      "expandedKeys",
+      "defaultExpandedKeys",
+      "onExpandedChange",
+      "isDisabled",
+    ],
+    props: {
+      className: "Extra classes for the wrapper.",
+      allowsMultipleExpanded:
+        "Lets several sections stay open. By default, opening one closes the others.",
+      expandedKeys: "Controlled open sections, by `id`.",
+      defaultExpandedKeys: "Open sections on first render.",
+      onExpandedChange: "Called with the `Set` of open ids.",
+      isDisabled: "Disables every section.",
+    },
+  },
+  AccordionItem: {
+    inherited: [
+      "id",
+      "isExpanded",
+      "defaultExpanded",
+      "onExpandedChange",
+      "isDisabled",
+    ],
+    props: {
+      title: "Section heading, inside the button that opens it.",
+      headingLevel:
+        "Heading level of the title, so it fits your page's outline.",
+      className: "Extra classes for the section.",
+      id: "Key used by the accordion's `expandedKeys`.",
+      isExpanded: "Controlled open state, for a single section.",
+      defaultExpanded: "Open on first render.",
+      onExpandedChange: "Called with `true` or `false`.",
+      isDisabled: "Can't be opened or closed.",
     },
   },
 };

@@ -318,7 +318,13 @@ html:has(.site) {
 .site-prose > :first-child {
   margin-top: 0;
 }
-.site-prose h2 {
+/*
+ * Makale kuralları (başlık boşlukları, madde işaretleri, bağlantı ve kod
+ * stilleri) sadece sitenin metni için: `:not(.plonk *)` ile sergilere
+ * (PlonkProvider'ların içi) sızmaz. Accordion'un h3 başlıkları üstte
+ * boşluk alıyordu.
+ */
+.site-prose h2:not(.plonk *) {
   margin: 3.5rem 0 0.75rem;
   font-weight: 600;
   font-size: 1.75rem;
@@ -326,7 +332,7 @@ html:has(.site) {
   line-height: 1.15;
   scroll-margin-top: calc(var(--site-header-h) + 1.5rem);
 }
-.site-prose h3 {
+.site-prose h3:not(.plonk *) {
   margin: 2.25rem 0 0.5rem;
   font-weight: 600;
   font-size: 1.2rem;
@@ -347,33 +353,31 @@ html:has(.site) {
 .site-prose :is(h2, h3):hover a::after {
   opacity: 1;
 }
-.site-prose p,
-.site-prose ul,
-.site-prose ol {
+.site-prose :is(p, ul, ol):not(.plonk *) {
   margin: 0.9rem 0;
 }
-.site-prose ul {
+.site-prose ul:not(.plonk *) {
   padding-inline-start: 1.25rem;
   list-style: square;
 }
-.site-prose ol {
+.site-prose ol:not(.plonk *) {
   padding-inline-start: 1.5rem;
   list-style: decimal;
 }
-.site-prose li {
+.site-prose li:not(.plonk *) {
   margin: 0.3rem 0;
 }
-.site-prose li::marker {
+.site-prose li:not(.plonk *)::marker {
   color: var(--site-accent);
 }
-.site-prose a {
+.site-prose a:not(.plonk *) {
   color: inherit;
   text-decoration: underline;
   text-decoration-color: var(--site-accent);
   text-decoration-thickness: 1.5px;
   text-underline-offset: 3px;
 }
-.site-prose :not(pre) > code {
+.site-prose :not(pre) > code:not(.plonk *) {
   padding: 0.1rem 0.32rem;
   border: 1px solid var(--site-line);
   background: var(--site-panel);
@@ -606,9 +610,21 @@ html:has(.site) {
     monospace;
   pointer-events: none;
 }
-/* Kişilik değişince eser yeniden "basılır". */
+/*
+ * Kişilik değişince eser yeniden "basılır". İç kutu sahne kadar geniş, eser
+ * içinde ortalanır: içeriği kadar genişleseydi örneklerdeki `w-full max-w-*`
+ * içeriğe göre hesaplanır, Accordion açılınca genişleyip yana kayardı.
+ */
 .site-stage-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
   animation: site-stage-in 420ms var(--site-ease);
+}
+.site-stage[data-align="start"] > .site-stage-inner {
+  align-items: flex-start;
 }
 @keyframes site-stage-in {
   from {

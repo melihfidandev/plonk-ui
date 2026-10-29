@@ -86,7 +86,9 @@ Arcade lights the title up like a high score.
 
 - A card with a `title` is a region named by its title, so screen reader users
   can find it in the landmarks list. Without a title it's a plain section.
-- The title is an `<h3>`. Keep your page's headings in order around it.
+- The title is an `<h3>` by default. Set `headingLevel` so it follows the
+  page's outline: a card under an `<h2>` section keeps `3`, a card that
+  starts its own section can use `2`.
 - The close box is a real button with an accessible name, "Close" by default.
 - Tape, halftone and title bar stripes are decoration and stay silent.
 
