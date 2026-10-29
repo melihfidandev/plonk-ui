@@ -150,6 +150,39 @@ describe("Slider", () => {
     expect(thumb).toHaveAttribute("aria-valuenow", "49");
   });
 
+  it("aralıkta balonlar çakışınca birleşir, uzaklaşınca ayrılır", async () => {
+    // Ray 300 px, tek değerli yazı 40 px, balon çerçevesi 16 px.
+    vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockImplementation(
+      function (this: HTMLElement) {
+        if (this.classList.contains("plonk-slider")) return 300;
+        if (this.classList.contains("plonk-slider-bubble-one")) return 40;
+        if (this.classList.contains("plonk-slider-bubble")) return 56;
+        return 0;
+      },
+    );
+    render(
+      <Slider label="Price" defaultValue={[200, 800]} min={0} max={1000} />,
+    );
+    const box = document.querySelector(".plonk-slider")!;
+    const [low] = screen.getAllByRole("slider");
+    // 600 birim = 180 px: balonlar (56 px) rahat sığar.
+    expect(box).not.toHaveAttribute("data-merged");
+
+    // Alttakini 750'ye yaklaştır: 50 birim = 15 px, balonlar çakışır.
+    low!.focus();
+    await userEvent.keyboard("{PageUp}".repeat(5) + "{ArrowRight}".repeat(50));
+    expect(low).toHaveAttribute("aria-valuenow", "750");
+    expect(box).toHaveAttribute("data-merged");
+    expect(
+      document.querySelector(".plonk-slider-bubble-both"),
+    ).toHaveTextContent("750 – 800");
+
+    await userEvent.keyboard("{Home}");
+    expect(box).not.toHaveAttribute("data-merged");
+    expect(box).toHaveAttribute("data-split");
+    vi.restoreAllMocks();
+  });
+
   it("devre dışıyken değişmez ve odaklanmaz", async () => {
     const onChange = vi.fn();
     render(

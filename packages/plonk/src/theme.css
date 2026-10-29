@@ -3444,6 +3444,57 @@
     opacity: 1;
     scale: 1;
   }
+  /*
+   * Aralıkta balonlar çakışınca (Slider.tsx → useBubbleMerge): ilk balon iki
+   * değeri birden gösterip tutamaçların ortasına kayar, ikincisi söner;
+   * uzaklaşınca ayrılırlar. Kayma kişiliğin yayıyla (Retro'da kademeli).
+   */
+  .plonk-slider-bubble-both {
+    display: none;
+  }
+  .plonk-slider[data-merged] [data-thumb="0"] .plonk-slider-bubble {
+    translate: calc(
+        -50% + var(--plonk-slider-trail, 0px) +
+          var(--plonk-slider-merge-shift, 0px)
+      )
+      0;
+    animation: plonk-slider-merge var(--plonk-motion-spring-duration)
+      var(--plonk-motion-spring-easing);
+  }
+  .plonk-slider[data-split] [data-thumb="0"] .plonk-slider-bubble {
+    animation: plonk-slider-split var(--plonk-motion-spring-duration)
+      var(--plonk-motion-spring-easing);
+  }
+  /* Tek değer gizli ama ölçülebilir kalır (display: none genişliği 0 yapar). */
+  .plonk-slider[data-merged] [data-thumb="0"] .plonk-slider-bubble-one {
+    position: absolute;
+    visibility: hidden;
+  }
+  .plonk-slider[data-merged] [data-thumb="0"] .plonk-slider-bubble-both {
+    display: inline;
+  }
+  /*
+   * İkinci balon söner. Aşağıdaki "sadece kullanılırken" kuralı onu yeniden
+   * açmasın diye özgüllük bilerek yüksek.
+   */
+  .plonk-slider[data-merged]
+    .plonk-slider-thumb[data-thumb="1"][data-thumb]
+    .plonk-slider-bubble.plonk-slider-bubble.plonk-slider-bubble {
+    opacity: 0;
+    scale: 0.6;
+  }
+  /* Sadece kullanılırken: hangi tutamaç kullanılırsa birleşik balon görünür. */
+  .plonk-slider[data-bubble="active"][data-merged]:has(
+      .plonk-slider-thumb:is(
+        [data-active],
+        :has(.plonk-slider-knob:is(:focus-visible:not([data-pointer]), :hover))
+      )
+    )
+    [data-thumb="0"]
+    .plonk-slider-bubble {
+    opacity: 1;
+    scale: 1;
+  }
   .plonk-slider-marks {
     position: absolute;
     inset-inline: 0;
@@ -5565,6 +5616,23 @@
     opacity: 0;
     translate: calc(var(--plonk-toast-swipe, 1) * 110%) 0;
     rotate: calc(var(--plonk-toast-swipe, 1) * var(--plonk-tilt) * 16);
+  }
+}
+
+/* Slider: birleşen balon kendi tutamacının üstünden ortaya kayar; ayrılınca geri. */
+@keyframes plonk-slider-merge {
+  from {
+    translate: calc(-50% + var(--plonk-slider-trail, 0px)) 0;
+    scale: 0.85;
+  }
+}
+@keyframes plonk-slider-split {
+  from {
+    translate: calc(
+        -50% + var(--plonk-slider-trail, 0px) +
+          var(--plonk-slider-merge-shift, 0px)
+      )
+      0;
   }
 }
 

@@ -169,6 +169,15 @@ export function Slider<T extends SliderValue = number>({
     knob.setAttribute("data-hop", "");
   };
 
+  // ---------- Aralıkta değer balonları çakışınca birleşir ----------
+  useBubbleMerge(
+    area,
+    thumbs,
+    range && valueBubble !== "never",
+    spreadOf(values, pct),
+    rtl,
+  );
+
   // ---------- Fare ve dokunma ----------
   const [dragging, setDragging] = useState(-1);
   const valueAt = (clientX: number) => {
@@ -294,6 +303,7 @@ export function Slider<T extends SliderValue = number>({
               thumbs.current[i] = el;
             }}
             data-active={dragging === i || undefined}
+            data-thumb={i}
             className="plonk-slider-thumb"
             style={{ insetInlineStart: `${p[i]}%` }}
           >
@@ -322,7 +332,11 @@ export function Slider<T extends SliderValue = number>({
             />
             {valueBubble !== "never" && (
               <div aria-hidden="true" className="plonk-slider-bubble">
-                {format(v)}
+                <span className="plonk-slider-bubble-one">{format(v)}</span>
+                {/* Birleşince ilk balon iki değeri birden gösterir. */}
+                {range && i === 0 && (
+                  <span className="plonk-slider-bubble-both">{text}</span>
+                )}
               </div>
             )}
           </div>
@@ -466,4 +480,76 @@ function useSliderPhysics(
   );
 
   return { wake };
+}
+
+/** İki tutamaç arasındaki uzaklık, rayın yüzdesi olarak. */
+const spreadOf = (values: number[], pct: (v: number) => number) =>
+  values.length === 2 ? pct(values[1]!) - pct(values[0]!) : 0;
+
+/** Balonlar arasında kalması gereken boşluk ve titremeyi önleyen pay (px). */
+const MERGE_GAP = 6;
+const SPLIT_SLACK = 10;
+
+/**
+ * Aralıkta iki tutamaç yaklaşınca değer balonları üst üste biner. Çakışacak
+ * kadar yaklaşınca ilk balon iki değeri birden gösterip tutamaçların ortasına
+ * kayar, ikincisi söner (`data-merged`); uzaklaşınca ayrılır (`data-split`).
+ * Hareket CSS'te, kişiliğin yay eğrisiyle. Durum React'te değil DOM'da: her
+ * sürükleme karesinde yeniden render gerekmesin.
+ */
+function useBubbleMerge(
+  area: RefObject<HTMLDivElement | null>,
+  thumbs: RefObject<(HTMLDivElement | null)[]>,
+  enabled: boolean,
+  spread: number,
+  rtl: boolean,
+) {
+  const merged = useRef(false);
+
+  const measure = () => {
+    const box = area.current;
+    const [t0, t1] = thumbs.current;
+    const one0 = t0?.querySelector<HTMLElement>(".plonk-slider-bubble-one");
+    const b1 = t1?.querySelector<HTMLElement>(".plonk-slider-bubble");
+    const one1 = b1?.querySelector<HTMLElement>(".plonk-slider-bubble-one");
+    if (!box || !t0 || !one0 || !b1 || !one1) return;
+    // Balonların tek değerli genişliği: yazı + aynı çerçeve payı.
+    const chrome = b1.offsetWidth - one1.offsetWidth;
+    const need = (one0.offsetWidth + one1.offsetWidth) / 2 + chrome + MERGE_GAP;
+    const distance = (spread / 100) * box.offsetWidth;
+    const next = merged.current
+      ? distance < need + SPLIT_SLACK
+      : distance < need;
+    // Birleşik balon tutamaçların ortasında.
+    t0.style.setProperty(
+      "--plonk-slider-merge-shift",
+      `${(rtl ? -distance : distance) / 2}px`,
+    );
+    if (next === merged.current) return;
+    merged.current = next;
+    box.toggleAttribute("data-merged", next);
+    box.toggleAttribute("data-split", !next);
+  };
+
+  // Her render'dan sonra: değer, yazı ya da uzaklık değişmiş olabilir.
+  const latest = useRef(measure);
+  useLayoutEffect(() => {
+    latest.current = measure;
+    if (enabled) measure();
+  });
+
+  useLayoutEffect(() => {
+    const box = area.current;
+    if (!box) return;
+    if (!enabled) {
+      merged.current = false;
+      box.removeAttribute("data-merged");
+      box.removeAttribute("data-split");
+      return;
+    }
+    // Genişlik değişince (pencere, yazı tipi yüklenmesi) yeniden ölç.
+    const observer = new ResizeObserver(() => latest.current());
+    observer.observe(box);
+    return () => observer.disconnect();
+  }, [area, enabled]);
 }
