@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MobileMenu } from "./MobileMenu";
+import { THEME_BUILDER } from "./nav";
 import { ModeToggle } from "./ModeToggle";
 import { Search } from "./Search";
 
@@ -12,6 +13,9 @@ export function Header() {
       <nav aria-label="Main" className="site-nav">
         <Link href="/docs">Docs</Link>
         <Link href="/docs/components/button">Components</Link>
+        <Link href={THEME_BUILDER.href} className="site-nav-tool">
+          {THEME_BUILDER.title}
+        </Link>
       </nav>
       <div className="site-header-end">
         <Search />

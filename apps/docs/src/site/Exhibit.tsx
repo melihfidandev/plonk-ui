@@ -11,7 +11,7 @@ import {
 } from "plonk";
 import { createStore } from "./store";
 
-const LABELS: Record<PersonalityName, string> = {
+export const PERSONALITY_LABELS: Record<PersonalityName, string> = {
   sticker: "Sticker",
   retro: "Retro",
   comic: "Comic",
@@ -38,7 +38,7 @@ export function PersonalityChips() {
     >
       {PERSONALITY_NAMES.map((name) => (
         <Radio key={name} value={name} className="site-chip">
-          {LABELS[name]}
+          {PERSONALITY_LABELS[name]}
         </Radio>
       ))}
     </RadioGroup>

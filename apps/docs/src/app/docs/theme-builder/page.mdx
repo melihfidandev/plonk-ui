@@ -1,0 +1,66 @@
+import { PageHeader } from "@/site/PageHeader";
+import { ThemeBuilder } from "@/site/builder/ThemeBuilder";
+
+export const metadata = {
+  title: "Theme builder",
+  description:
+    "Start from a personality, tune its colors, shape and motion, and copy the code.",
+};
+
+<PageHeader crumb="Tools" title="Theme builder">
+  Start from a personality and make it yours: colors, corners, shadows, type and
+  motion. Everything in the preview is the real library. Copy the code when it
+  feels right.
+</PageHeader>
+
+<ThemeBuilder />
+
+## Using the code
+
+The builder only writes the tokens you changed. Put the CSS version in your
+global stylesheet, after Plonk's theme:
+
+```css
+@import "tailwindcss";
+@import "plonk/theme.css";
+
+[data-plonk-personality="sticker"] {
+  --plonk-color-primary: #7c5cff;
+  --plonk-color-on-primary: #ffffff;
+  --plonk-radius-md: 16px;
+}
+```
+
+Or pass the same tokens to the provider. They are typed, so a misspelled token
+name is a TypeScript error:
+
+```tsx
+import type { ReactNode } from "react";
+import { PlonkProvider } from "plonk";
+
+export function App({ children }: { children: ReactNode }) {
+  return (
+    <PlonkProvider
+      personality="sticker"
+      style={{ "--plonk-color-primary": "#7c5cff" }}
+    >
+      {children}
+    </PlonkProvider>
+  );
+}
+```
+
+Both reach dialogs, menus and toasts too. More on the three ways to apply
+tokens on the [Colors](/docs/colors#three-ways-to-apply-them) page.
+
+## Saving and sharing
+
+Your draft stays in this browser, so you can leave and come back. **Copy link**
+puts the whole theme in a link: whoever opens it starts from your draft.
+
+## What stays with the personality
+
+A theme changes how a personality looks, not how it moves. Springs or steps,
+the jelly's timing, press effects like the comic's POW! and the arcade's
+points all come with the personality you start from. For the full list of
+tokens, see [Tokens](/docs/tokens); for motion, see [Motion](/docs/motion).

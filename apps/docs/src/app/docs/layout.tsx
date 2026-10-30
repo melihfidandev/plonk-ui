@@ -1,3 +1,4 @@
+import { DocsMain } from "@/site/DocsMain";
 import { Header } from "@/site/Header";
 import { Pager } from "@/site/Pager";
 import { Sidebar } from "@/site/Sidebar";
@@ -9,11 +10,11 @@ export default function DocsLayout({ children }: LayoutProps<"/docs">) {
       <Header />
       <div className="site-shell">
         <Sidebar />
-        <main className="site-main">
+        <DocsMain>
           <TocBar />
           <article className="site-prose">{children}</article>
           <Pager />
-        </main>
+        </DocsMain>
         <Toc />
       </div>
     </div>

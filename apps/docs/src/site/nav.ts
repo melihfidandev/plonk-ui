@@ -71,8 +71,25 @@ export const NAV: NavSection[] = [
   },
 ];
 
+/**
+ * Tema oluşturucu: okuma sırasının dışında bir araç. Menünün en üstünde ayrı
+ * bir kart, üst çubukta vurgulu bağlantı; aramada çıkar, Pager atlar.
+ */
+export const THEME_BUILDER = {
+  title: "Theme builder",
+  href: "/docs/theme-builder",
+  blurb: "Make Plonk yours",
+} as const;
+
+/** Okuma sırası: Pager bunu izler. */
 export const READY_PAGES = NAV.flatMap((section) =>
   section.pages
     .filter((page) => page.ready)
     .map((page) => ({ ...page, section: section.title })),
 );
+
+/** Aramada çıkan sayfalar: araç en başta. */
+export const SEARCH_PAGES = [
+  { ...THEME_BUILDER, section: "Tools" },
+  ...READY_PAGES,
+];

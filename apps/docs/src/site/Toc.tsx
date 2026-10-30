@@ -7,6 +7,8 @@ import {
   useSyncExternalStore,
   type RefObject,
 } from "react";
+import { usePathname } from "next/navigation";
+import { THEME_BUILDER } from "./nav";
 
 // Sadece metnin kendi başlıkları; sergilerdeki bileşen başlıkları (Card) değil.
 const SELECTOR = ".site-prose > :is(h2, h3)[id]";
@@ -193,7 +195,10 @@ export function Toc() {
   const list = useRef<HTMLDivElement>(null);
   useInPageLinks();
   useRailFill(list, items.map((h) => h.id).join("|"));
+  const tool = usePathname() === THEME_BUILDER.href;
 
+  // Tema oluşturucu geniş bir araç: sağ sütunu da kullanır (DocsMain).
+  if (tool) return null;
   if (items.length === 0) return <div className="site-toc" />;
   return (
     <nav aria-label="On this page" className="site-toc">
@@ -226,6 +231,7 @@ export function TocBar() {
   const [open, setOpen] = useState(false);
   const bar = useRef<HTMLDivElement>(null);
   const progress = useRef<HTMLSpanElement>(null);
+  const tool = usePathname() === THEME_BUILDER.href;
 
   // İlerleme: sayfanın ne kadarı okundu. Değer CSS değişkeninde, React'e girmez.
   useEffect(() => {
@@ -268,7 +274,7 @@ export function TocBar() {
     };
   }, [open]);
 
-  if (items.length === 0) return null;
+  if (tool || items.length === 0) return null;
   const current = items.find((h) => h.id === active) ?? items[0]!;
 
   return (

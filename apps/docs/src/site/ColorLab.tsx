@@ -8,10 +8,10 @@ import {
   PlonkProvider,
   Progress,
   Switch,
-  contrastRatio,
   personalities,
   type PlonkStyle,
 } from "plonk";
+import { ColorField, Contrast } from "./ColorField";
 import { Exhibit, exhibitPersonality } from "./Exhibit";
 import { LiveCode } from "./LiveCode";
 
@@ -64,14 +64,14 @@ export function ColorLab() {
               <div key={token.key} className="site-control">
                 <span>{token.key}</span>
                 <div className="site-colors">
-                  <ColorInput
+                  <ColorField
                     label={token.key}
                     value={value(token.key)}
                     onChange={(c) => set(token.key, c)}
                   />
                   {"on" in token && (
                     <>
-                      <ColorInput
+                      <ColorField
                         label={token.on}
                         value={value(token.on)}
                         onChange={(c) => set(token.on, c)}
@@ -111,38 +111,5 @@ export function ColorLab() {
         </div>
       </PlonkProvider>
     </Exhibit>
-  );
-}
-
-function ColorInput({
-  label,
-  value,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-}) {
-  return (
-    <label className="site-color" title={label}>
-      <input
-        type="color"
-        aria-label={label}
-        value={value.toLowerCase()}
-        onChange={(e) => onChange(e.target.value.toUpperCase())}
-      />
-      <span>{value.toUpperCase()}</span>
-    </label>
-  );
-}
-
-/** WCAG kontrastı: metin için 4.5 (AA) geçer, altı uyarır. */
-function Contrast({ a, b }: { a: string; b: string }) {
-  const ratio = contrastRatio(a, b);
-  const pass = ratio >= 4.5;
-  return (
-    <span className="site-contrast" data-pass={pass || undefined}>
-      {ratio.toFixed(1)}:1 {pass ? "AA" : "Low"}
-    </span>
   );
 }

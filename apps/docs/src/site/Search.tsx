@@ -13,7 +13,7 @@ import {
   SearchField,
   useFilter,
 } from "react-aria-components";
-import { READY_PAGES } from "./nav";
+import { SEARCH_PAGES } from "./nav";
 
 /**
  * Site araması (⌘K / Ctrl+K). Sitenin kendi parçası: Plonk'un Komut paleti
@@ -70,7 +70,7 @@ export function Search() {
                 <Input placeholder="Search pages…" />
               </SearchField>
               <Menu
-                items={READY_PAGES}
+                items={SEARCH_PAGES}
                 renderEmptyState={() => (
                   <div className="site-search-empty">No pages found.</div>
                 )}
