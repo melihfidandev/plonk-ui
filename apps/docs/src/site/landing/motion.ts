@@ -49,6 +49,9 @@ export function pressLike(el: HTMLElement, hold = 140) {
   el.dispatchEvent(new PointerEvent("pointerdown", { ...init, buttons: 1 }));
   setTimeout(() => {
     el.dispatchEvent(new PointerEvent("pointerup", { ...init, buttons: 0 }));
+    // React Aria basışın yerini click'ten okur; sahte basışta tarayıcı click
+    // üretmez, yoksa POW! (0, 0) noktasında, ekranın dışında çıkıyordu.
+    el.dispatchEvent(new MouseEvent("click", { ...init, detail: 1 }));
   }, hold);
 }
 

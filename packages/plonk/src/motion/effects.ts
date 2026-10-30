@@ -135,8 +135,11 @@ function place(
   // Elemanın kendi anchor'ları varsa (aynı anda iki efekt de olabilir) korunur.
   target.setProperty("anchor-name", [...names(), name].join(", "));
   fx.style.setProperty("position-anchor", name);
-  fx.style.left = "anchor(left)";
-  fx.style.top = "anchor(top)";
+  // Yedek değer: eleman efekt bitmeden DOM'dan kalkarsa (dialog'u kapatan
+  // düğme, yeniden kurulan bileşen) çapa kaybolur; yedeksiz anchor() geçersiz
+  // sayılır ve efekt sayfanın sol altına düşerdi. Son bilinen yerinde kalır.
+  fx.style.left = `anchor(left, ${rect.left}px)`;
+  fx.style.top = `anchor(top, ${rect.top}px)`;
   fx.style.marginLeft = `${dx}px`;
   fx.style.marginTop = `${dy}px`;
   return () => {
