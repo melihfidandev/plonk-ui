@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .shadow { fill: #0f1115; }
+    .tiles { stroke: #0f1115; }
+    @media (prefers-color-scheme: dark) {
+      .shadow { fill: #e9eaee; }
+    }
+  </style>
+  <rect class="shadow" x="5" y="5" width="25" height="25" rx="3" />
+  <g class="tiles" stroke-width="2.2">
+    <rect x="2" y="2" width="12" height="12" fill="#FFD23F" />
+    <rect x="14" y="2" width="12" height="12" fill="#5B4CFF" />
+    <rect x="2" y="14" width="12" height="12" fill="#E3170A" />
+    <rect x="14" y="14" width="12" height="12" fill="#23E5FF" />
+  </g>
+</svg>

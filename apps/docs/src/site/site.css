@@ -104,6 +104,28 @@ html:has(.site) {
   letter-spacing: -0.03em;
   text-decoration: none;
 }
+.site-logo-mark {
+  align-self: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-inline-end: 0.15rem;
+  overflow: visible;
+}
+.site-logo-shadow {
+  fill: var(--site-ink);
+}
+/* Koyu modda çerçeve koyu kalır (sekme ikonundaki gibi), gölge açık. */
+.site-logo-tiles {
+  stroke: #0f1115;
+  transition: translate 0.45s var(--site-pop);
+}
+.site-logo:hover .site-logo-tiles {
+  translate: 1.25px 1.25px;
+}
+.site-logo:active .site-logo-tiles {
+  translate: 3px 3px;
+  transition-duration: 0.07s;
+}
 .site-logo small {
   font:
     500 0.75rem var(--site-font-mono),

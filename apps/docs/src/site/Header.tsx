@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LogoMark } from "./Logo";
 import { MobileMenu } from "./MobileMenu";
 import { THEME_BUILDER } from "./nav";
 import { ModeToggle } from "./ModeToggle";
@@ -8,6 +9,7 @@ export function Header() {
   return (
     <header className="site-header">
       <Link href="/" className="site-logo">
+        <LogoMark />
         plonk.<small>/ ui</small>
       </Link>
       <nav aria-label="Main" className="site-nav">
