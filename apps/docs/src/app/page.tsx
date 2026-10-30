@@ -85,20 +85,35 @@ export default function Home() {
         <section className="site-wrap">
           <span className="site-eyebrow">Install</span>
           <h2 className="site-h2">Three steps.</h2>
-          <div className="site-steps">
-            <div className="site-step">
-              <span>01 · Install</span>
+          <ol className="site-steps">
+            <li className="site-step">
+              <span className="no">01</span>
+              <div className="text">
+                <h3>Install</h3>
+                <p>Add the package to your project.</p>
+              </div>
               <CodeBlock lang="bash" code="npm install plonk" />
-            </div>
-            <div className="site-step">
-              <span>02 · Add the CSS</span>
+            </li>
+            <li className="site-step">
+              <span className="no">02</span>
+              <div className="text">
+                <h3>Add the CSS</h3>
+                <p>After Tailwind: tokens, fonts and motion in one line.</p>
+              </div>
               <CodeBlock
                 lang="css"
                 code={'@import "tailwindcss";\n@import "plonk/theme.css";'}
               />
-            </div>
-            <div className="site-step">
-              <span>03 · Wrap your app</span>
+            </li>
+            <li className="site-step">
+              <span className="no">03</span>
+              <div className="text">
+                <h3>Wrap your app</h3>
+                <p>
+                  Once, at the root. Pick a personality; toasts and the locale
+                  live here too.
+                </p>
+              </div>
               <CodeBlock
                 lang="tsx"
                 // Fonksiyona sarılı: tek başına JSX'e biçimlendirici ";" ekliyordu.
@@ -106,8 +121,8 @@ export default function Home() {
                   'export function Root() {\n  return (\n    <PlonkProvider personality="sticker">\n      <App />\n    </PlonkProvider>\n  );\n}'
                 }
               />
-            </div>
-          </div>
+            </li>
+          </ol>
         </section>
       </main>
 
