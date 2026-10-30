@@ -15,7 +15,15 @@ import { Exhibit, type ExhibitProps } from "./Exhibit";
 
 export type Control =
   | { type: "enum"; options: readonly string[]; default: string }
-  | { type: "boolean"; default: boolean }
+  | {
+      type: "boolean";
+      default: boolean;
+      /**
+       * Bileşenin kendi varsayılanı (verilmezse `false`): değer ondan farklıysa
+       * yazılır. `searchable` gibi varsayılanı açık prop'lar `key={false}` olur.
+       */
+      componentDefault?: boolean;
+    }
   | { type: "text"; default: string }
   | {
       type: "number";
@@ -74,7 +82,7 @@ export interface PlaygroundProps<C extends Record<string, Control>> {
 /**
  * Oyun alanı: kontrollerle prop'ları değiştir, eseri canlı gör, kodu kopyala.
  * Kod ekranda görünenden kendiliğinden yazılır: metin ve sayılar her zaman
- * (boş metin hariç), açık/kapalılar açıksa, seçenekler bileşenin varsayılanından
+ * (boş metin hariç), açık/kapalılar ve seçenekler bileşenin varsayılanından
  * farklıysa. Bu yüzden enum kontrolünün `default`'u bileşenin gerçek varsayılanı
  * olmalı; metin ve sayı `default`'ları sadece örnek değerdir.
  * `children` kontrolü bileşenin içeriği olur.
@@ -232,13 +240,13 @@ function toJsx<C extends Record<string, Control>>(
       if (key === "children") return false;
       const value = values[key];
       if (c.type === "text") return value !== "";
-      if (c.type === "boolean") return value === true;
+      if (c.type === "boolean") return value !== (c.componentDefault ?? false);
       if (c.type === "enum") return value !== c.default;
       return !(c.omitDefault && value === c.default);
     })
     .map(([key, c]) => {
       const value = values[key];
-      if (c.type === "boolean") return key;
+      if (c.type === "boolean") return value ? key : `${key}={false}`;
       if (c.type === "number") return `${key}={${String(value)}}`;
       return `${key}="${String(value)}"`;
     });

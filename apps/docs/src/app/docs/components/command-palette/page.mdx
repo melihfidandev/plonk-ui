@@ -1,0 +1,182 @@
+import CommandPalettePlayground from "@/examples/command-palette/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Command Palette",
+  description: "A ⌘K palette with fuzzy search, sub-pages and server results.",
+};
+
+<PageHeader crumb="Components / Navigation" title="Command Palette" number="08">
+  Press ⌘K, type a few letters, hit Enter. Fuzzy search, sub-pages and results
+  from your server. The highlight springs from row to row in Sticker, Retro
+  opens a "Run…" window, Comic slams it down and Arcade boots it up like a CRT.
+</PageHeader>
+
+<CommandPalettePlayground />
+
+The palette above has everything on this page: try "bill" (a keyword for
+Invoices), "Change theme" (a sub-page) or "at" (customers from a pretend
+server). On this site ⌘K belongs to the docs search, so it opens with the
+button.
+
+## Usage
+
+```tsx
+import { CommandGroup, CommandItem, CommandPalette } from "plonk";
+
+export function AppCommands() {
+  return (
+    <CommandPalette>
+      <CommandGroup heading="Pages">
+        <CommandItem onAction={() => go("/invoices")}>Invoices</CommandItem>
+        <CommandItem onAction={() => go("/settings")}>Settings</CommandItem>
+      </CommandGroup>
+    </CommandPalette>
+  );
+}
+```
+
+Render it once, near the root of your app. ⌘K on a Mac or Ctrl+K elsewhere
+opens it; choosing an item runs its `onAction` and closes the palette.
+
+### Opening it
+
+The keyboard isn't the only way in. `CommandPaletteTrigger` is a search-style
+button for toolbars and touch screens that also teaches the shortcut, and
+`commandPalette` opens it from code, like from a menu item:
+
+```tsx
+import { CommandPaletteTrigger, commandPalette } from "plonk";
+
+<CommandPaletteTrigger>Search…</CommandPaletteTrigger>;
+
+commandPalette.open(); // also .close() and .toggle()
+```
+
+Change the letter with `shortcut="j"`, or turn it off with `shortcut={false}`.
+For full control, pass `isOpen` and `onOpenChange`; ⌘K and the trigger still
+call `onOpenChange`.
+
+### Search
+
+Typing filters every group with a fuzzy search: "nwinv" finds "New invoice",
+and the best matches move to the top. Groups with no matches hide. Matching
+follows the provider's `locale`, so in Turkish "i" and "ı" stay different
+letters.
+
+Add `keywords` for words people might type that aren't in the label:
+
+```tsx
+<CommandItem keywords={["preferences", "account"]} onAction={openSettings}>
+  Settings
+</CommandItem>
+```
+
+Items can also have an `icon`, a `description` and a `shortcut` hint, and
+`isDisabled` shows an item that can't be run right now.
+
+### Sub-pages
+
+An item with `page` opens the `CommandPage` with the same `id` instead of
+running an action. `Esc`, or `Backspace` in an empty field, goes back.
+
+```tsx
+<>
+  <CommandItem page="theme">Change theme</CommandItem>
+
+  <CommandPage id="theme">
+    <CommandGroup heading="Theme">
+      <CommandItem onAction={() => setTheme("light")}>Light</CommandItem>
+      <CommandItem onAction={() => setTheme("dark")}>Dark</CommandItem>
+    </CommandGroup>
+  </CommandPage>
+</>
+```
+
+### Results from a server
+
+`onSearchChange` gives you the text as it's typed. Fetch, then render the
+results in a group with `filter={false}`, so the palette shows them in your
+order, and `isLoading` while you wait:
+
+```tsx
+const [results, setResults] = useState<Customer[]>([]);
+const [loading, setLoading] = useState(false);
+
+<CommandPalette onSearchChange={(text) => search(text)}>
+  <CommandGroup heading="Customers" filter={false} isLoading={loading}>
+    {results.map((c) => (
+      <CommandItem key={c.id} onAction={() => open(c)}>
+        {c.name}
+      </CommandItem>
+    ))}
+  </CommandGroup>
+</CommandPalette>;
+```
+
+Ignore answers that arrive after a newer search started, as the playground
+does with a request counter.
+
+### Visible texts
+
+Retro, Comic and Arcade show `title` as the window title; it's also the
+palette's name for screen readers. Translate it along with `placeholder` and
+`emptyLabel`:
+
+```tsx
+<CommandPalette
+  title="Git"
+  placeholder="Sayfa ya da komut ara…"
+  emptyLabel="Sonuç yok"
+>
+  …
+</CommandPalette>
+```
+
+## Personalities
+
+- **Sticker:** drops onto the page like a note; the highlight springs from row
+  to row and squashes when it lands.
+- **Retro:** zooms open as a "Run…" window, with inverted highlights.
+- **Comic:** slams down, highlights rows in a slanted yellow box, and sub-pages
+  slide in at an angle.
+- **Arcade:** opens like a CRT and types the rows in, with a neon highlight, a
+  pixel arrow and a block cursor.
+
+With reduced motion it simply fades in, and the highlight moves without a
+spring.
+
+## Accessibility
+
+- It follows the combobox pattern: focus stays in the search field, `↑` and `↓`
+  move the highlight (`aria-activedescendant`), `Enter` runs the item.
+- `Esc` goes back from a sub-page, then closes the palette and returns focus to
+  where it was.
+- Group headings, descriptions and shortcuts are read with the items; icons are
+  hidden.
+- Screen readers hear when results are loading.
+
+## API
+
+### CommandPalette
+
+<ApiTable component="CommandPalette" />
+
+### CommandGroup
+
+<ApiTable component="CommandGroup" />
+
+### CommandItem
+
+<ApiTable component="CommandItem" />
+
+### CommandPage
+
+<ApiTable component="CommandPage" />
+
+### CommandPaletteTrigger
+
+Its children are the button's text, "Search…" by default.
+
+<ApiTable component="CommandPaletteTrigger" />

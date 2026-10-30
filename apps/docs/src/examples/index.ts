@@ -17,6 +17,10 @@ import CheckboxSelectAll from "./checkbox/select-all";
 import CheckboxTerms from "./checkbox/terms";
 import ComboBoxCustom from "./combo-box/custom";
 import ComboBoxItems from "./combo-box/items";
+import DataTableBulk from "./data-table/bulk";
+import DataTableColumns from "./data-table/columns";
+import DataTableServer from "./data-table/server";
+import DataTableTurkish from "./data-table/turkish";
 import DatePickerCalendar from "./date-picker/calendar";
 import DatePickerLimits from "./date-picker/limits";
 import DatePickerRange from "./date-picker/range";
@@ -86,6 +90,10 @@ export const EXAMPLES = {
   "checkbox/terms": CheckboxTerms,
   "combo-box/custom": ComboBoxCustom,
   "combo-box/items": ComboBoxItems,
+  "data-table/bulk": DataTableBulk,
+  "data-table/columns": DataTableColumns,
+  "data-table/server": DataTableServer,
+  "data-table/turkish": DataTableTurkish,
   "date-picker/calendar": DatePickerCalendar,
   "date-picker/limits": DatePickerLimits,
   "date-picker/range": DatePickerRange,

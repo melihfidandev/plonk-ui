@@ -748,4 +748,99 @@ export const API: Record<string, ComponentApi> = {
       description: "Help text under the slider.",
     },
   },
+  CommandPalette: {
+    defaults: { shortcut: '"k"', emptyLabel: '"No results"' },
+    props: {
+      isOpen:
+        "Controlled open state. Without it, ⌘K, the trigger and `commandPalette.open()` manage it.",
+      onOpenChange: "Called when it opens or closes, from any source.",
+      shortcut:
+        "Letter that opens it with ⌘ (Mac) or Ctrl. `false` turns the shortcut off.",
+      placeholder: "Text in the empty search field.",
+      title:
+        "The palette's accessible name. Retro, Comic and Arcade also show it as the window title.",
+      emptyLabel: "Shown when nothing matches.",
+      onSearchChange:
+        "Called as the search text changes, to fetch results from a server.",
+      className: "Extra classes for the window.",
+    },
+  },
+  CommandGroup: {
+    defaults: { loadingLabel: '"Searching…"' },
+    props: {
+      heading: "Group heading, read by screen readers.",
+      filter:
+        "`false` shows the items as they are, for results your server already filtered and ranked.",
+      isLoading: "Shows a loading row while results are on their way.",
+      loadingLabel: "Text of the loading row.",
+    },
+  },
+  CommandItem: {
+    props: {
+      textValue: "Text to search. Required when the label isn't plain text.",
+      keywords:
+        "Extra words that find this item, like `preferences` for Settings.",
+      icon: "Icon before the label. Hidden from screen readers.",
+      description: "Smaller text under the label.",
+      shortcut:
+        "Shortcut shown on the right, like `⌘N`. Display only: wire the key yourself.",
+      onAction: "Runs when the item is chosen; then the palette closes.",
+      keepOpen: "Keeps the palette open after `onAction`.",
+      page: "Opens the `CommandPage` with this `id` instead of running an action.",
+      isDisabled: "Shown but can't be chosen.",
+    },
+  },
+  CommandPage: {
+    props: {
+      id: "Matches a `CommandItem`'s `page`. `Esc` or `Backspace` in an empty field goes back.",
+    },
+  },
+  CommandPaletteTrigger: {
+    props: {
+      className: "Extra classes for the button.",
+    },
+  },
+  DataTable: {
+    defaults: { height: '"28rem"' },
+    props: {
+      data: "Rows to show. Thousands are fine: rows are virtualized.",
+      columns: "Column definitions from `createDataTableColumns<Row>()`.",
+      getRowId:
+        "A stable id for each row. Selection and the reorder animation follow it.",
+      selectable:
+        "Checkboxes at the start of each row and a bar of bulk actions while rows are selected.",
+      bulkActions:
+        "Buttons in the bulk bar. Gets `{ rows, ids, clear }` for the selection.",
+      bulkBarTape:
+        "Tape on the bulk bar. Defaults to the provider's `tape` setting.",
+      searchable: "Search field over every text column.",
+      columnMenu: "Menu to show and hide columns.",
+      toolbar: "Extra content at the end of the toolbar, like a “New” button.",
+      height:
+        "Height of the scrolling area. Virtualization needs a fixed height.",
+      rowHeight: "Row height in pixels.",
+      isLoading: "Shows the loading state over the rows.",
+      emptyState: "Content shown when there are no rows.",
+      manualSorting:
+        "Your server sorts: the table only reports `sorting` and shows the arrows.",
+      manualFiltering:
+        "Your server filters: the table only reports the search text and filters.",
+      rowCount: "Total rows on the server, for the row counter.",
+      sorting: "Controlled sorting state, a list of `{ id, desc }`.",
+      onSortingChange: "Called with the new sorting state.",
+      globalFilter: "Controlled search text.",
+      onGlobalFilterChange: "Called as the search text changes.",
+      columnFilters: "Controlled column filters.",
+      onColumnFiltersChange: "Called when a column filter changes.",
+      rowSelection: "Controlled selection, `{ [rowId]: true }`.",
+      onRowSelectionChange: "Called when the selection changes.",
+      columnVisibility:
+        "Controlled visible columns, `{ [columnId]: false }` hides one.",
+      onColumnVisibilityChange: "Called when a column is shown or hidden.",
+      messages:
+        "Visible and screen reader texts, to translate the table. Pass only the ones you change.",
+      "aria-label": "Name of the table, for screen readers.",
+      className: "Extra classes for the outer wrapper.",
+    },
+  },
 };

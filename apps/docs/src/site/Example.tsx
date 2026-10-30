@@ -31,7 +31,7 @@ export async function Example({
   ...props
 }: { name: ExampleName; title: string } & Pick<
   ExhibitProps,
-  "align" | "toaster"
+  "align" | "toaster" | "locale"
 >) {
   const Component = EXAMPLES[name];
   const code = await readSource(name);

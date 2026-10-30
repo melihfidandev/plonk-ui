@@ -1,0 +1,163 @@
+import DataTablePlayground from "@/examples/data-table/playground";
+import { ApiTable } from "@/site/ApiTable";
+import { Example } from "@/site/Example";
+import { PageHeader } from "@/site/PageHeader";
+
+export const metadata = {
+  title: "Data Table",
+  description: "Sorting, filters, selection and thousands of rows.",
+};
+
+<PageHeader crumb="Components / Data" title="Data Table" number="09">
+  Sorting, search, filters, column controls, bulk selection and virtual
+  scrolling for thousands of rows. Rows don't just jump when you sort: they fly
+  to their new place, hop in Comic and step in Arcade.
+</PageHeader>
+
+<DataTablePlayground />
+
+## Usage
+
+```tsx
+import { DataTable } from "plonk";
+import { columns } from "./columns";
+
+export function Invoices({ invoices }: { invoices: Invoice[] }) {
+  return (
+    <DataTable
+      aria-label="Invoices"
+      data={invoices}
+      columns={columns}
+      getRowId={(row) => row.id}
+    />
+  );
+}
+```
+
+`DataTable` is built on [TanStack Table](https://tanstack.com/table) and
+TanStack Virtual. `getRowId` gives every row a stable id: selection and the
+reorder animation follow it, even when the data changes.
+
+The examples use 240 sample invoices:
+
+```ts
+interface Invoice {
+  id: string; // "INV-0001"
+  customer: string;
+  status: "Paid" | "Pending" | "Overdue";
+  amount: number;
+  date: Date;
+}
+```
+
+## Columns
+
+Define columns with `createDataTableColumns<Row>()`. Each `accessor` reads a
+field, `header` names it and `cell` renders it. Plonk's own settings live in
+`meta`:
+
+- `align: "end"` right-aligns numbers and dates.
+- `filter: { type: "select" }` adds a filter to the toolbar with the column's
+  values (or your own `options`). Pair it with `filterFn: "equalsString"`.
+- `filter: { type: "dateRange" }` adds a date range filter. Pair it with
+  `filterFn: "inDateRange"`.
+- `label` names the column in menus when the header isn't plain text.
+
+<Example name="data-table/columns" title="Data Table · Columns" />
+
+Drag a header's edge to resize a column. The column menu shows and hides
+columns.
+
+## Sorting
+
+Click a header to sort: ascending, then descending, then back to unsorted.
+Text sorts by the provider's `locale`, so "Çınar" comes after "Cedar", not
+after "Zeytin".
+
+**Shift + click** another header to sort by several columns at once. The
+headers show their order, 1 and 2: try Status, then Shift + Amount.
+
+## Selection and bulk actions
+
+`selectable` adds a checkbox to each row. While rows are selected, a bar
+appears with the count and your `bulkActions`, which get the selected `rows`,
+their `ids` and `clear()`.
+
+<Example name="data-table/bulk" title="Data Table · Bulk actions" />
+
+**Shift + click** a checkbox to select every row between it and the last one
+you clicked. The header checkbox selects all rows that match the current
+search and filters.
+
+Rows that leave the data drop out of the selection on their own. The bar's tape
+follows the provider's `tape` setting; `bulkBarTape` overrides it.
+
+## Search and filters
+
+The search field matches every text column, lowercasing by the provider's
+`locale` ("ışık" finds "Işık"). Turn it off with `searchable={false}`, or
+exclude a column with `enableGlobalFilter: false`, as the date column does.
+
+## Large data and height
+
+Only the rows on screen are drawn, so thousands of rows scroll smoothly. That
+needs a fixed `height` (28rem by default) and a fixed `rowHeight` (44px).
+
+## Server mode
+
+When your server sorts and searches, set `manualSorting` and
+`manualFiltering`. The table stops doing it itself and reports what the user
+asked for through the controlled props; you fetch and pass the new `data`.
+`rowCount` keeps the counter honest and `isLoading` shows the wait.
+
+<Example name="data-table/server" title="Data Table · Server mode" />
+
+Every piece of state has a controlled pair: `sorting`, `globalFilter`,
+`columnFilters`, `rowSelection` and `columnVisibility`, each with its
+`on…Change`. Use them to keep the table's state in the URL, too.
+
+## Localization
+
+`messages` translates every visible and screen reader text; pass only the ones
+you change. With `<PlonkProvider locale="tr-TR">`, as in this example, sorting
+and search follow Turkish rules: Ç after C, Ş after S, and İ and I are
+different letters.
+
+<Example
+  name="data-table/turkish"
+  title="Data Table · Turkish"
+  locale="tr-TR"
+/>
+
+## Personalities
+
+- **Sticker:** sorted rows fly to their place, leaning on the way and squashing
+  when they land; selected rows are swept with a highlighter, and the bulk bar
+  is taped down.
+- **Retro:** rows move in steps and selections are dithered.
+- **Comic:** a yellow header strip; rows hop to their place and new ones pop
+  in; selected rows get blue halftone and the bulk bar is a speech bubble.
+- **Arcade:** "high score" headers, alternating rows, neon selection, rows that
+  step into place, and a neon bulk bar with a ticking count.
+
+With reduced motion, rows fade into their new order.
+
+## Accessibility
+
+- A real `<table>`: headers are `columnheader`s with `aria-sort`, and the sort
+  buttons say which way they sort.
+- With virtual scrolling, `aria-rowcount` and `aria-rowindex` tell screen
+  readers the full size of the table and where each row is.
+- Checkboxes are named "Select row" and "Select all rows" (translate them in
+  `messages`); selected rows have `aria-selected`.
+- The bulk bar is a toolbar named by the selection count, and the count is
+  announced as it changes.
+- The search field, filters and column menu are reachable with `Tab`.
+
+## API
+
+<ApiTable component="DataTable" />
+
+The column helper, `createDataTableColumns<Row>()`, is TanStack Table's column
+helper with Plonk's features registered; see TanStack's docs for every column
+option.

@@ -58,6 +58,8 @@ export interface ExhibitProps {
   toaster?: boolean;
   /** Toast bölgesinin yeri (Toast sayfasının oyun alanı). */
   toastPlacement?: ToastPlacement;
+  /** Eserin dili (ör. Data Table'ın Türkçe sıralama örneği). */
+  locale?: string;
 }
 
 /**
@@ -72,6 +74,7 @@ export function Exhibit({
   align = "center",
   toaster = false,
   toastPlacement,
+  locale,
 }: ExhibitProps) {
   const personality = exhibitPersonality.use();
   const tokens = personalities[personality];
@@ -87,6 +90,7 @@ export function Exhibit({
         personality={personality}
         toaster={toaster}
         toastPlacement={toastPlacement}
+        locale={locale}
         className="site-stage"
         data-align={align}
       >

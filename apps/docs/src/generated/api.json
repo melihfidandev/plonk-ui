@@ -548,7 +548,7 @@
     {
       "name": "shortcut",
       "type": "string | false",
-      "default": "k",
+      "default": "\"k\"",
       "required": false,
       "inherited": false
     },
@@ -569,7 +569,7 @@
     {
       "name": "emptyLabel",
       "type": "ReactNode",
-      "default": "No results",
+      "default": "\"No results\"",
       "required": false,
       "inherited": false
     },
@@ -618,7 +618,7 @@
     {
       "name": "loadingLabel",
       "type": "ReactNode",
-      "default": "Searching…",
+      "default": "\"Searching…\"",
       "required": false,
       "inherited": false
     }
@@ -2104,7 +2104,7 @@
     {
       "name": "height",
       "type": "string | number",
-      "default": "28rem",
+      "default": "\"28rem\"",
       "required": false,
       "inherited": false
     },
