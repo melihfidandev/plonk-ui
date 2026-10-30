@@ -4418,14 +4418,21 @@
     animation: plonk-table-loading 500ms linear infinite;
   }
 
+  /*
+   * İçeriği kadar geniş, tablodan geniş değil. Sığmazsa (telefonda) düğmeler
+   * alt satıra geçer; yoksa tek satıra zorlanan içerik çubuktan taşıyordu.
+   */
   .plonk-table-bulk {
     position: absolute;
     bottom: 1rem;
     left: 50%;
     z-index: 5;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    gap: 0.4rem 0.5rem;
+    width: max-content;
     max-width: calc(100% - 2rem);
     padding: 0.45rem 0.45rem 0.45rem 0.9rem;
     translate: -50% 0;
