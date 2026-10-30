@@ -29,7 +29,7 @@ function Arrow() {
   );
 }
 
-/** Ana sayfa: "Pafta" konsepti (demos/landing/a.html), altbilgide PLONK harfleri. */
+/** Ana sayfa: "Pafta" konsepti, altbilgide PLONK harfleri. */
 export default function Home() {
   return (
     <div className="site">
