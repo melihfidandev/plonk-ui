@@ -10,6 +10,9 @@ coverage
 *.tsbuildinfo
 next-env.d.ts
 
+# tanıtım videosu (Remotion): yerelde kalır, asla push edilmez
+/video/
+
 # ortam
 .env*
 .vercel
