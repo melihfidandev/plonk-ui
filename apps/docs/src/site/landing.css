@@ -1,0 +1,961 @@
+/*
+ * Ana sayfa (landing): "Pafta". Sitenin teknik çizim kimliği; Plonk eserleri
+ * ölçüleriyle çizilir, aynı panel tarama çizgisiyle kişilik değiştirir, sayfa
+ * PLONK harfleriyle kapanır. Mobil öncelikli: temel kurallar telefon.
+ */
+.site-landing {
+  overflow-x: clip;
+}
+.site-wrap {
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding-inline: 1rem;
+}
+.site-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--site-accent);
+  font:
+    500 0.72rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.site-eyebrow::before {
+  content: "";
+  width: 1.4rem;
+  border-top: 1.5px solid currentColor;
+}
+.site-h2 {
+  margin: 0.6rem 0 0.8rem;
+  font-size: clamp(2rem, 8vw, 4.5rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+.site-lead-l {
+  max-width: 56ch;
+  margin: 0;
+  color: var(--site-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* Sitenin düğmeleri */
+.site-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3rem;
+  padding: 0.7rem 1.15rem;
+  border: 1.5px solid var(--site-ink);
+  background: var(--site-panel);
+  box-shadow: 3px 3px 0 var(--site-ink);
+  color: var(--site-ink);
+  font:
+    500 0.78rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    translate 200ms var(--site-pop),
+    box-shadow 200ms var(--site-pop);
+}
+.site-btn svg {
+  width: 1rem;
+  height: 1rem;
+  transition: translate 320ms var(--site-pop);
+}
+.site-btn:hover svg {
+  translate: 3px 0;
+}
+.site-btn:active {
+  translate: 3px 3px;
+  box-shadow: 0 0 0 var(--site-ink);
+  transition-duration: 60ms;
+}
+.site-btn.primary {
+  background: var(--site-accent);
+  color: var(--site-on-accent);
+}
+.site-btn.dark {
+  background: var(--site-ink);
+  box-shadow: 3px 3px 0 var(--site-accent);
+  color: var(--site-bg);
+}
+.site-btn.dark:active {
+  box-shadow: 0 0 0 var(--site-accent);
+}
+.site-install {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3rem;
+  padding: 0 0.5rem 0 0.9rem;
+  border: 1.5px dashed var(--site-ink);
+  background: var(--site-panel);
+  font:
+    500 0.85rem var(--site-font-mono),
+    monospace;
+}
+.site-install > span::before {
+  content: "$ ";
+  color: var(--site-muted);
+}
+.site-install .site-copy {
+  padding: 0.35rem 0.6rem;
+  background: var(--site-ink);
+  color: var(--site-bg);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.site-install .site-copy:hover {
+  color: var(--site-bg);
+}
+
+/* ---------- Hero: başlık + çizim paftası ---------- */
+.site-hero {
+  display: grid;
+  gap: 2.5rem;
+  padding-block: 2.5rem 4.5rem;
+}
+.site-hero-title {
+  margin: 0.8rem 0 1rem;
+  font-size: clamp(2.9rem, 13vw, 7.2rem);
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  line-height: 0.92;
+}
+.site-hero-title .line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+.site-hero-title .line > span {
+  display: inline-block;
+  animation: site-rise 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.site-hero-title .line + .line > span {
+  animation-delay: 120ms;
+}
+.site-hero-title em {
+  color: var(--site-accent);
+  font-style: normal;
+}
+@keyframes site-rise {
+  from {
+    translate: 0 110%;
+  }
+}
+.site-hero-copy > :is(.site-lead-l, .site-ctas) {
+  animation: site-panel-in 800ms var(--site-ease) 350ms both;
+}
+.site-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.6rem;
+}
+
+.site-sheet {
+  position: relative;
+  margin: 0;
+  border: 1.5px solid var(--site-ink);
+  background: var(--site-panel);
+  animation: site-panel-in 900ms var(--site-ease) 200ms both;
+}
+.site-sheet::before,
+.site-sheet::after,
+.site-cut::before,
+.site-cut::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--site-accent);
+  pointer-events: none;
+}
+.site-sheet::before,
+.site-cut::before {
+  top: -8px;
+  left: -8px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.site-sheet::after,
+.site-cut::after {
+  right: -8px;
+  bottom: -8px;
+  border-top: 0;
+  border-left: 0;
+}
+.site-cut {
+  position: relative;
+}
+.site-sheet-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 21rem;
+  padding: 4.5rem 1rem 5.5rem 3.4rem;
+  overflow: hidden;
+  background: var(--plonk-color-canvas);
+  transition: background-color 500ms var(--site-ease);
+}
+/* Paftanın iç çerçevesi ve ince ızgarası (eserin mürekkebiyle) */
+.site-sheet-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0.6rem;
+  border: 1px solid color-mix(in oklab, var(--plonk-color-ink) 30%, transparent);
+  pointer-events: none;
+}
+.site-sheet-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(
+      color-mix(in oklab, var(--plonk-color-ink) 6%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--plonk-color-ink) 6%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 12px 12px;
+  pointer-events: none;
+}
+/* 2:1 ölçek: eser gerçek boyutunun iki katı çizilir. */
+.site-scale {
+  position: relative;
+  z-index: 1;
+  scale: 2;
+}
+.site-dims {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  color: #2f5bff;
+  pointer-events: none;
+}
+[data-plonk-personality="arcade"] .site-dims {
+  color: #8fa6ff;
+}
+.site-dims path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 700ms var(--site-ease);
+}
+.site-dims path:nth-of-type(2n) {
+  transition-delay: 90ms;
+}
+.site-dims path:nth-of-type(3n) {
+  transition-delay: 180ms;
+}
+.site-dims .ext {
+  stroke-width: 0.8;
+  opacity: 0.55;
+}
+.site-dims text {
+  fill: currentColor;
+  font:
+    600 11px var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.06em;
+}
+.site-dims :is(text, rect) {
+  opacity: 0;
+  transition: opacity 300ms 350ms;
+}
+.site-dims rect {
+  fill: var(--plonk-color-canvas);
+}
+.site-dims[data-drawn] path {
+  stroke-dashoffset: 0;
+}
+.site-dims[data-drawn] :is(text, rect) {
+  opacity: 1;
+}
+
+/* Antet: kişilik sekmeleri ve eserin künyesi */
+.site-titleblock {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1.5px solid var(--site-ink);
+}
+.site-titleblock > div {
+  padding: 0.55rem 0.75rem;
+  border-inline-end: 1px solid var(--site-line);
+  border-bottom: 1px solid var(--site-line);
+}
+.site-titleblock > div:nth-child(2n) {
+  border-inline-end: 0;
+}
+.site-titleblock small {
+  display: block;
+  color: var(--site-muted);
+  font:
+    500 0.6rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.site-titleblock b {
+  font:
+    500 0.95rem var(--site-font-mono),
+    monospace;
+  font-variant-numeric: tabular-nums;
+}
+.site-titleblock b.small {
+  font-size: 0.72rem;
+}
+.site-titleblock .tabs {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: 0;
+  border-inline-end: 0;
+}
+.site-titleblock .tabs button {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 3rem;
+  padding: 0.4rem;
+  border: 0;
+  border-inline-end: 1px solid var(--site-line);
+  background: none;
+  color: var(--site-muted);
+  font:
+    500 0.66rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.site-titleblock .tabs button:last-child {
+  border-inline-end: 0;
+}
+.site-titleblock .tabs i {
+  width: 0.55rem;
+  height: 0.55rem;
+  border: 1.5px solid var(--site-ink);
+  border-radius: 50%;
+  background: var(--dot);
+}
+.site-titleblock .tabs button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--site-ink);
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 340ms var(--site-ease);
+}
+.site-titleblock .tabs button[aria-pressed="true"] {
+  color: var(--site-bg);
+}
+.site-titleblock .tabs button[aria-pressed="true"] i {
+  border-color: var(--site-bg);
+}
+.site-titleblock .tabs button[aria-pressed="true"]::before {
+  clip-path: inset(0);
+}
+/* Kendiliğinden dönerken seçili sekmenin altında süre çizgisi */
+.site-titleblock .tabs button::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 3px;
+  background: var(--site-accent);
+  transform-origin: left;
+  scale: 0 1;
+}
+.site-sheet[data-auto] .tabs button[aria-pressed="true"]::after {
+  animation: site-timer var(--cycle) linear forwards;
+}
+@keyframes site-timer {
+  to {
+    scale: 1 1;
+  }
+}
+
+/* Kişiliklerin girişleri: eser değişince kendi hareket diliyle yeniden basılır. */
+[data-plonk-personality] .site-in {
+  animation: site-in-sticker 760ms var(--plonk-motion-spring-easing) both;
+  animation-delay: calc(var(--i, 0) * 80ms);
+}
+[data-plonk-personality="retro"] .site-in {
+  animation: site-in-retro 280ms steps(4) both;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+[data-plonk-personality="comic"] .site-in {
+  animation: site-in-comic 340ms cubic-bezier(0.2, 1.4, 0.4, 1) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+[data-plonk-personality="arcade"] .site-in {
+  animation: site-in-arcade 420ms steps(6) both;
+  animation-delay: calc(var(--i, 0) * 80ms);
+}
+@keyframes site-in-sticker {
+  from {
+    opacity: 0;
+    translate: 0 -28px;
+    rotate: -7deg;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+@keyframes site-in-retro {
+  from {
+    opacity: 0;
+    scale: 0.3;
+  }
+  25% {
+    opacity: 1;
+  }
+}
+@keyframes site-in-comic {
+  from {
+    opacity: 0;
+    scale: 1.4;
+    rotate: -6deg;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes site-in-arcade {
+  0% {
+    opacity: 0;
+    scale: 1 0.02;
+    filter: brightness(3);
+  }
+  35% {
+    opacity: 1;
+    scale: 1 0.02;
+  }
+  70% {
+    scale: 1 1.06;
+    filter: brightness(1.6);
+  }
+}
+
+/* ---------- Aynı parçalar, tarama çizgisiyle kişilik değişir ---------- */
+.site-wipe {
+  position: relative;
+  height: 340vh;
+}
+.site-wipe-sticky {
+  position: sticky;
+  top: var(--site-header-h);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.1rem;
+  min-height: calc(100svh - var(--site-header-h));
+  padding-block: 1.25rem 2rem;
+}
+.site-wipe-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+}
+.site-wipe-head .site-h2 {
+  margin-bottom: 0;
+  font-size: clamp(1.9rem, 7vw, 4rem);
+}
+.site-wipe-chips {
+  display: flex;
+  gap: 0.3rem;
+}
+.site-wipe-chips span {
+  padding: 0.3rem 0.55rem;
+  border: 1.5px solid var(--site-ink);
+  color: var(--site-muted);
+  font:
+    500 0.64rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition:
+    background-color 200ms,
+    color 200ms;
+}
+.site-wipe-chips span[data-on] {
+  background: var(--site-ink);
+  color: var(--site-bg);
+}
+.site-wipe-frame {
+  position: relative;
+  display: grid;
+  border: 1.5px solid var(--site-ink);
+}
+.site-wipe-frame > .site-board {
+  grid-area: 1 / 1;
+  clip-path: inset(0 0 0 var(--x, 0%));
+}
+.site-board {
+  position: relative;
+  padding: 2rem 1.1rem 2.4rem;
+  background: var(--plonk-color-canvas);
+}
+.site-board-grid {
+  display: grid;
+  gap: 1.6rem;
+  max-width: 56rem;
+  margin: 0 auto;
+}
+.site-board .side {
+  display: none;
+}
+.site-board-name {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.5rem;
+  color: var(--plonk-color-ink-muted);
+  font:
+    500 0.62rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.site-scan {
+  position: absolute;
+  top: -0.75rem;
+  bottom: -0.75rem;
+  left: var(--line, 100%);
+  z-index: 5;
+  width: 2px;
+  translate: -1px 0;
+  background: var(--site-accent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms;
+}
+.site-scan[data-on] {
+  opacity: 1;
+}
+.site-scan::before {
+  content: attr(data-label);
+  position: absolute;
+  top: 0;
+  right: 6px;
+  padding: 0.25rem 0.45rem;
+  background: var(--site-accent);
+  color: #fff;
+  font:
+    500 0.62rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.site-scan::after {
+  content: "";
+  position: absolute;
+  inset: 0 -14px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(47 91 255 / 0.18),
+    transparent
+  );
+}
+
+/* ---------- Hareket dilleri ---------- */
+.site-motion {
+  padding-block: 4rem 2rem;
+}
+.site-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+.site-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 15rem;
+  padding: 0.9rem;
+  border: 1.5px solid var(--site-ink);
+  background: var(--plonk-color-canvas);
+  color: var(--plonk-color-ink);
+}
+.site-tile header {
+  display: flex;
+  justify-content: space-between;
+  color: var(--plonk-color-ink-muted);
+  font:
+    500 0.6rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.site-tile h3 {
+  margin: 0;
+  font-family: var(--plonk-font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: var(--plonk-font-display-tracking);
+  text-transform: var(--plonk-font-display-case);
+}
+[data-plonk-personality]:not([data-plonk-personality="sticker"]) .site-tile h3,
+.site-tile[data-plonk-personality]:not([data-plonk-personality="sticker"]) h3 {
+  font-weight: 400;
+}
+.site-tile p {
+  margin: 0;
+  color: var(--plonk-color-ink-muted);
+  font:
+    500 0.66rem/1.5 var(--site-font-mono),
+    monospace;
+}
+.site-tile .row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+/* ---------- Tema oluşturucu tadımlığı ---------- */
+.site-make {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+  padding-block: 5rem;
+}
+.site-make-stage {
+  display: grid;
+  place-items: center;
+  padding: 3rem 1.25rem;
+  border: 1.5px solid var(--site-ink);
+  background: var(--plonk-color-canvas);
+}
+.site-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 1.5rem 0;
+}
+.site-swatches button {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1.5px solid var(--site-ink);
+  background: var(--c);
+  cursor: pointer;
+  transition:
+    translate 260ms var(--site-pop),
+    box-shadow 260ms var(--site-pop);
+}
+.site-swatches button[aria-pressed="true"] {
+  translate: -2px -2px;
+  box-shadow: 3px 3px 0 var(--site-ink);
+}
+.site-corner {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  max-width: 22rem;
+  margin-bottom: 1.6rem;
+  font:
+    500 0.72rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.site-corner input {
+  flex: 1;
+  accent-color: var(--site-accent);
+}
+
+/* ---------- Kurulum ---------- */
+.site-steps {
+  display: grid;
+  gap: 0.75rem;
+  margin: 2rem 0 5rem;
+}
+.site-step {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.site-step > span {
+  margin-bottom: 0.5rem;
+  color: var(--site-muted);
+  font:
+    500 0.7rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.site-step .site-code {
+  flex: 1;
+}
+
+/* ---------- Altbilgi: PLONK, her harf bir kişilik, K senin ---------- */
+.site-foot {
+  padding-block: 3rem 2rem;
+  border-top: 1.5px solid var(--site-ink);
+}
+.site-letters {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.4rem;
+  margin: 1.2rem 0 2.5rem;
+}
+.site-letter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  background: none;
+}
+.site-letter > span {
+  color: var(--site-muted);
+  font:
+    500 clamp(0.5rem, 1.8vw, 0.68rem) var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+/*
+ * Karo gerçek bir Plonk düğmesi: basınca kişiliğin tepkisi (jöle, POW!, +100)
+ * kütüphaneden gelir. Görünüşü burada: düğmenin utility sınıflarını katmansız
+ * site CSS'i ezer.
+ */
+.site-letter .plonk-button {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  padding: 0;
+  overflow: hidden;
+  border-radius: var(--plonk-radius-lg);
+  background: var(--plonk-color-canvas);
+  color: var(--plonk-color-ink);
+  font-family: var(--plonk-font-display);
+  font-size: clamp(2.4rem, 13vw, 11rem);
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.site-letter[data-plonk-personality="sticker"] .plonk-button {
+  rotate: -2deg;
+  text-shadow: 0.05em 0.05em 0 var(--plonk-color-primary);
+}
+.site-letter[data-plonk-personality="retro"] .plonk-button {
+  color: var(--plonk-color-primary);
+  font-weight: 400;
+}
+.site-letter[data-plonk-personality="retro"] .plonk-button::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 14%;
+  border-bottom: 2px solid var(--plonk-color-ink);
+  background:
+    repeating-linear-gradient(
+        var(--plonk-color-ink) 0 1.5px,
+        transparent 1.5px 4px
+      )
+      50% 50% / 80% 55% no-repeat,
+    var(--plonk-color-surface);
+}
+.site-letter[data-plonk-personality="comic"] .plonk-button {
+  rotate: 1.5deg;
+  background-color: var(--plonk-color-accent);
+  background-image: radial-gradient(
+    circle,
+    rgb(227 23 10 / 0.5) 1.4px,
+    transparent 1.9px
+  );
+  background-size: 8px 8px;
+  color: var(--plonk-color-primary);
+  font-weight: 400;
+  -webkit-text-stroke: 0.03em var(--plonk-color-ink);
+  text-shadow: 0.06em 0.06em 0 var(--plonk-color-ink);
+}
+.site-letter[data-plonk-personality="arcade"] .plonk-button {
+  border-radius: var(--plonk-radius-lg);
+  background-image: repeating-linear-gradient(
+    transparent 0 3px,
+    rgb(0 0 0 / 0.25) 3px 4px
+  );
+  color: var(--plonk-color-accent);
+  font-weight: 400;
+  text-shadow:
+    0 0 0.15em rgb(255 230 0 / 0.6),
+    0.05em 0.05em 0 var(--plonk-color-primary);
+}
+/* K: senin harfin; tema oluşturucuya açılır. */
+.site-letter-yours {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 4;
+  border: 2px dashed var(--site-accent);
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0 10px,
+      color-mix(in oklab, var(--site-accent) 7%, transparent) 10px 11px
+    ),
+    var(--site-panel);
+  color: transparent;
+  font-size: clamp(2.4rem, 13vw, 11rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  text-decoration: none;
+  -webkit-text-stroke: 1.5px var(--site-accent);
+  transition:
+    color 400ms var(--site-ease),
+    border-style 0s;
+}
+.site-letter-yours:hover,
+.site-letter-yours:focus-visible {
+  border-style: solid;
+  color: var(--site-accent);
+}
+.site-letter > a + span {
+  color: var(--site-accent);
+}
+/* Harfler altbilgi görününce belirir (her biri kendi girişiyle). */
+.site-letters:not([data-shown]) .site-in {
+  animation: none;
+  opacity: 0;
+}
+.site-letters:not([data-shown]) .site-letter-yours {
+  opacity: 0;
+}
+.site-letters[data-shown] .site-letter-yours {
+  animation: site-panel-in 600ms var(--site-ease) 380ms both;
+}
+.site-foot-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.5rem;
+  justify-content: space-between;
+  color: var(--site-muted);
+  font:
+    500 0.7rem var(--site-font-mono),
+    monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.site-foot-row nav {
+  display: flex;
+  gap: 1.25rem;
+}
+.site-foot-row a {
+  color: var(--site-ink);
+  text-decoration: none;
+}
+.site-foot-row a:hover {
+  color: var(--site-accent);
+}
+
+@media (min-width: 52rem) {
+  .site-wrap {
+    padding-inline: 1.5rem;
+  }
+  .site-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    align-items: center;
+    gap: 3rem;
+    padding-block: 4rem 6rem;
+  }
+  .site-hero-title {
+    font-size: clamp(3rem, 5.4vw, 6.2rem);
+  }
+  .site-sheet-stage {
+    min-height: 28rem;
+  }
+  .site-titleblock {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .site-titleblock > div:nth-child(2n) {
+    border-inline-end: 1px solid var(--site-line);
+  }
+  .site-titleblock > div:nth-child(4n + 1) {
+    border-inline-end: 0;
+  }
+  .site-board {
+    padding: 3rem 2.5rem 3.2rem;
+  }
+  .site-board-grid {
+    grid-template-columns: 1.1fr 1fr;
+    align-items: start;
+  }
+  .site-board .side {
+    display: flex;
+  }
+  .site-tiles {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .site-make {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+  .site-steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .site-letters {
+    gap: 1rem;
+  }
+}
+
+/* Azaltılmış hareket: tarama yok (panolar alt alta), girişler kısa solma. */
+@media (prefers-reduced-motion: reduce) {
+  .site-wipe {
+    height: auto;
+  }
+  .site-wipe-sticky {
+    position: static;
+    min-height: 0;
+  }
+  .site-wipe-frame > .site-board {
+    grid-area: auto;
+    clip-path: none;
+    border-bottom: 1.5px solid var(--site-ink);
+  }
+  .site-scan,
+  .site-wipe-chips {
+    display: none;
+  }
+  .site-hero-title .line > span,
+  .site-hero-copy > *,
+  .site-sheet,
+  [data-plonk-personality] .site-in,
+  .site-letters[data-shown] .site-letter-yours {
+    animation: site-fade 200ms ease-out both !important;
+  }
+  .site-dims path {
+    transition: none;
+  }
+}

@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "plonk/theme.css";
 @import "../site/site.css";
+@import "../site/landing.css";
 
 /* Tailwind'in kütüphane bileşenlerindeki sınıfları da görmesi için */
 @source "../../../../packages/plonk/src";
