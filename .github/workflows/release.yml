@@ -44,5 +44,3 @@ jobs:
           push-git-tags: false
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Sadece ilk yayın için gerekirse: trusted publishing açılamazsa NPM_TOKEN sırrı.
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
