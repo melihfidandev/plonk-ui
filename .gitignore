@@ -17,8 +17,9 @@ next-env.d.ts
 CLAUDE.md
 .claude/
 
-# pnpm pack çıktıları
+# pnpm pack çıktıları (yayın ve kurulum testi)
 *.tgz
+.release/
 
 # ortam
 .env*

@@ -1,0 +1,48 @@
+name: Release
+
+# main'e her push'ta:
+# - bekleyen sürüm notu (.changeset/*.md) varsa "Version Packages" PR'ını açar ya da günceller;
+# - yoksa (o PR birleştiyse) scripts/release.mjs ile npm'e yayınlar. Sürüm zaten yayındaysa
+#   betik bir şey yapmadan çıkar.
+on:
+  push:
+    branches: [main]
+
+# İki yayın aynı anda çalışmasın; yarıda kesilmesin.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # sürüm commit'i, git etiketi, GitHub sürümü
+      pull-requests: write # "Version Packages" PR'ı
+      id-token: write # npm trusted publishing ve provenance
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      # Trusted publishing npm 11.5.1+ ister.
+      - run: npm install --global npm@11
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - uses: changesets/action@v2
+        with:
+          publish-script: pnpm release
+          # Etiketi ve GitHub sürümünü scripts/release.mjs açar.
+          create-github-releases: false
+          push-git-tags: false
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Sadece ilk yayın için gerekirse: trusted publishing açılamazsa NPM_TOKEN sırrı.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

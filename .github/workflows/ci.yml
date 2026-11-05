@@ -5,13 +5,21 @@ on:
     branches: [main]
   pull_request:
 
+# Aynı dala art arda push edilince eski çalışma iptal olur.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
@@ -21,3 +29,23 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+
+  # Yayınlanacak paketin kendisi: içerik, exports/tip yolları ve gerçek bir projeye kurulum.
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter plonk-ui build
+      - name: Install the packed tarball into a fresh Vite app
+        run: pnpm smoke
+      - name: Lint the package (publint)
+        run: npx --yes publint@0.3.25 run .release/plonk-ui-*.tgz --strict
+      - name: Check type resolution (are-the-types-wrong)
+        # theme.css bir CSS girişi, tip araması anlamsız.
+        run: npx --yes @arethetypeswrong/cli@0.18.5 .release/plonk-ui-*.tgz --profile esm-only --exclude-entrypoints ./theme.css
