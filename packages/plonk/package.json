@@ -15,6 +15,15 @@
     "themes"
   ],
   "license": "MIT",
+  "homepage": "https://plonk-ui.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/melihfidandev/plonk-ui.git",
+    "directory": "packages/plonk"
+  },
+  "bugs": {
+    "url": "https://github.com/melihfidandev/plonk-ui/issues"
+  },
   "author": "Melih Fidan",
   "type": "module",
   "sideEffects": [

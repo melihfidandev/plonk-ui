@@ -8,7 +8,7 @@
 
 _Same components, four personalities, each with its own look and motion._
 
-**[📖 Documentation](__DOCS_URL__/docs)** · **[🎨 Theme builder](__DOCS_URL__/docs/theme-builder)** · **[📦 npm](https://www.npmjs.com/package/plonk-ui)**
+**[📖 Documentation](https://plonk-ui.vercel.app/docs)** · **[🎨 Theme builder](https://plonk-ui.vercel.app/docs/theme-builder)** · **[📦 npm](https://www.npmjs.com/package/plonk-ui)**
 
 [![npm](https://img.shields.io/npm/v/plonk-ui?style=flat-square&color=0f1115&label=npm)](https://www.npmjs.com/package/plonk-ui)
 ![License](https://img.shields.io/badge/license-MIT-0f1115?style=flat-square)
@@ -94,7 +94,7 @@ export function App() {
 }
 ```
 
-Components also render without a provider (as Sticker), but toasts won't appear and there's no personality, motion or locale setting. See [Installation](__DOCS_URL__/docs/installation) for Next.js and more.
+Components also render without a provider (as Sticker), but toasts won't appear and there's no personality, motion or locale setting. See [Installation](https://plonk-ui.vercel.app/docs/installation) for Next.js and more.
 
 ## Theming
 
@@ -115,18 +115,18 @@ Or pass them to a provider. The `style` prop is typed, so token names autocomple
 <PlonkProvider style={{ "--plonk-color-focus": "#2f5bff" }}>…</PlonkProvider>
 ```
 
-The [theme builder](__DOCS_URL__/docs/theme-builder) writes this code for you. See [Colors](__DOCS_URL__/docs/colors), [Fonts](__DOCS_URL__/docs/fonts), [Tokens](__DOCS_URL__/docs/tokens) and [Motion](__DOCS_URL__/docs/motion).
+The [theme builder](https://plonk-ui.vercel.app/docs/theme-builder) writes this code for you. See [Colors](https://plonk-ui.vercel.app/docs/colors), [Fonts](https://plonk-ui.vercel.app/docs/fonts), [Tokens](https://plonk-ui.vercel.app/docs/tokens) and [Motion](https://plonk-ui.vercel.app/docs/motion).
 
 ## Components
 
-| Group     | Components                                                                                                                                                                                                                                                                                                                                                    |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Forms     | [Button](__DOCS_URL__/docs/components/button) · [Input](__DOCS_URL__/docs/components/input) · [Textarea](__DOCS_URL__/docs/components/textarea) · [Checkbox](__DOCS_URL__/docs/components/checkbox) · [Radio Group](__DOCS_URL__/docs/components/radio-group) · [Switch](__DOCS_URL__/docs/components/switch) · [Slider](__DOCS_URL__/docs/components/slider) |
-| Display   | [Card](__DOCS_URL__/docs/components/card) · [Badge](__DOCS_URL__/docs/components/badge) · [Avatar](__DOCS_URL__/docs/components/avatar) · [Progress](__DOCS_URL__/docs/components/progress) · [Kbd](__DOCS_URL__/docs/components/kbd)                                                                                                                         |
-| Overlays  | [Dialog](__DOCS_URL__/docs/components/dialog) · [Drawer](__DOCS_URL__/docs/components/drawer) · [Popover](__DOCS_URL__/docs/components/popover) · [Tooltip](__DOCS_URL__/docs/components/tooltip) · [Toast](__DOCS_URL__/docs/components/toast)                                                                                                               |
-| Selection | [Menu](__DOCS_URL__/docs/components/menu) · [Select](__DOCS_URL__/docs/components/select) · [Combo Box](__DOCS_URL__/docs/components/combo-box) · [Date Picker](__DOCS_URL__/docs/components/date-picker) · [Command Palette](__DOCS_URL__/docs/components/command-palette)                                                                                   |
-| Structure | [Tabs](__DOCS_URL__/docs/components/tabs) · [Accordion](__DOCS_URL__/docs/components/accordion)                                                                                                                                                                                                                                                               |
-| Data      | [Data Table](__DOCS_URL__/docs/components/data-table)                                                                                                                                                                                                                                                                                                         |
+| Group     | Components                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Forms     | [Button](https://plonk-ui.vercel.app/docs/components/button) · [Input](https://plonk-ui.vercel.app/docs/components/input) · [Textarea](https://plonk-ui.vercel.app/docs/components/textarea) · [Checkbox](https://plonk-ui.vercel.app/docs/components/checkbox) · [Radio Group](https://plonk-ui.vercel.app/docs/components/radio-group) · [Switch](https://plonk-ui.vercel.app/docs/components/switch) · [Slider](https://plonk-ui.vercel.app/docs/components/slider) |
+| Display   | [Card](https://plonk-ui.vercel.app/docs/components/card) · [Badge](https://plonk-ui.vercel.app/docs/components/badge) · [Avatar](https://plonk-ui.vercel.app/docs/components/avatar) · [Progress](https://plonk-ui.vercel.app/docs/components/progress) · [Kbd](https://plonk-ui.vercel.app/docs/components/kbd)                                                                                                                                                       |
+| Overlays  | [Dialog](https://plonk-ui.vercel.app/docs/components/dialog) · [Drawer](https://plonk-ui.vercel.app/docs/components/drawer) · [Popover](https://plonk-ui.vercel.app/docs/components/popover) · [Tooltip](https://plonk-ui.vercel.app/docs/components/tooltip) · [Toast](https://plonk-ui.vercel.app/docs/components/toast)                                                                                                                                             |
+| Selection | [Menu](https://plonk-ui.vercel.app/docs/components/menu) · [Select](https://plonk-ui.vercel.app/docs/components/select) · [Combo Box](https://plonk-ui.vercel.app/docs/components/combo-box) · [Date Picker](https://plonk-ui.vercel.app/docs/components/date-picker) · [Command Palette](https://plonk-ui.vercel.app/docs/components/command-palette)                                                                                                                 |
+| Structure | [Tabs](https://plonk-ui.vercel.app/docs/components/tabs) · [Accordion](https://plonk-ui.vercel.app/docs/components/accordion)                                                                                                                                                                                                                                                                                                                                          |
+| Data      | [Data Table](https://plonk-ui.vercel.app/docs/components/data-table)                                                                                                                                                                                                                                                                                                                                                                                                   |
 
 ## Accessibility and localization
 
@@ -135,7 +135,7 @@ The [theme builder](__DOCS_URL__/docs/theme-builder) writes this code for you. S
 - Reduced motion is respected from the system setting, or forced with `<PlonkProvider motion="reduce">`.
 - Give the provider a `locale` (e.g. `locale="tr-TR"`). Without one, components follow the **browser's language**: placeholders and date formats may differ from your page's language.
 
-More in [Accessibility](__DOCS_URL__/docs/accessibility) and [Localization](__DOCS_URL__/docs/localization).
+More in [Accessibility](https://plonk-ui.vercel.app/docs/accessibility) and [Localization](https://plonk-ui.vercel.app/docs/localization).
 
 ## Tech stack
 
