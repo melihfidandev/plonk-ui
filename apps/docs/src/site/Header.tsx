@@ -10,7 +10,7 @@ export function Header() {
     <header className="site-header">
       <Link href="/" className="site-logo">
         <LogoMark />
-        plonk.<small>/ ui</small>
+        plonk<small>/ ui</small>
       </Link>
       <nav aria-label="Main" className="site-nav">
         <Link href="/docs">Docs</Link>
