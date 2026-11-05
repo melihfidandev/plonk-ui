@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Tab, TabList, TabPanel, Tabs } from "plonk";
+import { Button, Tab, TabList, TabPanel, Tabs } from "plonk-ui";
 
 const STEPS = ["details", "team", "review"];
 

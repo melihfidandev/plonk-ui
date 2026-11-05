@@ -1,6 +1,6 @@
 "use client";
 
-import { Accordion, AccordionItem } from "plonk";
+import { Accordion, AccordionItem } from "plonk-ui";
 
 const FAQ = [
   {

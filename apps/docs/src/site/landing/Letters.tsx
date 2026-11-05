@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { Button, PlonkProvider, type PersonalityName } from "plonk";
+import { Button, PlonkProvider, type PersonalityName } from "plonk-ui";
 import { PERSONALITY_LABELS } from "../Exhibit";
 
 const LETTERS: [string, PersonalityName][] = [

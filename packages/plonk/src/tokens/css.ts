@@ -73,7 +73,7 @@ const block = (selector: string, vars: Record<string, string>, indent = "") =>
 export function buildPersonalitiesCss(): string {
   const parts = [
     "/* Bu dosya üretilir, elle düzenleme. Kaynak: src/tokens/personalities.ts */",
-    "/* Yeniden üretmek için: pnpm --filter plonk tokens */",
+    "/* Yeniden üretmek için: pnpm --filter plonk-ui tokens */",
   ];
   for (const p of Object.values(personalities)) {
     const selector =

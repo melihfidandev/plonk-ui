@@ -1,6 +1,6 @@
 "use client";
 
-import { personalities, personalityVariables } from "plonk";
+import { personalities, personalityVariables } from "plonk-ui";
 import { PersonalityChips, exhibitPersonality } from "./Exhibit";
 
 const GROUPS = {

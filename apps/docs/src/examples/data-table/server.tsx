@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { DataTable, type SortingState } from "plonk";
+import { DataTable, type SortingState } from "plonk-ui";
 import { COLUMNS } from "./columns";
 import { INVOICES, type Invoice } from "./invoices";
 

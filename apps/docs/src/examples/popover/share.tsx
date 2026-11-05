@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, DialogTrigger, Input, Popover } from "plonk";
+import { Button, DialogTrigger, Input, Popover } from "plonk-ui";
 
 const LINK = "https://plonk.dev/s/a8f3";
 

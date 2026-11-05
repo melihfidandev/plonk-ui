@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Card } from "plonk";
+import { Button, Card } from "plonk-ui";
 
 export default function Closable() {
   const [open, setOpen] = useState(true);

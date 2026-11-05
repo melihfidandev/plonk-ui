@@ -1,6 +1,6 @@
 "use client";
 
-import { DataTable, createDataTableColumns } from "plonk";
+import { DataTable, createDataTableColumns } from "plonk-ui";
 
 interface Customer {
   name: string;

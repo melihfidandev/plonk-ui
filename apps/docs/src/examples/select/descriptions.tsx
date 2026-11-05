@@ -1,6 +1,6 @@
 "use client";
 
-import { Select, SelectItem } from "plonk";
+import { Select, SelectItem } from "plonk-ui";
 
 export default function Descriptions() {
   return (

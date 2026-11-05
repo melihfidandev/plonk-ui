@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, PlonkProvider, Switch, usePersonality } from "plonk";
+import { Button, PlonkProvider, Switch, usePersonality } from "plonk-ui";
 
 export default function Reduced() {
   const personality = usePersonality();

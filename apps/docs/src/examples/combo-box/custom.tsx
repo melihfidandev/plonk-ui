@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ComboBox, ComboBoxItem } from "plonk";
+import { ComboBox, ComboBoxItem } from "plonk-ui";
 
 const TAGS = ["design", "frontend", "research", "urgent"];
 

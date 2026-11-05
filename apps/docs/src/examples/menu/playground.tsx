@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Menu, MenuItem, MenuTrigger } from "plonk";
+import { Button, Menu, MenuItem, MenuTrigger } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Menu sayfasının oyun alanı. */

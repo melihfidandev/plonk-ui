@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Button, Checkbox } from "plonk";
+import { Button, Checkbox } from "plonk-ui";
 
 export default function Terms() {
   const [error, setError] = useState<string>();

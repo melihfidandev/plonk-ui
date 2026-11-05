@@ -1,6 +1,6 @@
 "use client";
 
-import { Select, SelectItem, SelectSection } from "plonk";
+import { Select, SelectItem, SelectSection } from "plonk-ui";
 
 export default function Sections() {
   return (

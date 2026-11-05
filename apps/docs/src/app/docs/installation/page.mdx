@@ -20,7 +20,7 @@ export const metadata = {
 ## 1. Install the package
 
 ```bash
-npm install plonk
+npm install plonk-ui
 ```
 
 pnpm, Yarn and Bun work the same way. The fonts for all four personalities come
@@ -33,10 +33,10 @@ to scan the package for classes:
 
 ```css
 @import "tailwindcss";
-@import "plonk/theme.css";
+@import "plonk-ui/theme.css";
 
 /* Path from this CSS file to node_modules */
-@source "../node_modules/plonk/dist";
+@source "../node_modules/plonk-ui/dist";
 ```
 
 `theme.css` brings the tokens for every personality, the motion keyframes and
@@ -49,7 +49,7 @@ Put a `PlonkProvider` near the root of your app. It sets the personality and
 opens the region where toasts appear.
 
 ```tsx
-import { PlonkProvider } from "plonk";
+import { PlonkProvider } from "plonk-ui";
 
 export function App() {
   return (
@@ -92,7 +92,7 @@ root layout:
 
 ```tsx
 // app/layout.tsx
-import { PlonkProvider } from "plonk";
+import { PlonkProvider } from "plonk-ui";
 import "./globals.css";
 
 export default function RootLayout({
@@ -123,7 +123,7 @@ the client.
 
 ```tsx
 import { Suspense } from "react";
-import { Calendar } from "plonk";
+import { Calendar } from "plonk-ui";
 
 export default function Page() {
   return (

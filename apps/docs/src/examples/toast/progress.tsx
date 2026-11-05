@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, toast } from "plonk";
+import { Button, toast } from "plonk-ui";
 
 const upload = () => new Promise((resolve) => setTimeout(resolve, 2500));
 

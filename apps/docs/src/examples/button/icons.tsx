@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "plonk";
+import { Button } from "plonk-ui";
 
 const Plus = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>

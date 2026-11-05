@@ -1,6 +1,6 @@
 "use client";
 
-import { Input } from "plonk";
+import { Input } from "plonk-ui";
 
 const Search = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>

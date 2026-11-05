@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar } from "plonk";
+import { Avatar } from "plonk-ui";
 
 export default function Fallback() {
   return (

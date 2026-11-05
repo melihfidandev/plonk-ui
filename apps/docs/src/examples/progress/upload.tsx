@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, Progress } from "plonk";
+import { Button, Progress } from "plonk-ui";
 
 const SIZE = 8.4;
 

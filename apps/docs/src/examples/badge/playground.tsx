@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge } from "plonk";
+import { Badge } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Badge sayfasının oyun alanı. */

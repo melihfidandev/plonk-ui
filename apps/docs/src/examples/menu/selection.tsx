@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Menu, MenuItem, MenuTrigger } from "plonk";
+import { Button, Menu, MenuItem, MenuTrigger } from "plonk-ui";
 
 // A menu reports its selection as a Set of item ids ("all" only with select all).
 const ids = (keys: Iterable<unknown> | "all") =>

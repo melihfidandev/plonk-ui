@@ -9,7 +9,7 @@ import {
   TabPanel,
   Tabs,
 } from "react-aria-components";
-import { playJelly } from "plonk";
+import { playJelly } from "plonk-ui";
 import { PERSONALITY_LABELS } from "../Exhibit";
 import { LiveCode } from "../LiveCode";
 import { createStore } from "../store";
@@ -218,7 +218,7 @@ export function ThemeBuilder() {
               </RadioGroup>
               <p>
                 {format === "css"
-                  ? "Add it to your global CSS, after plonk/theme.css. Only the tokens you changed are written."
+                  ? "Add it to your global CSS, after plonk-ui/theme.css. Only the tokens you changed are written."
                   : "Tokens in style also reach dialogs, menus and toasts. Only the tokens you changed are written."}
               </p>
             </div>

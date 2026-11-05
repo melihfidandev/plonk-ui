@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ComboBox, ComboBoxItem } from "plonk";
+import { ComboBox, ComboBoxItem } from "plonk-ui";
 
 const LANGUAGES = [
   { id: "en", name: "English", native: "English" },

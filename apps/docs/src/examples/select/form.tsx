@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Button, Select, SelectItem } from "plonk";
+import { Button, Select, SelectItem } from "plonk-ui";
 
 export default function Form() {
   const [role, setRole] = useState<string | null>(null);

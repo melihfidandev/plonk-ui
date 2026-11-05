@@ -1,6 +1,6 @@
 "use client";
 
-import { Card } from "plonk";
+import { Card } from "plonk-ui";
 
 export default function Tilt() {
   return (

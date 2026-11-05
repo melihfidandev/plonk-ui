@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Button, Input } from "plonk";
+import { Button, Input } from "plonk-ui";
 
 export default function Form() {
   const [email, setEmail] = useState<string | null>(null);

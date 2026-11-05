@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { contrastRatio } from "plonk";
+import { contrastRatio } from "plonk-ui";
 
 /** "#abc" ya da "abc123" → "#AABBCC" / "#ABC123"; geçersizse `null`. */
 function normalizeHex(text: string): string | null {

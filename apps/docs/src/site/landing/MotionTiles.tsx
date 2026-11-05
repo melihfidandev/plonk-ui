@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Button, PERSONALITY_NAMES, PlonkProvider, Switch } from "plonk";
+import { Button, PERSONALITY_NAMES, PlonkProvider, Switch } from "plonk-ui";
 import { PERSONALITY_LABELS } from "../Exhibit";
 import { motionLine, pressLike, reduceMotion } from "./motion";
 

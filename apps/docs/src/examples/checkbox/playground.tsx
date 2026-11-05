@@ -1,6 +1,6 @@
 "use client";
 
-import { Checkbox } from "plonk";
+import { Checkbox } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Checkbox sayfasının oyun alanı. */

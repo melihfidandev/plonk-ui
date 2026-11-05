@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, Switch, toast } from "plonk";
+import { Button, Card, Switch, toast } from "plonk-ui";
 
 export default function First() {
   return (

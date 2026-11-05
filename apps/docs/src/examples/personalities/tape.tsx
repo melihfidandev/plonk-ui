@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, toast } from "plonk";
+import { Button, Card, toast } from "plonk-ui";
 
 export default function Tape() {
   return (

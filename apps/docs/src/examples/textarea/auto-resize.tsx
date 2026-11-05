@@ -1,6 +1,6 @@
 "use client";
 
-import { Textarea } from "plonk";
+import { Textarea } from "plonk-ui";
 
 export default function AutoResize() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar } from "plonk";
+import { Avatar } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Avatar sayfasının oyun alanı. */

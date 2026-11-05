@@ -108,7 +108,7 @@ describe("personalities.css", () => {
       new URL("../personalities.css", import.meta.url),
       "utf8",
     );
-    expect(file, "Çalıştır: pnpm --filter plonk tokens").toBe(
+    expect(file, "Çalıştır: pnpm --filter plonk-ui tokens").toBe(
       buildPersonalitiesCss(),
     );
   });

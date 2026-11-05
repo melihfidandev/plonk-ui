@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "plonk";
+import { Button } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Button sayfasının oyun alanı. */

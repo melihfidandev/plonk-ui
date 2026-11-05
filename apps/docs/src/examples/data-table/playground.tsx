@@ -1,6 +1,6 @@
 "use client";
 
-import { DataTable } from "plonk";
+import { DataTable } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 import { COLUMNS } from "./columns";
 import { INVOICES } from "./invoices";

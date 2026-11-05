@@ -1,6 +1,6 @@
 "use client";
 
-import { DatePicker, parseDate, type DateValue } from "plonk";
+import { DatePicker, parseDate, type DateValue } from "plonk-ui";
 
 const BOOKED = ["2026-11-20", "2026-11-21", "2026-11-27"].map((d) =>
   parseDate(d),

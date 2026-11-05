@@ -7,7 +7,7 @@ import {
   PlonkProvider,
   personalities,
   type PersonalityName,
-} from "plonk";
+} from "plonk-ui";
 import { PERSONALITY_LABELS } from "../Exhibit";
 import { DOTS, motionLine, reduceMotion, useReducedMotion } from "./motion";
 

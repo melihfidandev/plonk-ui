@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Dialog, DialogTrigger, Input, Switch } from "plonk";
+import { Button, Dialog, DialogTrigger, Input, Switch } from "plonk-ui";
 
 export default function Form() {
   const [name, setName] = useState("Ada Lovelace");

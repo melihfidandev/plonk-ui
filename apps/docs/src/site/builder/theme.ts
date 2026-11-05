@@ -6,7 +6,7 @@ import {
   type PersonalityName,
   type PlonkStyle,
   type PlonkVariable,
-} from "plonk";
+} from "plonk-ui";
 
 /**
  * Tema oluşturucunun modeli: hangi token'lar ayarlanır, taslak nasıl tutulur,

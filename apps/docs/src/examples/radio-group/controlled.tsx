@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Radio, RadioGroup } from "plonk";
+import { Button, Radio, RadioGroup } from "plonk-ui";
 
 export default function Controlled() {
   // null: controlled, nothing selected.

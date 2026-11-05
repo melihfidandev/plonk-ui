@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, PlonkProvider, usePersonality } from "plonk";
+import { Button, Card, PlonkProvider, usePersonality } from "plonk-ui";
 
 export default function CustomFont() {
   const personality = usePersonality();

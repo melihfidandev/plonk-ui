@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Slider } from "plonk";
+import { Slider } from "plonk-ui";
 
 const PRICE = {
   style: "currency",

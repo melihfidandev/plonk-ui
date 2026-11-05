@@ -8,7 +8,7 @@ import {
   MenuSection,
   MenuSeparator,
   MenuTrigger,
-} from "plonk";
+} from "plonk-ui";
 
 const Icon = ({ d }: { d: string }) => (
   <svg

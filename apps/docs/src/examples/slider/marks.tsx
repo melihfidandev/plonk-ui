@@ -1,6 +1,6 @@
 "use client";
 
-import { Slider } from "plonk";
+import { Slider } from "plonk-ui";
 
 const LEVELS = ["Off", "Low", "Medium", "High"];
 

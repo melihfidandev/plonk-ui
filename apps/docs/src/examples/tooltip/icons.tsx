@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Tooltip, TooltipTrigger } from "plonk";
+import { Button, Tooltip, TooltipTrigger } from "plonk-ui";
 
 const ICONS = {
   Bold: "M7 5h6a3.5 3.5 0 0 1 0 7H7zm0 7h7a3.5 3.5 0 0 1 0 7H7z",

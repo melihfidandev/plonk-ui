@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, DataTable } from "plonk";
+import { Button, DataTable } from "plonk-ui";
 import { COLUMNS } from "./columns";
 import { INVOICES } from "./invoices";
 

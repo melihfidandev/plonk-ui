@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Switch } from "plonk";
+import { Switch } from "plonk-ui";
 
 export default function Settings() {
   const [autosave, setAutosave] = useState(true);

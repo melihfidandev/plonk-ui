@@ -9,7 +9,7 @@ import {
   Radio,
   RadioGroup,
   Switch,
-} from "plonk";
+} from "plonk-ui";
 
 export default function Filters() {
   const [applied, setApplied] = useState("All projects");

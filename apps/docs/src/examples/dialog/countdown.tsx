@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Dialog, DialogTrigger } from "plonk";
+import { Button, Dialog, DialogTrigger } from "plonk-ui";
 
 export default function Countdown() {
   const [status, setStatus] = useState("Signed in");

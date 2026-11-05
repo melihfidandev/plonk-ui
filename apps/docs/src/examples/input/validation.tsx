@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef } from "react";
-import { Button, Input } from "plonk";
+import { Button, Input } from "plonk-ui";
 
 interface State {
   values: { name: string; email: string };

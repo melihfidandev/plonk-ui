@@ -1,6 +1,6 @@
 "use client";
 
-import { Radio, RadioGroup } from "plonk";
+import { Radio, RadioGroup } from "plonk-ui";
 
 export default function Descriptions() {
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { PERSONALITY_NAMES, type PersonalityName } from "plonk";
+import { PERSONALITY_NAMES, type PersonalityName } from "plonk-ui";
 import { decodeDraft, emptyDraft, encodeDraft, type Draft } from "./theme";
 
 const KEY = "plonk-docs-theme";

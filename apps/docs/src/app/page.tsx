@@ -60,8 +60,8 @@ export default function Home() {
                 Theme builder
               </Link>
               <span className="site-install">
-                <span>npm i plonk</span>
-                <CopyButton text="npm i plonk" />
+                <span>npm i plonk-ui</span>
+                <CopyButton text="npm i plonk-ui" />
               </span>
             </div>
           </div>
@@ -92,7 +92,7 @@ export default function Home() {
                 <h3>Install</h3>
                 <p>Add the package to your project.</p>
               </div>
-              <CodeBlock lang="bash" code="npm install plonk" />
+              <CodeBlock lang="bash" code="npm install plonk-ui" />
             </li>
             <li className="site-step">
               <span className="no">02</span>
@@ -102,7 +102,7 @@ export default function Home() {
               </div>
               <CodeBlock
                 lang="css"
-                code={'@import "tailwindcss";\n@import "plonk/theme.css";'}
+                code={'@import "tailwindcss";\n@import "plonk-ui/theme.css";'}
               />
             </li>
             <li className="site-step">

@@ -1,6 +1,6 @@
 /* Bu dosya üretilir, elle düzenleme. Kaynak: src/tokens/personalities.ts */
 
-/* Yeniden üretmek için: pnpm --filter plonk tokens */
+/* Yeniden üretmek için: pnpm --filter plonk-ui tokens */
 
 @layer base {
   :root,

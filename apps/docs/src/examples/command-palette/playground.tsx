@@ -7,7 +7,7 @@ import {
   CommandPage,
   CommandPalette,
   CommandPaletteTrigger,
-} from "plonk";
+} from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 const CUSTOMERS = [

@@ -1,6 +1,6 @@
 "use client";
 
-import { Progress } from "plonk";
+import { Progress } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Progress sayfasının oyun alanı. */

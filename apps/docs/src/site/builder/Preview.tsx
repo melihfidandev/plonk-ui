@@ -17,7 +17,7 @@ import {
   TabPanel,
   Tabs,
   toast,
-} from "plonk";
+} from "plonk-ui";
 import { styleOf, type Draft } from "./theme";
 
 /**

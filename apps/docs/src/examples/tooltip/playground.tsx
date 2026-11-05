@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Tooltip, TooltipTrigger } from "plonk";
+import { Button, Tooltip, TooltipTrigger } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Tooltip sayfasının oyun alanı. */

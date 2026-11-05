@@ -1,5 +1,5 @@
 ---
-"plonk": major
+"plonk-ui": major
 ---
 
 First release. Neo-brutalist React components with four switchable personalities (Sticker, Retro, Comic, Arcade), each with its own look and motion language.

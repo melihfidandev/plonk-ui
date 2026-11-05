@@ -1,6 +1,6 @@
 "use client";
 
-import { Kbd } from "plonk";
+import { Kbd } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Kbd sayfasının oyun alanı. */

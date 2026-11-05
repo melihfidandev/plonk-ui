@@ -1,6 +1,6 @@
 "use client";
 
-import { Select, SelectItem } from "plonk";
+import { Select, SelectItem } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Select sayfasının oyun alanı. */

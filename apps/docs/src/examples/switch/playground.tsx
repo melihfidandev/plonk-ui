@@ -1,6 +1,6 @@
 "use client";
 
-import { Switch } from "plonk";
+import { Switch } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Switch sayfasının oyun alanı. */

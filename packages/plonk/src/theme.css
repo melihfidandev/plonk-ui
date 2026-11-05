@@ -1,8 +1,8 @@
 /*
  * Plonk teması. Kullanım:
  *   @import "tailwindcss";
- *   @import "plonk/theme.css";
- *   @source "../node_modules/plonk/dist";
+ *   @import "plonk-ui/theme.css";
+ *   @source "../node_modules/plonk-ui/dist";
  */
 @import "./fonts.css";
 @import "./personalities.css";

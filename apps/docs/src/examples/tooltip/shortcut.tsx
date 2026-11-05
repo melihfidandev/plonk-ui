@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Kbd, Tooltip, TooltipTrigger } from "plonk";
+import { Button, Kbd, Tooltip, TooltipTrigger } from "plonk-ui";
 
 export default function Shortcut() {
   return (

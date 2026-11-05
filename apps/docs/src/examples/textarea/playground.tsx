@@ -1,6 +1,6 @@
 "use client";
 
-import { Textarea } from "plonk";
+import { Textarea } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Textarea sayfasının oyun alanı. */

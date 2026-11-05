@@ -7,7 +7,7 @@ import {
   parseDate,
   today,
   type DateRange,
-} from "plonk";
+} from "plonk-ui";
 
 // Functions run when the preset is pressed, so "today" is always fresh.
 const PRESETS = [

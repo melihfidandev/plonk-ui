@@ -7,7 +7,7 @@ import {
   contrastRatio,
   personalities,
   type PersonalityName,
-} from "plonk";
+} from "plonk-ui";
 import { ColorField, Contrast } from "../ColorField";
 import { PERSONALITY_LABELS } from "../Exhibit";
 import {

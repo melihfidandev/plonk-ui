@@ -10,7 +10,7 @@ import {
   Switch,
   personalities,
   type PlonkStyle,
-} from "plonk";
+} from "plonk-ui";
 import { ColorField, Contrast } from "./ColorField";
 import { Exhibit, exhibitPersonality } from "./Exhibit";
 import { LiveCode } from "./LiveCode";

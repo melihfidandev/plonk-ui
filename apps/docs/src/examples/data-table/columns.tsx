@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge, DataTable, createDataTableColumns } from "plonk";
+import { Badge, DataTable, createDataTableColumns } from "plonk-ui";
 import { INVOICES, type Invoice } from "./invoices";
 
 const money = new Intl.NumberFormat("en-US", {

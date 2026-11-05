@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Dialog, DialogTrigger, toast } from "plonk";
+import { Button, Dialog, DialogTrigger, toast } from "plonk-ui";
 
 export default function Moments() {
   return (

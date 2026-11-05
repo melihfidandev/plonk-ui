@@ -22,7 +22,7 @@ global stylesheet, after Plonk's theme:
 
 ```css
 @import "tailwindcss";
-@import "plonk/theme.css";
+@import "plonk-ui/theme.css";
 
 [data-plonk-personality="sticker"] {
   --plonk-color-primary: #7c5cff;
@@ -36,7 +36,7 @@ name is a TypeScript error:
 
 ```tsx
 import type { ReactNode } from "react";
-import { PlonkProvider } from "plonk";
+import { PlonkProvider } from "plonk-ui";
 
 export function App({ children }: { children: ReactNode }) {
   return (

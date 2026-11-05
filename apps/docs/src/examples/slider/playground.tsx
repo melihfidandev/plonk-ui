@@ -1,6 +1,6 @@
 "use client";
 
-import { Slider } from "plonk";
+import { Slider } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Slider sayfasının oyun alanı. */

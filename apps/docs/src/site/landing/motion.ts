@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import { personalities, type PersonalityName } from "plonk";
+import { personalities, type PersonalityName } from "plonk-ui";
 
 /** Kişiliğin işaret rengi (sekmelerdeki nokta, harf karoları). */
 export const DOTS: Record<PersonalityName, string> = {

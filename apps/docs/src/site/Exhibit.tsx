@@ -8,7 +8,7 @@ import {
   personalities,
   type PersonalityName,
   type ToastPlacement,
-} from "plonk";
+} from "plonk-ui";
 import { createStore } from "./store";
 
 export const PERSONALITY_LABELS: Record<PersonalityName, string> = {

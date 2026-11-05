@@ -1,6 +1,6 @@
 "use client";
 
-import { Tab, TabList, TabPanel, Tabs } from "plonk";
+import { Tab, TabList, TabPanel, Tabs } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Tabs sayfasının oyun alanı. */

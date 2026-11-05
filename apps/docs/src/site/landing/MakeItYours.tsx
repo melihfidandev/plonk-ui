@@ -9,7 +9,7 @@ import {
   PlonkProvider,
   Switch,
   type PlonkStyle,
-} from "plonk";
+} from "plonk-ui";
 
 /** Birkaç hazır marka rengi: dolgu ve üstündeki yazı. */
 const SWATCHES = [

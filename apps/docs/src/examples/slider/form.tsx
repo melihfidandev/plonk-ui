@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Button, Slider } from "plonk";
+import { Button, Slider } from "plonk-ui";
 
 export default function Form() {
   const [sent, setSent] = useState<string>();

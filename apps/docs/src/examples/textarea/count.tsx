@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Textarea } from "plonk";
+import { Textarea } from "plonk-ui";
 
 const LIMIT = 140;
 

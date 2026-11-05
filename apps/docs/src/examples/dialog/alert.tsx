@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Badge, Button, Dialog, DialogTrigger } from "plonk";
+import { Badge, Button, Dialog, DialogTrigger } from "plonk-ui";
 
 export default function Alert() {
   const [deleted, setDeleted] = useState(false);

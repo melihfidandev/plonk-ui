@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, DialogTrigger, Drawer } from "plonk";
+import { Button, DialogTrigger, Drawer } from "plonk-ui";
 
 const TARGETS = ["Copy link", "Email", "Slack", "Download PDF"];
 

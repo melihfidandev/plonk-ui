@@ -1,6 +1,6 @@
 "use client";
 
-import { ComboBox, ComboBoxItem } from "plonk";
+import { ComboBox, ComboBoxItem } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Combo Box sayfasının oyun alanı. */

@@ -1,6 +1,6 @@
 "use client";
 
-import { Input, Switch, Tab, TabList, TabPanel, Tabs } from "plonk";
+import { Input, Switch, Tab, TabList, TabPanel, Tabs } from "plonk-ui";
 
 export default function Settings() {
   return (

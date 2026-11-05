@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, DialogTrigger, Popover } from "plonk";
+import { Button, DialogTrigger, Popover } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Popover sayfasının oyun alanı. */

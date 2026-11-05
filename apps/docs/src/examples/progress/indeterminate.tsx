@@ -1,6 +1,6 @@
 "use client";
 
-import { Progress } from "plonk";
+import { Progress } from "plonk-ui";
 
 export default function Indeterminate() {
   return (

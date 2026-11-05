@@ -1,6 +1,6 @@
 "use client";
 
-import { Kbd } from "plonk";
+import { Kbd } from "plonk-ui";
 
 const SHORTCUTS = [
   { action: "Search", keys: ["⌘", "K"] },

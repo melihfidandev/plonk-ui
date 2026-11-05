@@ -8,9 +8,9 @@
 
 _Same components, four personalities, each with its own look and motion._
 
-**[📖 Documentation](__DOCS_URL__/docs)** · **[🎨 Theme builder](__DOCS_URL__/docs/theme-builder)** · **[📦 npm](https://www.npmjs.com/package/plonk)**
+**[📖 Documentation](__DOCS_URL__/docs)** · **[🎨 Theme builder](__DOCS_URL__/docs/theme-builder)** · **[📦 npm](https://www.npmjs.com/package/plonk-ui)**
 
-[![npm](https://img.shields.io/npm/v/plonk?style=flat-square&color=0f1115&label=npm)](https://www.npmjs.com/package/plonk)
+[![npm](https://img.shields.io/npm/v/plonk-ui?style=flat-square&color=0f1115&label=npm)](https://www.npmjs.com/package/plonk-ui)
 ![License](https://img.shields.io/badge/license-MIT-0f1115?style=flat-square)
 ![React](https://img.shields.io/badge/React_19-0f1115?style=flat-square&logo=react&logoColor=61DAFB)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_4-0f1115?style=flat-square&logo=tailwindcss&logoColor=38BDF8)
@@ -61,16 +61,16 @@ I built it as a **portfolio project**, to show what goes into a real design syst
 **Requirements:** React 19 and Tailwind CSS 4.1+. Plonk is an ES module package; use it with a bundler or a framework (Next.js, Vite, Remix).
 
 ```bash
-npm install plonk
+npm install plonk-ui
 ```
 
 In the CSS file where you import Tailwind, add Plonk's theme and let Tailwind scan the package for classes:
 
 ```css
 @import "tailwindcss";
-@import "plonk/theme.css";
+@import "plonk-ui/theme.css";
 /* Path from this CSS file to node_modules */
-@source "../node_modules/plonk/dist";
+@source "../node_modules/plonk-ui/dist";
 ```
 
 ## Quick start
@@ -78,7 +78,7 @@ In the CSS file where you import Tailwind, add Plonk's theme and let Tailwind sc
 Wrap your app once with `PlonkProvider`. It sets the personality and opens the region where toasts appear.
 
 ```tsx
-import { Button, Card, PlonkProvider, Switch, toast } from "plonk";
+import { Button, Card, PlonkProvider, Switch, toast } from "plonk-ui";
 
 export function App() {
   return (
@@ -164,13 +164,13 @@ pnpm dev   # docs site on http://localhost:3000
 
 The docs site uses the library's source directly, so changes show up without a build.
 
-| Command                        | Description                                          |
-| ------------------------------ | ---------------------------------------------------- |
-| `pnpm dev`                     | Start the docs site                                  |
-| `pnpm build`                   | Build the library and the docs                       |
-| `pnpm test`                    | Run the tests                                        |
-| `pnpm lint` / `pnpm typecheck` | Lint and type check                                  |
-| `pnpm --filter plonk tokens`   | Regenerate the personality CSS from the token source |
+| Command                         | Description                                          |
+| ------------------------------- | ---------------------------------------------------- |
+| `pnpm dev`                      | Start the docs site                                  |
+| `pnpm build`                    | Build the library and the docs                       |
+| `pnpm test`                     | Run the tests                                        |
+| `pnpm lint` / `pnpm typecheck`  | Lint and type check                                  |
+| `pnpm --filter plonk-ui tokens` | Regenerate the personality CSS from the token source |
 
 ```
 plonk-ui/

@@ -1,6 +1,6 @@
 "use client";
 
-import { Card } from "plonk";
+import { Card } from "plonk-ui";
 import { Lineup } from "./Lineup";
 
 /** Card sayfası: bandın dört kişilikteki hâli yan yana. */

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "plonk";
+import { Button } from "plonk-ui";
 
 const save = () => new Promise((resolve) => setTimeout(resolve, 1500));
 

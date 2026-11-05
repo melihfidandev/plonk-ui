@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "plonk";
+import { Button } from "plonk-ui";
 
 export default function Variants() {
   return (

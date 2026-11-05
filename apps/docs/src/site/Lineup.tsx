@@ -8,7 +8,7 @@ import {
   Progress,
   Switch,
   type PersonalityName,
-} from "plonk";
+} from "plonk-ui";
 import type { ReactNode } from "react";
 
 const CARDS: Record<PersonalityName, { name: string; motion: string }> = {

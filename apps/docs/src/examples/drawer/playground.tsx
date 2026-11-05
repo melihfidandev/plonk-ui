@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, DialogTrigger, Drawer } from "plonk";
+import { Button, DialogTrigger, Drawer } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Drawer sayfasının oyun alanı. */

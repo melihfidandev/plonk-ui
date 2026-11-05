@@ -12,7 +12,7 @@ import {
   Switch,
   type PersonalityName,
   type PlonkStyle,
-} from "plonk";
+} from "plonk-ui";
 import { PERSONALITY_LABELS } from "../Exhibit";
 import { reduceMotion } from "./motion";
 

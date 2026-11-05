@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge, Button, Card } from "plonk";
+import { Badge, Button, Card } from "plonk-ui";
 
 export default function Anatomy() {
   return (

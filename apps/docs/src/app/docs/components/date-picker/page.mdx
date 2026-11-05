@@ -20,7 +20,7 @@ export const metadata = {
 ## Usage
 
 ```tsx
-import { DatePicker, parseDate } from "plonk";
+import { DatePicker, parseDate } from "plonk-ui";
 
 export function Departure() {
   return (
@@ -44,7 +44,7 @@ Dates aren't JavaScript `Date`s: they're `CalendarDate` objects from
 November 14 everywhere. Plonk re-exports what you need most:
 
 ```ts
-import { CalendarDate, getLocalTimeZone, parseDate, today } from "plonk";
+import { CalendarDate, getLocalTimeZone, parseDate, today } from "plonk-ui";
 
 parseDate("2026-11-14"); // from an ISO string
 new CalendarDate(2026, 11, 14); // year, month, day

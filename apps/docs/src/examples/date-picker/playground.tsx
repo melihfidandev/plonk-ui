@@ -1,6 +1,6 @@
 "use client";
 
-import { DatePicker } from "plonk";
+import { DatePicker } from "plonk-ui";
 import { Playground } from "@/site/Playground";
 
 /** Date Picker sayfasının oyun alanı. */

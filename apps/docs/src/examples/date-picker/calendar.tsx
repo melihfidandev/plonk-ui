@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { Calendar, parseDate } from "plonk";
+import { Calendar, parseDate } from "plonk-ui";
 
 // A calendar on the page reads "today" while rendering, so draw it in the
 // browser only (see "Server rendering" below).

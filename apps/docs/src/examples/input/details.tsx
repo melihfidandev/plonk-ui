@@ -1,6 +1,6 @@
 "use client";
 
-import { Input } from "plonk";
+import { Input } from "plonk-ui";
 
 export default function Details() {
   return (

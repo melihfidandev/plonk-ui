@@ -8,7 +8,7 @@ import {
   PlonkProvider,
   Slider,
   parseDate,
-} from "plonk";
+} from "plonk-ui";
 import { Label, Radio, RadioGroup } from "react-aria-components";
 import { Exhibit, exhibitPersonality } from "./Exhibit";
 import { LiveCode } from "./LiveCode";

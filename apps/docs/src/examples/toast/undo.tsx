@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, toast } from "plonk";
+import { Button, toast } from "plonk-ui";
 
 const FILES = ["brief.pdf", "moodboard.png", "invoice-0042.pdf"];
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Checkbox } from "plonk";
+import { Checkbox } from "plonk-ui";
 
 const FILES = ["brief.pdf", "moodboard.png", "invoice-0042.pdf"];
 

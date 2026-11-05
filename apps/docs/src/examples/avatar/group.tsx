@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, AvatarGroup } from "plonk";
+import { Avatar, AvatarGroup } from "plonk-ui";
 
 const TEAM = [
   { name: "Ada Lovelace", src: "/avatars/ada.svg" },

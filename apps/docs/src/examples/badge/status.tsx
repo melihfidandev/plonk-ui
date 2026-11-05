@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge } from "plonk";
+import { Badge } from "plonk-ui";
 
 const DEPLOYS = [
   { name: "docs", status: "Live", variant: "success" },
