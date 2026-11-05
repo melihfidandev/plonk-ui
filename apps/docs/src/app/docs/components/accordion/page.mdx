@@ -1,12 +1,13 @@
+import { pageMetadata } from "@/site/metadata";
 import AccordionPlayground from "@/examples/accordion/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Accordion",
   description: "Sections that open and close. The height springs open.",
-};
+});
 
 <PageHeader crumb="Components / Structure" title="Accordion" number="01">
   Sections that open and close, for FAQs and long settings pages. The height

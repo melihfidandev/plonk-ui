@@ -1,12 +1,13 @@
+import { pageMetadata } from "@/site/metadata";
 import RadioGroupPlayground from "@/examples/radio-group/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Radio Group",
   description: "Pick one option. The dot springs in when you choose.",
-};
+});
 
 <PageHeader crumb="Components / Forms" title="Radio Group" number="18">
   One choice from a short list. The dot springs into the option you pick and

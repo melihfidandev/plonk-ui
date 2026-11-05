@@ -1,10 +1,11 @@
+import { pageMetadata } from "@/site/metadata";
 import { PageHeader } from "@/site/PageHeader";
 import { TokenTable } from "@/site/TokenTable";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Tokens",
   description: "Every --plonk-* variable, with each personality's values.",
-};
+});
 
 <PageHeader crumb="Guides" title="Tokens" number="05">
   A token is a named design decision: "the primary color", "how thick a border

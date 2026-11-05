@@ -1,12 +1,13 @@
+import { pageMetadata } from "@/site/metadata";
 import ComboBoxPlayground from "@/examples/combo-box/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Combo Box",
   description: "A text field that filters a list of options as you type.",
-};
+});
 
 <PageHeader crumb="Components / Selection" title="Combo Box" number="07">
   A text field with a list that filters as you type. The matching letters light

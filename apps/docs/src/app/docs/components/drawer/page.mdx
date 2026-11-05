@@ -1,12 +1,13 @@
+import { pageMetadata } from "@/site/metadata";
 import DrawerPlayground from "@/examples/drawer/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Drawer",
   description: "A panel that slides in from the edge of the screen.",
-};
+});
 
 <PageHeader crumb="Components / Overlays" title="Drawer" number="12">
   A panel that slides in from an edge, for filters, settings and details next to

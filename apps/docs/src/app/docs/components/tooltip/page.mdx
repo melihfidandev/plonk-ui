@@ -1,12 +1,13 @@
+import { pageMetadata } from "@/site/metadata";
 import TooltipPlayground from "@/examples/tooltip/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Tooltip",
   description: "A short hint on hover and focus.",
-};
+});
 
 <PageHeader crumb="Components / Overlays" title="Tooltip" number="25">
   A short hint that appears on hover and keyboard focus. Sticker slaps it on

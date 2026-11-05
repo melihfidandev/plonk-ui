@@ -1,11 +1,12 @@
+import { pageMetadata } from "@/site/metadata";
 import { PageHeader } from "@/site/PageHeader";
 import { ThemeBuilder } from "@/site/builder/ThemeBuilder";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Theme builder",
   description:
     "Start from a personality, tune its colors, shape and motion, and copy the code.",
-};
+});
 
 <PageHeader crumb="Tools" title="Theme builder">
   Start from a personality and make it yours: colors, corners, shadows, type and

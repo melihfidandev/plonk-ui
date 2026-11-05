@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { SITE_NAME, SITE_URL } from "@/site/metadata";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "Plonk", template: "%s · Plonk" },
+  metadataBase: new URL(SITE_URL),
+  title: { default: SITE_NAME, template: `%s · ${SITE_NAME}` },
   description: "Neo-brutalist React components with switchable personalities.",
+  openGraph: { siteName: SITE_NAME, type: "website" },
+  twitter: { card: "summary_large_image" },
 };
 
 // Sitenin kendi fontları (Plonk'unkiler kütüphaneyle gelir). Build'de indirilip

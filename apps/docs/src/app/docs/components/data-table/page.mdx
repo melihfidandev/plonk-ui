@@ -1,12 +1,13 @@
+import { pageMetadata } from "@/site/metadata";
 import DataTablePlayground from "@/examples/data-table/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Data Table",
   description: "Sorting, filters, selection and thousands of rows.",
-};
+});
 
 <PageHeader crumb="Components / Data" title="Data Table" number="09">
   Sorting, search, filters, column controls, bulk selection and virtual

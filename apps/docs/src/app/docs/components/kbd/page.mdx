@@ -1,11 +1,12 @@
+import { pageMetadata } from "@/site/metadata";
 import KbdPlayground from "@/examples/kbd/playground";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Kbd",
   description: "A keyboard key, for shortcuts in text and menus.",
-};
+});
 
 <PageHeader crumb="Components / Display" title="Kbd" number="14">
   A keyboard key with a thick bottom edge, for shortcuts in help text, menus and

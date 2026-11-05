@@ -1,11 +1,12 @@
+import { pageMetadata } from "@/site/metadata";
 import { MotionLab } from "@/site/MotionLab";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Motion",
   description:
     "Five motion tokens, a jelly dial and reduced motion that still feels alive.",
-};
+});
 
 <PageHeader crumb="Guides" title="Motion" number="06">
   Motion is half of a personality. Every component moves with the same five

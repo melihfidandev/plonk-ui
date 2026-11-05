@@ -1,12 +1,13 @@
+import { pageMetadata } from "@/site/metadata";
 import MenuPlayground from "@/examples/menu/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Menu",
   description: "A list of actions that opens from a button.",
-};
+});
 
 <PageHeader crumb="Components / Selection" title="Menu" number="15">
   A list of actions behind a button: edit, duplicate, delete. Rows deal

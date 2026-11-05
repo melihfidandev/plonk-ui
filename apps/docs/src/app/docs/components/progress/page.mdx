@@ -1,12 +1,13 @@
+import { pageMetadata } from "@/site/metadata";
 import ProgressPlayground from "@/examples/progress/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Progress",
   description: "A progress bar that springs forward, or fills block by block.",
-};
+});
 
 <PageHeader crumb="Components / Display" title="Progress" number="17">
   Shows how far along something is. The fill springs forward in Sticker, fills

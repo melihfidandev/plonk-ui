@@ -1,13 +1,14 @@
+import { pageMetadata } from "@/site/metadata";
 import InputPlayground from "@/examples/input/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Input",
   description:
     "A text field that lifts when you focus it and shakes its head at errors.",
-};
+});
 
 <PageHeader crumb="Components / Forms" title="Input" number="13">
   A text field with its label, help text and error built in. It lifts off the

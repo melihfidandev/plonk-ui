@@ -9,10 +9,19 @@ import { MotionTiles } from "@/site/landing/MotionTiles";
 import { Specimen } from "@/site/landing/Specimen";
 import { Wipe } from "@/site/landing/Wipe";
 
+const TITLE = "Plonk · React components with four personalities";
+const DESCRIPTION =
+  "Neo-brutalist, accessible React components. One library, four personalities, each with its own look and motion.";
+
 export const metadata: Metadata = {
-  title: { absolute: "Plonk · React components with four personalities" },
-  description:
-    "Neo-brutalist, accessible React components. One library, four personalities, each with its own look and motion.",
+  title: { absolute: TITLE },
+  description: DESCRIPTION,
+  openGraph: { title: TITLE, description: DESCRIPTION, type: "website" },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
 };
 
 function Arrow() {

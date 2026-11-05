@@ -1,12 +1,13 @@
+import { pageMetadata } from "@/site/metadata";
 import CheckboxPlayground from "@/examples/checkbox/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Checkbox",
   description: "A checkbox that draws its tick and wobbles when you check it.",
-};
+});
 
 <PageHeader crumb="Components / Forms" title="Checkbox" number="06">
   Draws its tick in one stroke and wobbles like jelly. In Comic it goes PAT!, in

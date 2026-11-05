@@ -1,11 +1,12 @@
+import { pageMetadata } from "@/site/metadata";
 import CommandPalettePlayground from "@/examples/command-palette/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Command Palette",
   description: "A ⌘K palette with fuzzy search, sub-pages and server results.",
-};
+});
 
 <PageHeader crumb="Components / Navigation" title="Command Palette" number="08">
   Press ⌘K, type a few letters, hit Enter. Fuzzy search, sub-pages and results

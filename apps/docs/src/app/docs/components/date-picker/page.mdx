@@ -1,12 +1,13 @@
+import { pageMetadata } from "@/site/metadata";
 import DatePickerPlayground from "@/examples/date-picker/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Date Picker",
   description: "Date fields with a calendar, for single dates and ranges.",
-};
+});
 
 <PageHeader crumb="Components / Date and time" title="Date Picker" number="10">
   A date field with a calendar behind a button, for single dates and ranges. In

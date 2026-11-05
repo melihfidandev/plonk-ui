@@ -1,11 +1,12 @@
+import { pageMetadata } from "@/site/metadata";
 import { Example } from "@/site/Example";
 import { Lineup } from "@/site/Lineup";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Personalities",
   description: "Four looks and four ways of moving, one set of components.",
-};
+});
 
 <PageHeader crumb="Get started" title="Personalities" number="02">
   A personality is more than a color scheme. It sets the borders, shadows and

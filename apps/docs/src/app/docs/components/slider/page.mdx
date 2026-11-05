@@ -1,12 +1,13 @@
+import { pageMetadata } from "@/site/metadata";
 import SliderPlayground from "@/examples/slider/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Slider",
   description: "Pick a value or a range by dragging. The thumb has weight.",
-};
+});
 
 <PageHeader crumb="Components / Forms" title="Slider" number="20">
   Pick a value, or a range, by dragging. In Sticker the thumb has weight: it

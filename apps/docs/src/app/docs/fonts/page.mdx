@@ -1,10 +1,11 @@
+import { pageMetadata } from "@/site/metadata";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Fonts",
   description: "Plonk ships its fonts. Swap in your own with three variables.",
-};
+});
 
 <PageHeader crumb="Guides" title="Fonts" number="04">
   The fonts come with the package, so there's nothing to load. When you want

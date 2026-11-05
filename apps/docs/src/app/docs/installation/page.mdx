@@ -1,10 +1,11 @@
+import { pageMetadata } from "@/site/metadata";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Installation",
   description: "Add Plonk to a React app in three steps.",
-};
+});
 
 <PageHeader crumb="Get started" title="Installation" number="01">
   Install the package, import the styles, wrap your app once. That's the whole

@@ -1,12 +1,13 @@
+import { pageMetadata } from "@/site/metadata";
 import TabsPlayground from "@/examples/tabs/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Tabs",
   description: "Switch between panels. The indicator springs across.",
-};
+});
 
 <PageHeader crumb="Components / Structure" title="Tabs" number="22">
   Switch between views of the same thing. The indicator springs to the new tab

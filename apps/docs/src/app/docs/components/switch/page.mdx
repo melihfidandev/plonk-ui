@@ -1,13 +1,14 @@
+import { pageMetadata } from "@/site/metadata";
 import SwitchPlayground from "@/examples/switch/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Switch",
   description:
     "An on/off setting. The knob springs across and squashes on the way.",
-};
+});
 
 <PageHeader crumb="Components / Forms" title="Switch" number="21">
   An on/off setting that takes effect right away. The knob springs to the other

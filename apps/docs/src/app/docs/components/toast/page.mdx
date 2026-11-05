@@ -1,11 +1,12 @@
+import { pageMetadata } from "@/site/metadata";
 import ToastPlayground from "@/examples/toast/playground";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Toast",
   description: "Short notifications you can call from anywhere.",
-};
+});
 
 <PageHeader crumb="Components / Feedback" title="Toast" number="24">
   A short notification that comes and goes on its own. Call `toast()` from

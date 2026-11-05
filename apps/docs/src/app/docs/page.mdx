@@ -1,8 +1,10 @@
+import { pageMetadata } from "@/site/metadata";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Introduction",
-};
+  description: "What Plonk is, how personalities work and where to start.",
+});
 
 <PageHeader crumb="Get started" title="Introduction" number="00">
   Plonk is a neo-brutalist React component library with switchable

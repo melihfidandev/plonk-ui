@@ -1,10 +1,11 @@
+import { pageMetadata } from "@/site/metadata";
 import { ColorLab } from "@/site/ColorLab";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Colors",
   description: "Change Plonk's colors with plain CSS variables.",
-};
+});
 
 <PageHeader crumb="Guides" title="Colors" number="03">
   Every color is a CSS variable. Change a few and the whole library follows:

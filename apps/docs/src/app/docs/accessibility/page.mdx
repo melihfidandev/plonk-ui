@@ -1,10 +1,11 @@
+import { pageMetadata } from "@/site/metadata";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Accessibility",
   description: "Loud on the outside, careful on the inside.",
-};
+});
 
 <PageHeader crumb="Guides" title="Accessibility" number="08">
   Plonk looks loud, but it behaves quietly and correctly. Keyboard, focus and

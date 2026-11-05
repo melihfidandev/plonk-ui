@@ -1,11 +1,12 @@
+import { pageMetadata } from "@/site/metadata";
 import { LocaleLab } from "@/site/LocaleLab";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Localization",
   description:
     "Dates, numbers, sorting and every built-in label, in any language.",
-};
+});
 
 <PageHeader crumb="Guides" title="Localization" number="07">
   One prop sets the language for dates, numbers, sorting, search and screen

@@ -1,12 +1,13 @@
+import { pageMetadata } from "@/site/metadata";
 import DialogPlayground from "@/examples/dialog/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Dialog",
   description: "A window over the page, with an optional countdown.",
-};
+});
 
 <PageHeader crumb="Components / Overlays" title="Dialog" number="11">
   A window over the page for a focused task or a decision. Sticker throws it in

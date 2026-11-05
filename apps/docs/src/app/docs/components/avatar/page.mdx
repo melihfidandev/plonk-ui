@@ -1,13 +1,14 @@
+import { pageMetadata } from "@/site/metadata";
 import AvatarPlayground from "@/examples/avatar/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Avatar",
   description:
     "A profile picture with colorful initials when there's no image.",
-};
+});
 
 <PageHeader crumb="Components / Display" title="Avatar" number="02">
   A profile picture, or colorful initials when there's no picture. Stack them in

@@ -1,12 +1,13 @@
+import { pageMetadata } from "@/site/metadata";
 import TextareaPlayground from "@/examples/textarea/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Textarea",
   description: "A multi-line text field that can grow with what you write.",
-};
+});
 
 <PageHeader crumb="Components / Forms" title="Textarea" number="23">
   The multi-line sibling of [Input](/docs/components/input): same label, help

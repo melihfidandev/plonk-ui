@@ -1,13 +1,14 @@
+import { pageMetadata } from "@/site/metadata";
 import CardPlayground from "@/examples/card/playground";
 import { ApiTable } from "@/site/ApiTable";
 import { Example } from "@/site/Example";
 import { PageHeader } from "@/site/PageHeader";
 import { TapeLineup } from "@/site/TapeLineup";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Card",
   description: "A box for related content. In Retro, every card is a window.",
-};
+});
 
 <PageHeader crumb="Components / Display" title="Card" number="05">
   A box for related content: a title, a body, actions and a footer. Sticker can
