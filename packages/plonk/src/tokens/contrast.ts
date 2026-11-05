@@ -14,7 +14,7 @@ function luminance(hex: string): number {
   );
 }
 
-/** WCAG 2 kontrast oranı (1-21). */
+/** WCAG 2 contrast ratio (1-21). */
 export function contrastRatio(a: string, b: string): number {
   const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x) as [
     number,

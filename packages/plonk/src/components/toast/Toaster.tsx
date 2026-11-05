@@ -42,7 +42,7 @@ const subscribe = (fn: () => void) => toastQueue.subscribe(fn);
 const getSnapshot = () => toastQueue.visibleToasts;
 const getServerSnapshot = () => NO_TOASTS;
 
-/** React Aria hook'larının beklediği durum nesnesi, ortak kuyruktan. */
+/** The state object React Aria hooks expect, from the shared queue. */
 function useQueueState(): ToastState<ToastContent> {
   const visibleToasts = useSyncExternalStore(
     subscribe,
@@ -59,10 +59,10 @@ function useQueueState(): ToastState<ToastContent> {
 }
 
 /**
- * React Aria kapanan toast'u kuyruktan hemen siler. Çıkış hareketi (soyulma,
- * katlanma) bitene kadar onu "çıkıyor" olarak listede tutarız. Yeni gelenler
- * DOM'da başa eklenir; var olanların yeri değişmez, yoksa tarayıcı onların
- * animasyonlarını baştan başlatır.
+ * React Aria removes a closed toast from the queue right away. We keep it in the
+ * list as "exiting" until its exit motion (peel, fold) finishes. New toasts are added
+ * at the start of the DOM; existing ones don't move, otherwise the browser would restart
+ * their animations.
  */
 function merge(items: Item[], visible: Queued[]): Item[] {
   const live = new Map(visible.map((t) => [t.key, t]));
@@ -78,14 +78,14 @@ function merge(items: Item[], visible: Queued[]): Item[] {
 }
 
 export interface ToasterProps {
-  /** Bölgenin açılacağı kap (provider'ın katman kabı). */
+  /** Container the region opens in (the provider's layer container). */
   container: HTMLElement | null;
   placement?: ToastPlacement;
 }
 
 /**
- * Bildirim bölgesi. `PlonkProvider` bunu kendiliğinden açar; doğrudan
- * kullanılmaz.
+ * Notification region. `PlonkProvider` opens it automatically; not used
+ * directly.
  */
 export function Toaster({ container, placement = "bottom-end" }: ToasterProps) {
   const state = useQueueState();
@@ -259,14 +259,14 @@ const LABELS: Record<ToastVariant, string> = {
   danger: "Error",
 };
 
-/** Anahtardan sabit bir sayı: her toast'un eğimi ve bandı kendine özgü olsun. */
+/** A stable number from the key, so every toast has its own tilt and tape. */
 function seed(key: string) {
   let h = 0;
   for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) | 0;
   return ((h >>> 0) % 1000) / 1000;
 }
 
-/** Çizgi Roman'ın giriş animasyonu (theme.css); bitince patlama oynar. */
+/** Comic's entrance animation (theme.css); a burst plays when it ends. */
 const SLAM = "plonk-toast-slam";
 
 const SWIPE_DISTANCE = 110;
@@ -567,7 +567,7 @@ const SMOOTH: Record<ToastVariant, string> = {
   danger: "M7.5 7.5l9 9M16.5 7.5l-9 9",
 };
 
-/** 5×7 piksel çizimler; her `#` bir piksel. */
+/** 5×7 pixel drawings; each `#` is a pixel. */
 const PIXEL: Record<ToastVariant, string[]> = {
   info: ["..#..", ".....", ".##..", "..#..", "..#..", "..#..", ".###."],
   success: [".....", "....#", "...##", "#.##.", "###..", ".#...", "....."],

@@ -14,8 +14,8 @@ import {
 export interface TextareaProps
   extends ComponentPropsWithRef<"textarea">, FieldProps {
   /**
-   * Yazdıkça uzar (`field-sizing: content`). Desteklemeyen tarayıcılarda
-   * normal, elle boyutlanan bir alan olarak kalır.
+   * Grows as you type (`field-sizing: content`). In browsers without support it stays
+   * a normal, manually resizable field.
    */
   autoResize?: boolean;
 }

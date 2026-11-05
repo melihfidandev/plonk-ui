@@ -41,7 +41,7 @@ const subscribe = (fn: () => void) => {
   };
 };
 
-/** Paleti koddan açıp kapatmak için (ör. bir menü öğesinden). */
+/** Opens and closes the palette from code (e.g. from a menu item). */
 export const commandPalette = {
   open: () => setOpenState(true),
   close: () => setOpenState(false),
@@ -59,9 +59,9 @@ interface PaletteContextValue {
 }
 
 const PaletteContext = createContext<PaletteContextValue | null>(null);
-/** İçinde bulunulan alt sayfa; kökte `null`. */
+/** The current subpage; `null` at the root. */
 const PageContext = createContext<string | null>(null);
-/** Grup, öğelerini kendisi süzüp sıraladıysa öğeye eşleşmeyi verir. */
+/** Gives an item its match when its group already filtered and sorted the items. */
 const MatchContext = createContext<FuzzyMatch | null | undefined>(undefined);
 
 function usePalette() {
@@ -74,27 +74,27 @@ function usePalette() {
 
 export interface CommandPaletteProps {
   children: ReactNode;
-  /** Kontrollü kullanım. Verilmezse ⌘K ve `commandPalette.open()` yönetir. */
+  /** Controlled use. Without it, ⌘K and `commandPalette.open()` manage it. */
   isOpen?: boolean;
   onOpenChange?: (isOpen: boolean) => void;
-  /** ⌘K / Ctrl+K ile açılır. Başka bir harf ya da kapatmak için `false`. */
+  /** Opens with ⌘K / Ctrl+K. Another letter, or `false` to turn it off. */
   shortcut?: string | false;
   placeholder?: string;
-  /** Retro'da pencere başlığı; ekran okuyucular için paletin adı. */
+  /** Window title in Retro; the palette's name for screen readers. */
   title?: string;
   emptyLabel?: ReactNode;
-  /** Arama metni değişince (sunucudan arama için). */
+  /** Called when the search text changes (for server-side search). */
   onSearchChange?: (search: string) => void;
   className?: string;
 }
 
 /**
- * Komut paleti: ⌘K ile açılan, yazdıkça süzülen komut listesi. Sıfırdan
- * yazıldı; pencere katmanı (odak tuzağı, Esc, arka plan) Dialog'unkiyle aynı.
- * Ok tuşları, Enter, Esc; alt sayfada Backspace ya da Esc ile geri.
+ * Command palette: a list of commands that opens with ⌘K and filters as you type.
+ * Written from scratch; the window layer (focus trap, Esc, backdrop) is Dialog's.
+ * Arrow keys, Enter, Esc; on a subpage Backspace or Esc goes back.
  *
- * Sticker'da masaya düşen bir not; seçili satırın vurgusu satırdan satıra
- * yayla kayıp ezilir. Retro'da "Çalıştır…" penceresi, seçim ters renk.
+ * In Sticker a note dropped on the desk; the highlight springs from row to row and
+ * squishes. In Retro a "Run…" window with inverted selection.
  */
 export function CommandPalette({
   children,
@@ -386,12 +386,12 @@ function PaletteBody({
 // ---------- Alt sayfa, grup, öğe ----------
 
 export interface CommandPageProps {
-  /** `CommandItem`'ın `page` değeriyle eşleşir. */
+  /** Matches the `page` value of a `CommandItem`. */
   id: string;
   children: ReactNode;
 }
 
-/** Bir öğe seçilince açılan iç liste ("Tema değiştir ›"). */
+/** An inner list that opens when an item is chosen ("Change theme ›"). */
 export function CommandPage({ id, children }: CommandPageProps) {
   const { page } = usePalette();
   if (page !== id) return null;
@@ -402,18 +402,18 @@ export interface CommandGroupProps {
   heading?: ReactNode;
   children?: ReactNode;
   /**
-   * `false`: öğeleri süzme ve sıralama (sunucu zaten süzdüyse). Varsayılan:
-   * bulanık arama.
+   * `false`: don't filter or sort the items (when the server already did). Default:
+   * fuzzy search.
    */
   filter?: boolean;
-  /** Sonuçlar gelirken "aranıyor" satırı. */
+  /** A "searching" row while results are loading. */
   isLoading?: boolean;
   loadingLabel?: ReactNode;
 }
 
 /**
- * Başlıklı öğe grubu. Yazınca öğeler bulanık aramayla süzülür ve en iyi
- * eşleşen başa gelir; hiç öğe kalmazsa grup gizlenir.
+ * A group of items with a heading. Typing filters the items with fuzzy search and
+ * puts the best match first; the group hides when no items are left.
  */
 export function CommandGroup({
   heading,
@@ -468,19 +468,19 @@ export function CommandGroup({
 
 export interface CommandItemProps {
   children: ReactNode;
-  /** Arama için metin; `children` düz metin değilse zorunlu. */
+  /** Text to search by; required when `children` isn't plain text. */
   textValue?: string;
-  /** Aramada eşleşecek ek kelimeler ("ayarlar" için "tercihler"). */
+  /** Extra words to match in search ("preferences" for "settings"). */
   keywords?: string[];
   icon?: ReactNode;
   description?: ReactNode;
-  /** Sağda gösterilen kısayol, ör. "⌘N". Sadece gösterim. */
+  /** Shortcut shown on the right, e.g. "⌘N". Display only. */
   shortcut?: string;
-  /** Seçilince çalışır, ardından palet kapanır. */
+  /** Runs when chosen, then the palette closes. */
   onAction?: () => void;
-  /** Çalıştıktan sonra palet açık kalsın. */
+  /** Keep the palette open after running. */
   keepOpen?: boolean;
-  /** Seçilince bu kimlikteki `CommandPage` açılır. */
+  /** Opens the `CommandPage` with this id when chosen. */
   page?: string;
   isDisabled?: boolean;
 }
@@ -593,9 +593,9 @@ export interface CommandPaletteTriggerProps {
 }
 
 /**
- * Üst çubukta duran, arama kutusu gibi görünen düğme. Tıklayınca paleti
- * açar; klavye kullanmayanlar ve dokunmatik ekranlar için. Kısayolu da
- * öğretir (Mac'te ⌘K, diğerlerinde Ctrl K).
+ * A button that sits in the top bar and looks like a search box. Clicking it opens
+ * the palette, for people who don't use the keyboard and for touch screens. It also
+ * teaches the shortcut (⌘K on Mac, Ctrl K elsewhere).
  */
 export function CommandPaletteTrigger({
   children = "Search…",

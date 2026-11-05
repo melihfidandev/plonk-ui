@@ -23,60 +23,60 @@ import {
 import type { PlonkStyle } from "../tokens/variables";
 
 const PersonalityContext = createContext<PersonalityName>(DEFAULT_PERSONALITY);
-/** Yukarıda bildirim bölgesi açmış bir provider var mı? */
+/** Is there a provider above that already opened a notification region? */
 const ToasterContext = createContext(false);
-/** Süs bantlarının varsayılanı (Toast, tablo işlem çubuğu). */
+/** Default for decorative tape (Toast, table action bar). */
 const TapeContext = createContext(true);
 
 export interface PlonkProviderProps extends Omit<
   HTMLAttributes<HTMLDivElement>,
   "style"
 > {
-  /** Bileşenlerin görünüşü ve hareket dili. */
+  /** Look and motion language of the components. */
   personality?: PersonalityName;
   /**
-   * `system`: kullanıcının işletim sistemi tercihine uyar (varsayılan).
-   * `reduce`: hareketi her durumda azaltır.
+   * `system`: follows the user's operating system preference (default).
+   * `reduce`: always reduces motion.
    */
   motion?: "system" | "reduce";
   /**
-   * Jöle miktarı: 0 kapalı, 1 tam jöle. Verilmezse kişiliğin varsayılanı.
-   * Hareket azaltıldığında her durumda 0 olur.
+   * Jelly amount: 0 off, 1 full jelly. Defaults to the personality's value.
+   * Always 0 when motion is reduced.
    */
   jelly?: number;
   /**
-   * Normal stiller ve `--plonk-*` token'ları. Token'lar katmanlara (Dialog,
-   * Toast…) da taşınır: `style={{ "--plonk-color-focus": "#ff8cc6" }}`.
+   * Regular styles and `--plonk-*` tokens. Tokens also carry over to layers (Dialog,
+   * Toast…): `style={{ "--plonk-color-focus": "#ff8cc6" }}`.
    */
   style?: PlonkStyle;
   /**
-   * Bildirim bölgesini aç (varsayılan). Sadece en dıştaki provider açar;
-   * iç içe provider'lar onu kullanır. `false`: bu provider açmaz.
+   * Open the notification region (default). Only the outermost provider opens it;
+   * nested providers use that one. `false`: this provider doesn't open it.
    */
   toaster?: boolean;
-  /** Bildirimlerin ekrandaki köşesi. Varsayılan `bottom-end` (sağ alt). */
+  /** Screen corner for notifications. Default `bottom-end` (bottom right). */
   toastPlacement?: ToastPlacement;
   /**
-   * Bildirimlerin varsayılan ekranda kalma süresi (ms). En az 5000.
-   * Tek bir toast için `toast("…", { timeout })`.
+   * Default time notifications stay on screen (ms). At least 5000.
+   * For a single toast use `toast("…", { timeout })`.
    */
   toastTimeout?: number;
   /**
-   * Sticker'daki süs bantları: varsayılanı açık olan her yerde (Toast, tablo
-   * işlem çubuğu) kapatır ya da açar. Bileşenin kendi ayarı her zaman önceliklidir
-   * (`toast("…", { tape: true })`). Verilmezse dıştaki provider'ınki.
+   * Decorative tape: turns it off (or on) everywhere it's on by default (Toast, table
+   * action bar). A component's own setting always wins
+   * (`toast("…", { tape: true })`). Defaults to the outer provider's.
    */
   tape?: boolean;
   /**
-   * Dil ve bölge, ör. `"tr-TR"`. Tarih biçimi, ay adları, haftanın ilk günü
-   * ve React Aria'nın ekran okuyucu metinleri buna göre. Verilmezse tarayıcının dili.
+   * Language and region, e.g. `"tr-TR"`. Date format, month names, first day of the
+   * week and React Aria's screen reader texts follow it. Defaults to the browser's language.
    */
   locale?: string;
 }
 
 const subscribeNothing = () => () => {};
 
-/** Sadece CSS değişkenlerini (`--…`) alır; kenar boşluğu gibi yerleşim stilleri taşınmaz. */
+/** Takes only CSS variables (`--…`); layout styles such as margins aren't carried over. */
 function customProperties(style: PlonkStyle | undefined) {
   if (!style) return undefined;
   const entries = Object.entries(style).filter(([key]) => key.startsWith("--"));
@@ -86,13 +86,12 @@ function customProperties(style: PlonkStyle | undefined) {
 }
 
 /**
- * Altındaki her şeye bir kişilik verir. İç içe kullanılabilir; en yakın
- * provider kazanır.
+ * Gives everything below it a personality. Can be nested; the nearest provider wins.
  *
- * Dialog, menü gibi katmanlar sayfanın en altına (body) açılır. Kişilik
- * değişkenlerinin dışında kalmasınlar diye her provider, body'de kendi
- * kişiliğini taşıyan bir katman kabı açar ve katmanları oraya yönlendirir.
- * En dıştaki provider, `toast()` bildirimlerinin bölgesini de aynı kaba açar.
+ * Layers such as dialogs and menus open at the bottom of the page (body). So they
+ * don't fall outside the personality's variables, each provider opens a layer container
+ * in body that carries its personality and routes layers there. The outermost provider
+ * also opens the region for `toast()` notifications in that container.
  */
 export function PlonkProvider({
   personality = DEFAULT_PERSONALITY,
@@ -174,12 +173,12 @@ export function PlonkProvider({
   return locale ? <I18nProvider locale={locale}>{tree}</I18nProvider> : tree;
 }
 
-/** Süs bantları varsayılan olarak açık mı (en yakın provider'ın `tape` ayarı). */
+/** Is decorative tape on by default (the nearest provider's `tape` setting). */
 export function useTapeDefault(): boolean {
   return use(TapeContext);
 }
 
-/** En yakın `PlonkProvider`'ın kişiliği. Provider yoksa varsayılan kişilik. */
+/** Personality of the nearest `PlonkProvider`. The default personality without a provider. */
 export function usePersonality(): PersonalityName {
   return use(PersonalityContext);
 }

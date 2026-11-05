@@ -34,13 +34,13 @@ export interface ComboBoxProps<T extends object>
     FieldProps {
   children: ReactNode | ((item: T) => ReactNode);
   placeholder?: string;
-  /** Hiçbir seçenek eşleşmediğinde gösterilen metin. */
+  /** Text shown when no option matches. */
   emptyMessage?: ReactNode;
   className?: string;
 }
 
 /**
- * Yazdıkça filtrelenen seçim kutusu. Eşleşen harfler seçeneklerde vurgulanır.
+ * A select box that filters as you type. Matching letters are highlighted in the options.
  */
 export function ComboBox<T extends object>({
   label,
@@ -146,9 +146,9 @@ export function ComboBoxItem<T extends object>({
 }
 
 /**
- * Yazılan metnin seçenekteki ilk eşleşmesini vurgular. Küçük harfe çevirme
- * provider'ın diline göre: dil verilmezse tarayıcınınki kullanılır ve İngilizce
- * bir tarayıcıda "İzmir" → "i̇zmir" (noktalı i) olur, "iz" eşleşmez.
+ * Highlights the first match of the typed text in the option. Lowercasing follows the
+ * provider's language: without one the browser's is used, and in an English browser
+ * "İzmir" becomes "i̇zmir" (dotted i) and "iz" wouldn't match.
  */
 function Highlight({ text }: { text: string }) {
   const { locale } = useLocale();

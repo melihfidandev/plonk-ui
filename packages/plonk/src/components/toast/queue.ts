@@ -5,36 +5,36 @@ export type ToastVariant = "info" | "success" | "warning" | "danger";
 
 export interface ToastAction {
   label: ReactNode;
-  /** Düğmeye basınca çalışır; ardından toast kapanır. */
+  /** Runs when the button is pressed; then the toast closes. */
   onPress: () => void;
 }
 
 export interface ToastOptions {
   description?: ReactNode;
   variant?: ToastVariant;
-  /** Tek bir eylem düğmesi ("Geri al", "Tekrar dene"). */
+  /** A single action button ("Undo", "Retry"). */
   action?: ToastAction;
   /**
-   * Kaç milisaniye sonra kendiliğinden kapansın. `0`: kullanıcı kapatana kadar
-   * kalır. Varsayılan 5 sn; aksiyonlu toast'larda 0. 5 sn'nin altı 5 sn'ye
-   * yükseltilir: okumaya ve eyleme yetişmek için (WCAG 2.2.1).
+   * Milliseconds before it closes on its own. `0`: stays until the user closes it.
+   * Default 5 s; 0 for toasts with an action. Anything below 5 s is raised to 5 s, so
+   * there is time to read and act (WCAG 2.2.1).
    */
   timeout?: number;
   /**
-   * Retro'da pencere başlık çubuğundaki yazı. Verilmezse türün adı
-   * ("Notice", "Success", "Warning", "Error").
+   * Text in the title bar in Retro (and the label in Comic and Arcade). Defaults to the
+   * type's name ("Notice", "Success", "Warning", "Error").
    */
   label?: ReactNode;
   /**
-   * Sticker'da üstteki bant. Varsayılan açık (provider'ın `tape` ayarı);
-   * Retro'da görünmez.
+   * The tape on top. On by default (the provider's `tape` setting); each personality
+   * draws its own version.
    */
   tape?: boolean;
-  /** Kapandığında çağrılır: kullanıcı kapatınca ya da süre dolunca. */
+  /** Called when it closes: when the user closes it or time runs out. */
   onClose?: () => void;
 }
 
-/** Kuyrukta duran içerik. */
+/** Content waiting in the queue. */
 export interface ToastContent {
   title: ReactNode;
   description?: ReactNode;
@@ -48,9 +48,9 @@ export const MIN_TIMEOUT = 5000;
 const MAX_VISIBLE = 3;
 
 /**
- * Uygulamanın tek bildirim kuyruğu. React dışından da (bir fetch'in
- * catch'inden, bir store'dan) toast açılabilsin diye modül düzeyinde.
- * Görüntüleyen, en dıştaki `PlonkProvider`'ın açtığı bildirim bölgesidir.
+ * The app's single notification queue. Module level, so toasts can be opened from
+ * outside React too (a fetch's catch, a store). They are displayed by the region
+ * opened by the outermost `PlonkProvider`.
  */
 export const toastQueue = /* @__PURE__ */ new ToastQueue<ToastContent>({
   maxVisibleToasts: MAX_VISIBLE,
@@ -59,12 +59,12 @@ export const toastQueue = /* @__PURE__ */ new ToastQueue<ToastContent>({
 let defaultTimeout = MIN_TIMEOUT;
 let defaultTape = true;
 
-/** Provider'ın `toastTimeout` ayarı buraya yazılır. */
+/** The provider's `toastTimeout` setting is written here. */
 export function setDefaultToastTimeout(ms: number) {
   defaultTimeout = ms;
 }
 
-/** Provider'ın `tape` ayarı buraya yazılır (toast React dışından da açılır). */
+/** The provider's `tape` setting is written here (toasts open from outside React too). */
 export function setDefaultToastTape(tape: boolean) {
   defaultTape = tape;
 }
@@ -99,8 +99,8 @@ const shortcut =
     show(title, { ...options, variant });
 
 /**
- * Bildirim gösterir ve anahtarını döner. Her yerden çağrılabilir; hook ya da
- * context gerekmez.
+ * Shows a notification and returns its key. Callable from anywhere; no hook or
+ * context needed.
  *
  * ```ts
  * toast("Changes saved");
@@ -116,7 +116,7 @@ export const toast = /* @__PURE__ */ Object.assign(
     success: shortcut("success"),
     warning: shortcut("warning"),
     danger: shortcut("danger"),
-    /** Anahtarı verilen toast'u kapatır; anahtar verilmezse hepsini. */
+    /** Closes the toast with the given key; closes all of them when no key is given. */
     dismiss(key?: string) {
       if (key === undefined) toastQueue.clear();
       else toastQueue.close(key);

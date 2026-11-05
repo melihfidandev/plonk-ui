@@ -9,12 +9,12 @@ import {
 } from "react-aria-components";
 import { cn } from "../../lib/cn";
 
-/** Menu ve ListBox seçeneklerinin ortak durum bilgisinden ihtiyacımız olan kısım. */
+/** The part of Menu and ListBox option state that we need. */
 interface ItemRenderProps {
   selectionMode: "none" | "single" | "multiple";
 }
 
-/** Menu, Select ve ComboBox'ın açılan kutusu. Seçenekler sırayla gelir. */
+/** The popup of Menu, Select and ComboBox. Options come in one after another. */
 export function ListPopover({
   className,
   offset = 8,
@@ -32,20 +32,20 @@ export function ListPopover({
   );
 }
 
-/** Seçenek satırının sınıfları. Odak ve seçili hâlin rengi kişilikten gelir. */
+/** Classes of an option row. Focus and selected colors come from the personality. */
 export const itemClass =
   "plonk-item relative flex cursor-pointer items-center gap-2.5 rounded-plonk-sm px-2.5 py-2 text-[0.95rem] outline-none select-none data-disabled:cursor-not-allowed";
 
 export interface ItemContentProps {
-  /** Baştaki ikon. Ekran okuyuculardan gizlenir. */
+  /** Leading icon. Hidden from screen readers. */
   icon?: ReactNode;
-  /** Etiketin altındaki küçük açıklama. */
+  /** Small description under the label. */
   description?: ReactNode;
-  /** Sağdaki klavye kısayolu, ör. "⌘E". */
+  /** Keyboard shortcut on the right, e.g. "⌘E". */
   shortcut?: string;
 }
 
-/** Bir seçenek satırının içi: ikon, etiket, açıklama, kısayol ve seçili işareti. */
+/** The inside of an option row: icon, label, description, shortcut and check mark. */
 export function ItemContent({
   icon,
   description,
@@ -117,6 +117,6 @@ export function ListSeparator() {
   );
 }
 
-/** Seçeneğin etiketi metin değilse yazarak arama için düz metin gerekir. */
+/** Plain text for type-to-search when the option's label isn't text. */
 export const textValueOf = (children: ReactNode, textValue?: string) =>
   textValue ?? (typeof children === "string" ? children : undefined);

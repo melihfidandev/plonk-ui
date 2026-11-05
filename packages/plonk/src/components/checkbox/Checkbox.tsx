@@ -15,11 +15,11 @@ import {
 
 export interface CheckboxProps
   extends Omit<ComponentPropsWithRef<"input">, "type" | "size">, FieldProps {
-  /** "Bazıları seçili" hâli (tümünü seç kutuları için). */
+  /** "Some selected" state (for select-all boxes). */
   indeterminate?: boolean;
 }
 
-/** İşaretlenince tik çizilerek gelir, kutu jöle gibi esner. */
+/** When checked, the tick draws itself in and the box wobbles like jelly. */
 export function Checkbox({
   label,
   description,

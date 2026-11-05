@@ -48,7 +48,7 @@ export interface DataTableMessages {
   clearFilters: string;
   noResults: string;
   loading: string;
-  /** "3 seçili" içindeki kelime; sayı ayrı gösterilir. */
+  /** The word in "3 selected"; the number is shown separately. */
   selected: string;
   clearSelection: string;
   selectAll: string;
@@ -72,9 +72,9 @@ const MESSAGES: DataTableMessages = {
 };
 
 export interface DataTableBulkContext<T> {
-  /** Seçili ve yüklü satırların verisi. */
+  /** Data of the selected rows that are loaded. */
   rows: T[];
-  /** Seçili satır kimlikleri (yüklü olmayanlar dahil). */
+  /** Ids of the selected rows (including ones not loaded). */
   ids: string[];
   clear: () => void;
 }
@@ -82,32 +82,32 @@ export interface DataTableBulkContext<T> {
 export interface DataTableProps<T extends RowData> {
   data: T[];
   columns: DataTableColumn<T>[];
-  /** Satırın kalıcı kimliği. Seçim ve sıralama hareketi buna dayanır. */
+  /** A stable id for the row. Selection and reorder motion rely on it. */
   getRowId: (row: T) => string;
-  /** Satır başında seçim kutuları ve toplu işlem çubuğu. */
+  /** Selection boxes at the start of rows, and the bulk action bar. */
   selectable?: boolean;
-  /** Seçim varken alttaki çubukta gösterilen işlemler. */
+  /** Actions shown in the bar at the bottom while there is a selection. */
   bulkActions?: (ctx: DataTableBulkContext<T>) => ReactNode;
-  /** Sticker'da işlem çubuğundaki bant. Verilmezse provider'ın `tape` ayarı. */
+  /** The tape on the bulk action bar. Defaults to the provider's `tape` setting. */
   bulkBarTape?: boolean;
-  /** Arama kutusu (bütün metin sütunlarında). Varsayılan açık. */
+  /** Search box (across all text columns). On by default. */
   searchable?: boolean;
-  /** Sütun göster/gizle menüsü. Varsayılan açık. */
+  /** Show/hide columns menu. On by default. */
   columnMenu?: boolean;
-  /** Araç çubuğunun sonuna eklenecek içerik (ör. "Yeni" düğmesi). */
+  /** Content added to the end of the toolbar (e.g. a "New" button). */
   toolbar?: ReactNode;
-  /** Kaydırma alanının yüksekliği. Satırlar sanal: binlercesi de akıcı kayar. */
+  /** Height of the scroll area. Rows are virtual: thousands scroll smoothly too. */
   height?: number | string;
-  /** Satır yüksekliği (px). */
+  /** Row height (px). */
   rowHeight?: number;
   isLoading?: boolean;
-  /** Boş durumda gösterilecek içerik. */
+  /** Content shown when empty. */
   emptyState?: ReactNode;
-  /** Sıralamayı sunucu yapıyorsa: tablo sadece durumu bildirir. */
+  /** When the server sorts: the table only reports the state. */
   manualSorting?: boolean;
-  /** Filtrelemeyi sunucu yapıyorsa. */
+  /** When the server filters. */
   manualFiltering?: boolean;
-  /** Sunucudaki toplam satır sayısı (sayaç için). */
+  /** Total row count on the server (for the counter). */
   rowCount?: number;
   sorting?: SortingState;
   onSortingChange?: (sorting: SortingState) => void;
@@ -124,7 +124,7 @@ export interface DataTableProps<T extends RowData> {
   className?: string;
 }
 
-/** Kontrollü durum: değer verildiyse onu, yoksa kendi durumunu kullanır. */
+/** Controlled state: uses the value when given, otherwise its own state. */
 function useControllable<V>(
   value: V | undefined,
   onChange: ((v: V) => void) | undefined,
@@ -146,13 +146,13 @@ function useControllable<V>(
 const SELECT_ID = "__select";
 
 /**
- * Veri tablosu: sıralama (Shift ile çoklu), arama ve sütun filtreleri, sütun
- * gizleme ve genişlik ayarı, satır seçimi ve toplu işlemler, sanal kaydırma.
- * Motor TanStack Table + Virtual; görünüm ve hareket Plonk'un.
+ * Data table: sorting (multi-sort with Shift), search and column filters, hiding and
+ * resizing columns, row selection and bulk actions, virtual scrolling. The engine is
+ * TanStack Table + Virtual; the look and motion are Plonk's.
  *
- * Sticker'da sıralanınca satırlar yeni yerlerine eğilerek kayar, seçilen satır
- * fosforlu kalemle boyanır, işlem çubuğu alttan bantla yapışır. Retro'da
- * satırlar kademeli belirir, seçim ters renk, çubuk bir durum çubuğu.
+ * In Sticker sorted rows lean as they slide to their new places, selected rows are
+ * painted with a highlighter, and the action bar sticks on from below with tape. In
+ * Retro rows appear in steps, selection is inverted and the bar is a status bar.
  */
 export function DataTable<T extends RowData>({
   data,
@@ -724,15 +724,15 @@ function BulkBar({
 // ---------- Hareket: sıralama ve süzmede satırlar ----------
 
 /**
- * Sıralama, süzme ya da veri değişince satırlar yeni yerlerine hareket eder.
- * Her render'dan sonra satırların konumu kaydedilir; değişim olunca eski ve
- * yeni konum arasındaki fark oynatılır (FLIP). Kaydırmada oynatılmaz.
+ * When sorting, filtering or the data changes, rows move to their new places.
+ * Row positions are recorded after every render; on a change the difference between
+ * the old and new position is played (FLIP). Not played while scrolling.
  *
- * Kişilik hareketi CSS'te seçer (`--plonk-table-reorder`): Sticker `flip`
- * (aşmadan kayar, yolda eğilir; yay aşması satırları üst üste yığıyordu),
- * Çizgi Roman `hop` (gittiği yöne öne yatar, hedefi sabit birkaç piksel geçip
- * geri oturur ve inişte ezilir), Retro ve Atari `steps` (yukarıdan aşağı
- * kademeli belirir), azaltılmış hareket `fade`.
+ * The personality picks the motion in CSS (`--plonk-table-reorder`): Sticker `flip`
+ * (slides without overshoot and leans on the way; a spring's overshoot piled rows on
+ * top of each other), Comic `hop` (leans forward in its direction, passes the target
+ * by a fixed few pixels, settles back and squishes on landing), Retro and Arcade
+ * `steps` (appear top to bottom in steps), reduced motion `fade`.
  */
 function useReorderMotion(
   tbody: React.RefObject<HTMLTableSectionElement | null>,

@@ -3,7 +3,7 @@ import { cn } from "../../lib/cn";
 
 export type KbdProps = ComponentPropsWithRef<"kbd">;
 
-/** Klavye tuşu. Tuş kombinasyonları için yan yana kullan: <Kbd>⌘</Kbd><Kbd>K</Kbd> */
+/** A keyboard key. Put them side by side for combinations: <Kbd>⌘</Kbd><Kbd>K</Kbd> */
 export function Kbd({ className, ...props }: KbdProps) {
   return (
     <kbd

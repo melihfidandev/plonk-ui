@@ -20,16 +20,16 @@ export interface ButtonProps extends Omit<
 > {
   variant?: ButtonVariant;
   size?: ButtonSize;
-  /** Metnin önündeki ikon. Ekran okuyuculardan gizlenir. */
+  /** Icon before the text. Hidden from screen readers. */
   iconStart?: ReactNode;
-  /** Metnin arkasındaki ikon. Ekran okuyuculardan gizlenir. */
+  /** Icon after the text. Hidden from screen readers. */
   iconEnd?: ReactNode;
   /**
-   * İş sürerken: tıklanamaz ama odakta kalır, genişliği korunur, yerine
-   * yükleniyor noktaları gelir. Ekran okuyucuya durum değişimi duyurulur.
+   * While work is in progress: not pressable but keeps focus and its width; loading
+   * dots take the label's place. The state change is announced to screen readers.
    */
   loading?: boolean;
-  /** HTML'deki gibi; `isDisabled` ile aynı. */
+  /** Same as in HTML; equivalent to `isDisabled`. */
   disabled?: boolean;
   className?: string;
   style?: CSSProperties;
@@ -57,12 +57,12 @@ const SIZES: Record<ButtonSize, string> = {
 };
 
 /**
- * Basınca gölgesinin yerine iner, bırakınca yayla çıkıp jöle gibi esner.
- * Hareketin dili kişilikten gelir: Retro'da anlık ve kademeli, Çizgi Roman'da
- * tıklanan yerde PAT!, Atari'de düğmeden puan uçar.
+ * Sinks into its shadow when pressed, springs back on release and wobbles like jelly.
+ * The motion comes from the personality: instant and stepped in Retro, a POW! where
+ * you click in Comic, points flying off the button in Arcade.
  *
- * React Aria'nın Button'ı üzerine kurulu: dokunma, klavye ve fare aynı
- * davranır; Dialog, Menu gibi bileşenlerin tetikleyicisi olarak çalışır.
+ * Built on React Aria's Button: touch, keyboard and mouse behave the same, and it
+ * works as the trigger of Dialog, Menu and similar components.
  */
 export function Button({
   variant = "primary",

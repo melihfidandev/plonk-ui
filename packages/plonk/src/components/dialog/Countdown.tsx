@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
-/** Ekran okuyucuya kalan süre bu anlarda bildirilir (her saniye değil). */
+/** Moments at which the remaining time is announced to screen readers (not every second). */
 const ANNOUNCE_AT = [10, 5];
-/** Saniyeden sık bakılır: sekme uyuyup uyanınca sayı hemen düzelsin. */
+/**
+ * Checked more often than once a second, so the number corrects itself right away
+ * when the tab sleeps and wakes.
+ */
 const POLL_MS = 200;
 
 export interface CountdownProps {
-  /** Kaç saniyeden geriye sayılır. */
+  /** Number of seconds to count down from. */
   seconds: number;
   label: ReactNode;
   message: (seconds: number) => string;
@@ -14,13 +17,13 @@ export interface CountdownProps {
 }
 
 /**
- * Dialog'un geri sayımı. Süre bir bitiş anına göre hesaplanır, sayaç
- * kaymaz. Görünen sayı ekran okuyuculardan gizlidir; onlara sadece
- * belli anlarda kibarca (polite) kalan süre söylenir.
+ * The dialog's countdown. Time is computed against an end moment, so the counter
+ * doesn't drift. The visible number is hidden from screen readers; they are told the
+ * remaining time politely, only at certain moments.
  *
- * Görünüş kişilikten gelir: Atari'de dev "DEVAM? 9", diğerlerinde
- * kendi tarzlarında küçük bir sayaç. Her saniyede sayı `key` ile yeniden
- * doğar, böylece CSS'teki tik animasyonu baştan oynar.
+ * The look comes from the personality: a huge "CONTINUE? 9" in Arcade, a small
+ * counter in its own style elsewhere. Each second the number is reborn with a `key`,
+ * so the tick animation in CSS replays from the start.
  */
 export function Countdown({ seconds, label, message, onEnd }: CountdownProps) {
   const [left, setLeft] = useState(seconds);

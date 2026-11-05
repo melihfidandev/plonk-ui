@@ -21,19 +21,19 @@ export interface PopoverProps extends Pick<
   | "triggerRef"
   | "shouldFlip"
 > {
-  /** Küçük başlık; dialog'un adı olarak da kullanılır. */
+  /** Small heading; also used as the dialog's name. */
   title?: ReactNode;
-  /** İçerik. Fonksiyon verilirse `close` ile kapatabilirsin. */
+  /** Content. Pass a function to close it with `close`. */
   children?: ReactNode | ((api: { close: () => void }) => ReactNode);
-  /** Görünür başlık yoksa zorunlu. */
+  /** Required when there is no visible title. */
   "aria-label"?: string;
   className?: string;
 }
 
 /**
- * Tetikleyicinin yanında açılan küçük panel. `DialogTrigger` ile kullanılır.
- * Tetikleyiciye tıklanan noktadan büyüyerek çıkar. Çizgi Roman'da bir
- * konuşma balonu: kuyruğu tetikleyiciyi gösterir.
+ * A small panel that opens next to its trigger. Used with `DialogTrigger`.
+ * It grows out from where the trigger was clicked. In Comic it's a speech bubble whose
+ * tail points at the trigger.
  */
 export function Popover({
   title,

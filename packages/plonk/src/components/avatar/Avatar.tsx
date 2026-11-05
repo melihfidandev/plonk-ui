@@ -50,13 +50,13 @@ export interface AvatarProps extends Omit<
   ComponentPropsWithRef<"span">,
   "children"
 > {
-  /** Kişinin adı: resmin alternatif metni ve yedek baş harfler buradan gelir. */
+  /** The person's name: the image's alt text and the fallback initials come from it. */
   name: string;
   src?: string;
   size?: AvatarSize;
 }
 
-/** Profil resmi. Resim yoksa ya da yüklenemezse renkli baş harfler. */
+/** Profile picture. Colored initials when there is no image or it fails to load. */
 export function Avatar({ name, src, size, className, ...props }: AvatarProps) {
   const groupSize = use(SizeContext);
   const [failedSrc, setFailedSrc] = useState<string>();
@@ -93,14 +93,14 @@ export function Avatar({ name, src, size, className, ...props }: AvatarProps) {
 }
 
 export interface AvatarGroupProps extends ComponentPropsWithRef<"div"> {
-  /** En fazla bu kadar avatar gösterilir; kalanı "+N" olur. */
+  /** Show at most this many avatars; the rest become "+N". */
   max?: number;
   size?: AvatarSize;
   /** "+N" kutusunun ekran okuyucu metni. */
   moreLabel?: (count: number) => string;
 }
 
-/** Üst üste binen avatarlar. Üzerine gelince her biri yayla kalkar. */
+/** Overlapping avatars. Each one springs up on hover. */
 export function AvatarGroup({
   max,
   size = "md",

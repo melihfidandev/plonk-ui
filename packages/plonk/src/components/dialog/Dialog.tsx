@@ -22,36 +22,36 @@ export interface DialogProps extends Pick<
   "isOpen" | "defaultOpen" | "onOpenChange" | "isKeyboardDismissDisabled"
 > {
   title?: ReactNode;
-  /** Başlığın altındaki açıklama; ekran okuyucuya dialog'un açıklaması olarak bağlanır. */
+  /** Description under the title; linked to screen readers as the dialog's description. */
   description?: ReactNode;
-  /** İçerik. Fonksiyon verilirse `close` ile dialog'u kapatabilirsin. */
+  /** Content. Pass a function to close the dialog with `close`. */
   children?: RenderSlot;
-  /** Alt kısımdaki eylemler (genelde butonlar). Fonksiyon olarak da verilebilir. */
+  /** Actions at the bottom (usually buttons). Can also be a function. */
   footer?: RenderSlot;
   size?: DialogSize;
   /**
-   * `alertdialog`: kullanıcının bir karar vermesi gereken uyarılar. Dışarı
-   * tıklayınca kapanmaz ve kapatma kutusu çıkmaz.
+   * `alertdialog`: warnings where the user has to make a decision. It doesn't close on
+   * an outside click and has no close box.
    */
   role?: "dialog" | "alertdialog";
-  /** Dışarı tıklayınca kapansın mı? Varsayılan: `dialog` için evet. */
+  /** Close on an outside click? Default: yes for `dialog`. */
   isDismissable?: boolean;
-  /** Kapatma kutusunu gizler. `alertdialog`'da varsayılan olarak gizli. */
+  /** Hides the close box. Hidden by default in `alertdialog`. */
   hideClose?: boolean;
-  /** Kapatma kutusunun ekran okuyucu adı. */
+  /** Screen reader name of the close box. */
   closeLabel?: string;
   /**
-   * Saniye cinsinden geri sayım (ör. "Oturumun kapanacak, devam?"). Bitince
-   * `onCountdownEnd` çağrılır; verilmemişse dialog kapanır. Kullanıcıya yetecek
-   * süre ver (WCAG: en az 20 sn) ve süreyi uzatan bir düğme koy.
+   * Countdown in seconds (e.g. "Your session is about to expire. Continue?"). When it
+   * ends `onCountdownEnd` is called; without it the dialog closes. Give users enough
+   * time (WCAG: at least 20 s) and add a button that extends it.
    */
   countdown?: number;
   onCountdownEnd?: (api: { close: () => void }) => void;
-  /** Sayının yanındaki yazı. Varsayılan: "Continue?". */
+  /** Text next to the number. Default: "Continue?". */
   countdownLabel?: ReactNode;
-  /** Ekran okuyucuya 10 ve 5 saniye kala söylenen metin (yerelleştirme için). */
+  /** Text read to screen readers with 10 and 5 seconds left (for localization). */
   countdownMessage?: (seconds: number) => string;
-  /** Görünür başlık yoksa zorunlu. */
+  /** Required when there is no visible title. */
   "aria-label"?: string;
   className?: string;
 }
@@ -65,12 +65,12 @@ const SIZES: Record<DialogSize, string> = {
 };
 
 /**
- * Sayfanın üstünde açılan pencere. Odak içeride tutulur, Esc ile kapanır,
- * kapanınca odak açan düğmeye döner (React Aria).
+ * A window that opens above the page. Focus stays inside, Esc closes it and focus
+ * returns to the button that opened it (React Aria).
  *
- * Sticker'da fırlatılmış gibi gelip jöleyle oturur. Retro'da eski Mac'teki
- * gibi ortadan büyüyen çerçevelerle açılır. Çizgi Roman'da konuşma balonu
- * kuyruğundan şişer, Atari'de ekran gibi kademeli büyür.
+ * In Sticker it flies in and settles with a wobble. In Retro it opens with frames
+ * growing from the center, like an old Mac. In Comic a speech bubble inflates from
+ * its tail; in Arcade it grows in steps like a screen.
  */
 export function Dialog({
   title,

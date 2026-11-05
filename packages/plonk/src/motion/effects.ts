@@ -1,17 +1,17 @@
 /**
- * Basma efektleri: kişiliğin "imza" anları. Hangisinin oynayacağını CSS seçer
- * (`--plonk-press-effect`): Çizgi Roman'da `burst` (tıklanan yerde PAT!, ZAP!),
- * Atari'de `score` (düğmeden +100 uçar), diğerlerinde `none`.
+ * Press effects: the personality's "signature" moments. CSS picks which one plays
+ * (`--plonk-press-effect`): `burst` in Comic (POW!, ZAP! where you click), `score` in
+ * Arcade (+100 flies off the button), `none` elsewhere.
  *
- * Efekt `body`'ye eklenir: hiçbir kutunun overflow'u ya da transform'u onu
- * kırpmasın. Kişiliğin renk ve fontu kaynak elemandan kopyalanır; böylece
- * kullanıcının provider `style`'ı ile verdiği renkler de geçerli olur.
+ * The effect is added to `body`, so no box's overflow or transform clips it. The
+ * personality's colors and fonts are copied from the source element, so colors given
+ * through the provider's `style` apply too.
  */
 
 const BURST_WORDS = ["PAT!", "ZAP!", "BAM!", "POW!", "TAK!"];
 const SCORES = [10, 50, 100, 250];
 
-/** Efektin okuduğu değişkenler. */
+/** Variables the effect reads. */
 const COPIED = [
   "--plonk-color-primary",
   "--plonk-color-accent",
@@ -21,11 +21,11 @@ const COPIED = [
   "--plonk-font-display",
 ];
 
-/** Animasyon hiç bitmezse (sekme arka planda) yine de temizlensin. */
+/** Cleaned up even if the animation never ends (tab in the background). */
 const SAFETY_MS = 2000;
 
 let last = -1;
-/** Arka arkaya aynı kelime gelmesin. */
+/** Don't repeat the same word twice in a row. */
 function pick<T>(list: T[]): T {
   let i = Math.floor(Math.random() * list.length);
   if (i === last) i = (i + 1) % list.length;
@@ -34,13 +34,13 @@ function pick<T>(list: T[]): T {
 }
 
 export interface PressEffectOptions {
-  /** `sm`: küçük patlama (ör. toast'un inişi). */
+  /** `sm`: a small burst (e.g. a toast landing). */
   size?: "sm";
 }
 
 /**
- * Elemanın kişiliğindeki basma efektini oynatır. `point` ekran koordinatı;
- * verilmezse (klavye) elemanın ortası kullanılır.
+ * Plays the press effect of the element's personality. `point` is a screen
+ * coordinate; without it (keyboard) the element's center is used.
  */
 export function playPressEffect(
   el: Element,

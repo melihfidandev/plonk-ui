@@ -1,6 +1,6 @@
 import type { Ref, RefCallback } from "react";
 
-/** Birden çok ref'i tek bir ref callback'inde birleştirir. */
+/** Merges several refs into a single ref callback. */
 export function mergeRefs<T>(...refs: (Ref<T> | undefined)[]): RefCallback<T> {
   return (value) => {
     for (const ref of refs) {

@@ -18,12 +18,12 @@ import { cn } from "../../lib/cn";
 import { playJelly } from "../../motion/jelly";
 import type { FieldProps } from "../field/Field";
 
-/** Tek değer ya da `[başlangıç, bitiş]` aralığı. */
+/** A single value or a `[start, end]` range. */
 export type SliderValue = number | [number, number];
 
 export interface SliderMark {
   value: number;
-  /** Verilmezse değer, `formatOptions` ile biçimlenip yazılır. */
+  /** When omitted, the value is formatted with `formatOptions`. */
   label?: ReactNode;
 }
 
@@ -33,32 +33,32 @@ export interface SliderProps<T extends SliderValue = number> extends Omit<
 > {
   value?: T;
   defaultValue?: T;
-  /** Her değişimde (sürüklerken de) çağrılır. */
+  /** Called on every change (while dragging too). */
   onChange?: (value: T) => void;
-  /** Sürükleme bitince ya da klavyeyle her adımda çağrılır (kaydetmek için). */
+  /** Called when dragging ends, or on every keyboard step (for saving). */
   onChangeEnd?: (value: T) => void;
   min?: number;
   max?: number;
   step?: number;
   /**
-   * Aralıkta iki tutamaç arasında kalması gereken en küçük fark, ör. fiyatta
-   * `100`. `step`'in katı olmalı. Varsayılan 0: tutamaçlar aynı değere gelebilir.
+   * Smallest gap the two thumbs of a range must keep, e.g. `100` for a price.
+   * Should be a multiple of `step`. Default 0: the thumbs can meet at the same value.
    */
   minGap?: number;
-  /** Sayı biçimi (`Intl.NumberFormat`), ör. `{ style: "currency", currency: "TRY" }`. */
+  /** Number format (`Intl.NumberFormat`), e.g. `{ style: "currency", currency: "TRY" }`. */
   formatOptions?: Intl.NumberFormatOptions;
-  /** Biçimi tamamen sen ver: `(v) => ["Low", "Mid", "High"][v]`. */
+  /** Format it entirely yourself: `(v) => ["Low", "Mid", "High"][v]`. */
   formatValue?: (value: number) => string;
-  /** Rayın altındaki işaretler: sayılar ya da `{ value, label }`. */
+  /** Marks under the track: numbers or `{ value, label }`. */
   marks?: (number | SliderMark)[];
-  /** Tutamacın üstündeki değer etiketi: hep görünür ya da sadece kullanılırken. */
+  /** Value label above the thumb: always visible, or only while in use. */
   valueBubble?: "always" | "active" | "never";
-  /** Aralıkta iki tutamacın ekran okuyucu adları. */
+  /** Screen reader names of the two thumbs of a range. */
   thumbLabels?: [string, string];
-  /** Formla gönderilir; aralıkta aynı adla iki değer. */
+  /** Submitted with the form; a range sends two values under the same name. */
   name?: string;
   isDisabled?: boolean;
-  /** Görünür etiket yoksa zorunlu. */
+  /** Required when there is no visible label. */
   "aria-label"?: string;
   className?: string;
 }
@@ -66,16 +66,17 @@ export interface SliderProps<T extends SliderValue = number> extends Omit<
 const clamp = (v: number, lo: number, hi: number) =>
   Math.min(hi, Math.max(lo, v));
 
-/** Sticker tutamacının imlecin en fazla ne kadar gerisinde kalabileceği (px). */
+/** How far (px) the Sticker thumb may lag behind the pointer at most. */
 const MAX_LAG = 18;
 
 /**
- * Kaydırıcı: tek değer ya da iki tutamaçlı aralık. Sıfırdan yazıldı; fare,
- * dokunma ve klavye (oklar, PageUp/PageDown, Home/End) çalışır.
+ * Slider: a single value or a range with two thumbs. Written from scratch; mouse,
+ * touch and keyboard (arrows, PageUp/PageDown, Home/End) work.
  *
- * Sticker'da tutamaç sürüklenirken hız yönünde jöle gibi uzar, değer etiketi
- * yaylı bir gecikmeyle izler ve eğilir. Retro'da tutamaç adım adım zıplar.
- * Fizik, `--plonk-jelly-amount` sıfırsa (Retro, azaltılmış hareket) kapalıdır.
+ * In Sticker the thumb stretches like jelly in the direction of travel while dragged,
+ * and the value label follows with a springy delay and leans. In Retro the thumb hops
+ * step by step. The physics is off when `--plonk-jelly-amount` is zero (Retro, reduced
+ * motion).
  */
 export function Slider<T extends SliderValue = number>({
   label,
@@ -380,10 +381,10 @@ export function Slider<T extends SliderValue = number>({
 }
 
 /**
- * Sticker fiziği. Tutamacın görünen konumu gerçek konumu yayla izler; aradaki
- * hız tutamacı uzatır, değer etiketi bir yay daha geriden gelip eğilir.
- * Değerler CSS değişkenlerine yazılır. Döngü sadece hareket varken çalışır ve
- * jöle miktarı 0 ise (Retro, azaltılmış hareket) hiç başlamaz.
+ * Sticker physics. The thumb's visible position follows the real one with a spring;
+ * the speed in between stretches the thumb, and the value label trails one more spring
+ * behind and leans. Values are written to CSS variables. The loop only runs while there
+ * is motion and never starts when the jelly amount is 0 (Retro, reduced motion).
  */
 function useSliderPhysics(
   area: RefObject<HTMLDivElement | null>,
@@ -482,20 +483,20 @@ function useSliderPhysics(
   return { wake };
 }
 
-/** İki tutamaç arasındaki uzaklık, rayın yüzdesi olarak. */
+/** Distance between the two thumbs, as a percentage of the track. */
 const spreadOf = (values: number[], pct: (v: number) => number) =>
   values.length === 2 ? pct(values[1]!) - pct(values[0]!) : 0;
 
-/** Balonlar arasında kalması gereken boşluk ve titremeyi önleyen pay (px). */
+/** Gap the bubbles must keep, plus a margin that prevents flicker (px). */
 const MERGE_GAP = 6;
 const SPLIT_SLACK = 10;
 
 /**
- * Aralıkta iki tutamaç yaklaşınca değer balonları üst üste biner. Çakışacak
- * kadar yaklaşınca ilk balon iki değeri birden gösterip tutamaçların ortasına
- * kayar, ikincisi söner (`data-merged`); uzaklaşınca ayrılır (`data-split`).
- * Hareket CSS'te, kişiliğin yay eğrisiyle. Durum React'te değil DOM'da: her
- * sürükleme karesinde yeniden render gerekmesin.
+ * When the two thumbs of a range get close, their value bubbles overlap. Once close
+ * enough to collide, the first bubble shows both values and slides to the middle of the
+ * thumbs while the second fades out (`data-merged`); moving apart splits them again
+ * (`data-split`). Motion is in CSS, with the personality's spring curve. The state lives
+ * in the DOM, not React, so dragging doesn't re-render on every frame.
  */
 function useBubbleMerge(
   area: RefObject<HTMLDivElement | null>,

@@ -1,15 +1,15 @@
 export interface FuzzyMatch {
-  /** Yüksek olan daha iyi eşleşme. */
+  /** Higher is a better match. */
   score: number;
-  /** Eşleşen karakterlerin metindeki sırası (vurgulamak için). */
+  /** Positions of the matched characters in the text (for highlighting). */
   hits: number[];
 }
 
 /**
- * Bulanık eşleşme: sorgunun harfleri metinde aynı sırayla geçmeli, arada
- * başka harfler olabilir ("yfat" → "Yeni fatura"). Ardışık eşleşmeler ve
- * kelime başları ödüllendirilir. Büyük/küçük harf dile göre (tr: "i" ≠ "ı").
- * Eşleşme yoksa `null`.
+ * Fuzzy match: the query's letters must appear in the text in the same order, with
+ * other letters in between allowed ("ninv" → "New invoice"). Consecutive matches and
+ * word starts score higher. Case follows the language (tr: "i" ≠ "ı").
+ * `null` when there is no match.
  */
 export function fuzzy(
   text: string,

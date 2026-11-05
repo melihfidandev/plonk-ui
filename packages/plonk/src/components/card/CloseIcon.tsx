@@ -1,7 +1,7 @@
 /**
- * Kapatma kutusunun ikonu. İki çizim birlikte gelir, kişilik hangisinin
- * görüneceğini CSS'te seçer: yuvarlak uçlu × ya da Retro'da 2px'lik
- * piksellerden bir ×. Card, Dialog, Drawer ve Toast aynı ikonu kullanır.
+ * Close box icon. Both drawings ship together and the personality picks one in CSS:
+ * a round-capped × or, in Retro, a × made of 2px pixels. Card, Dialog, Drawer and
+ * Toast share this icon.
  */
 export function CloseIcon() {
   return (

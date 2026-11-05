@@ -1,15 +1,15 @@
 import { useId, type ReactNode } from "react";
 import { cn } from "../../lib/cn";
 
-/** Etiketli form öğelerinin ortak özellikleri. */
+/** Shared props of labeled form controls. */
 export interface FieldProps {
-  /** Görünen etiket. Yoksa `aria-label` ya da `aria-labelledby` ver. */
+  /** Visible label. Without one, pass `aria-label` or `aria-labelledby`. */
   label?: ReactNode;
-  /** Etiketin altındaki yardımcı metin. */
+  /** Helper text under the label. */
   description?: ReactNode;
   /**
-   * Hata mesajı. Verildiğinde öğe geçersiz sayılır (`aria-invalid`).
-   * Mesajsız işaretlemek için `true`.
+   * Error message. When given, the control counts as invalid (`aria-invalid`).
+   * Pass `true` to mark it without a message.
    */
   error?: ReactNode;
 }
@@ -17,7 +17,7 @@ export interface FieldProps {
 const hasContent = (node: ReactNode) =>
   node != null && typeof node !== "boolean" && node !== "";
 
-/** Etiket, açıklama ve hata için kimlikleri üretir ve birbirine bağlar. */
+/** Generates ids for the label, description and error and links them together. */
 export function useField({
   id,
   description,
@@ -88,7 +88,7 @@ export function FieldDescription({
   );
 }
 
-/** Hata mesajı: eğik yapıştırılmış küçük bir etiket olarak belirir. */
+/** Error message: appears as a small tilted label stuck on. */
 export function FieldError({
   id,
   className,

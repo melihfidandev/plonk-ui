@@ -24,7 +24,7 @@ import type { FieldProps } from "../field/Field";
 import { Calendar, RangeCalendar, type CalendarPreset } from "./Calendar";
 
 const noop = () => () => {};
-/** Sunucu render'ında React Aria "bugün"ü okumasın diye sabit yer tutucu. */
+/** A fixed placeholder so React Aria doesn't read "today" during server rendering. */
 const SERVER_PLACEHOLDER = /* @__PURE__ */ new CalendarDate(2000, 1, 1);
 
 const useIsClient = () =>
@@ -89,9 +89,9 @@ export interface DatePickerProps<T extends DateValue>
 }
 
 /**
- * Tarih alanı: gün, ay ve yıl ayrı parçalar halinde yazılır ya da ok
- * tuşlarıyla değiştirilir; düğmeyle takvim açılır. Biçim ve haftanın ilk
- * günü dile göre (provider'ın `locale`'i).
+ * Date field: day, month and year are typed as separate segments or changed with the
+ * arrow keys; a button opens the calendar. Format and first day of the week follow the
+ * language (the provider's `locale`).
  */
 export function DatePicker<T extends DateValue>({
   label,
@@ -131,12 +131,12 @@ export interface DateRangePickerProps<T extends DateValue>
   extends
     Omit<AriaDateRangePickerProps<T>, "children" | "className" | "style">,
     FieldProps {
-  /** Takvimin yanında hazır aralıklar ("Son 7 gün", "Bu ay"…). */
+  /** Preset ranges next to the calendar ("Last 7 days", "This month"…). */
   presets?: CalendarPreset[];
   className?: string;
 }
 
-/** Başlangıç ve bitiş tarihi. Takvimde iki gün seçilir ya da hazır aralıklardan biri. */
+/** A start and an end date. Pick two days in the calendar or one of the preset ranges. */
 export function DateRangePicker<T extends DateValue>({
   label,
   description,
@@ -199,7 +199,7 @@ function FieldLabel({
   );
 }
 
-/** Alan kutusu. Hata gelince "hayır" der gibi sallanır. */
+/** Field box. Shakes like a "no" when an error appears. */
 function FieldGroup({
   invalid,
   children,

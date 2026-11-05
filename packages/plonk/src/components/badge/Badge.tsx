@@ -12,7 +12,7 @@ export type BadgeVariant =
 
 export interface BadgeProps extends ComponentPropsWithRef<"span"> {
   variant?: BadgeVariant;
-  /** Başta küçük bir durum noktası. */
+  /** A small status dot at the start. */
   dot?: boolean;
 }
 
@@ -26,7 +26,7 @@ const VARIANTS: Record<BadgeVariant, string> = {
   danger: "bg-plonk-danger text-plonk-on-danger",
 };
 
-/** Durum ya da kategori etiketi. */
+/** A status or category label. */
 export function Badge({
   variant = "neutral",
   dot = false,

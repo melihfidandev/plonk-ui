@@ -17,8 +17,8 @@ export interface SwitchProps
     Omit<FieldProps, "error"> {}
 
 /**
- * Anında etki eden açık/kapalı ayarı. Topuz karşıya yayla geçer ve
- * yolda ezilip uzar. Form içinde normal bir checkbox gibi gönderilir.
+ * An on/off setting that applies immediately. The knob springs across and squishes
+ * and stretches on the way. Submitted like a normal checkbox inside a form.
  */
 export function Switch({
   label,

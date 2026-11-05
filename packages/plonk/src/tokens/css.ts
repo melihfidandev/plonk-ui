@@ -8,7 +8,7 @@ import {
 
 const kebab = (s: string) => s.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
 
-/** Kişiliği `--plonk-*` CSS değişkenlerine çevirir. */
+/** Turns a personality into `--plonk-*` CSS variables. */
 export function personalityVariables(p: Personality): Record<string, string> {
   const vars: Record<string, string> = {};
   for (const [key, value] of Object.entries(p.color)) {
@@ -38,9 +38,9 @@ export function personalityVariables(p: Personality): Record<string, string> {
 }
 
 /**
- * Hareket azaltıldığında: jöle kapanır (`!important`, böylece provider'ın `jelly`
- * ayarı ya da satır içi bir stil bu kuralı ezemez), yaylar kısa ve sade bir yavaşlamaya döner.
- * Basma tepkisi kalır; geri bildirim kaybolmasın.
+ * When motion is reduced: jelly turns off (`!important`, so the provider's `jelly`
+ * setting or an inline style can't override this rule) and springs become a short,
+ * plain ease-out. The press response stays, so feedback isn't lost.
  */
 const REDUCED: Partial<
   Record<MotionToken, { easing: string; duration: number }>
@@ -69,7 +69,7 @@ const block = (selector: string, vars: Record<string, string>, indent = "") =>
     `${indent}}`,
   ].join("\n");
 
-/** `src/personalities.css` dosyasının içeriği. */
+/** Contents of the `src/personalities.css` file. */
 export function buildPersonalitiesCss(): string {
   const parts = [
     "/* Bu dosya üretilir, elle düzenleme. Kaynak: src/tokens/personalities.ts */",

@@ -20,9 +20,9 @@ export interface DrawerProps extends Pick<
   description?: ReactNode;
   children?: RenderSlot;
   footer?: RenderSlot;
-  /** Hangi kenardan gelsin. Varsayılan: sağ. */
+  /** Which edge it comes from. Default: right. */
   placement?: DrawerPlacement;
-  /** Dışarı tıklayınca kapansın mı? Varsayılan: evet. */
+  /** Close on an outside click? Default: yes. */
   isDismissable?: boolean;
   hideClose?: boolean;
   closeLabel?: string;
@@ -45,11 +45,11 @@ const PANEL: Record<DrawerPlacement, string> = {
 };
 
 /**
- * Kenardan kayan panel. Dialog'la aynı erişilebilirlik davranışı; tetikleyici
- * olarak `DialogTrigger` kullanılır.
+ * A panel that slides in from an edge. Same accessibility behavior as Dialog; use
+ * `DialogTrigger` as its trigger.
  *
- * Sticker'da yayla gelip hedefi biraz aşar: panel ekranın dışına doğru taşan
- * gizli bir pay ile çizilir, böylece aşmada kenarda boşluk görünmez.
+ * In Sticker it springs in and overshoots a little: the panel is drawn with a hidden
+ * margin that extends off screen, so no gap shows at the edge during the overshoot.
  */
 export function Drawer({
   title,

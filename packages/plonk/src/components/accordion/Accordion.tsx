@@ -22,8 +22,8 @@ export interface AccordionProps extends Omit<
 }
 
 /**
- * Açılır kapanır bölümler. Varsayılan olarak aynı anda bir bölüm açık;
- * `allowsMultipleExpanded` ile birden çok.
+ * Collapsible sections. One section is open at a time by default;
+ * `allowsMultipleExpanded` allows several.
  */
 export function Accordion({ className, ...props }: AccordionProps) {
   return (
@@ -40,12 +40,12 @@ export interface AccordionItemProps extends Omit<
 > {
   title: ReactNode;
   children: ReactNode;
-  /** Başlık etiketinin seviyesi (sayfadaki başlık sırasına uysun diye). */
+  /** Level of the heading element (to fit the page's heading order). */
   headingLevel?: 2 | 3 | 4 | 5 | 6;
   className?: string;
 }
 
-/** Tek bölüm. Yükseklik yayla açılır, ok döner ve ezilir. */
+/** A single section. Its height opens with a spring, the chevron turns and squishes. */
 export function AccordionItem({
   title,
   children,

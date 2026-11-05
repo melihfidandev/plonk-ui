@@ -21,15 +21,15 @@ import {
 } from "@tanstack/react-table";
 import type { ReactNode } from "react";
 
-/** Sütunun Plonk'a özel ayarları: `columnDef.meta`. */
+/** Plonk-specific column settings: `columnDef.meta`. */
 export interface DataTableColumnMeta {
-  /** Sütun menüsündeki ve filtredeki adı (başlık metin değilse). */
+  /** Name in the column menu and the filter (when the header isn't text). */
   label?: string;
-  /** Sayılar ve tarihler için `end`: sağa yaslanır. */
+  /** `end` for numbers and dates: aligned to the end. */
   align?: "start" | "end";
   /**
-   * Araç çubuğunda bu sütun için filtre. `select`: değerlerden biri (seçenekler
-   * verilmezse veriden toplanır). `dateRange`: iki tarih arası.
+   * A toolbar filter for this column. `select`: one of the values (collected from the
+   * data when no options are given). `dateRange`: between two dates.
    */
   filter?:
     | { type: "select"; options?: { value: string; label?: ReactNode }[] }
@@ -40,10 +40,9 @@ const text = (value: unknown) =>
   value == null ? "" : typeof value === "string" ? value : String(value);
 
 /**
- * Tablonun kullandığı TanStack özellikleri. Metin sıralama ve arama dile
- * duyarlı: yerleşik olanlar karakter koduyla sıralıyor (Türkçede "Ç" Z'den
- * sonra geliyordu) ve dilden bağımsız küçük harfe çeviriyor ("ışık" "Işık"ı
- * bulmuyordu).
+ * TanStack features used by the table. Text sorting and search are
+ * language-aware: the built-in ones sort by character code (in Turkish "Ç" came after
+ * Z) and lowercase regardless of language ("ışık" didn't find "Işık").
  */
 export function createDataTableFeatures(locale: string) {
   const collator = new Intl.Collator(locale, {
@@ -89,7 +88,7 @@ export function createDataTableFeatures(locale: string) {
 
 export type DataTableFeatures = ReturnType<typeof createDataTableFeatures>;
 
-/** Bir sütun tanımı. Genelde `createDataTableColumns` ile yazılır. */
+/** A column definition. Usually written with `createDataTableColumns`. */
 export type DataTableColumn<T extends RowData> = ColumnDef<
   DataTableFeatures,
   T,
@@ -99,8 +98,8 @@ export type DataTableColumn<T extends RowData> = ColumnDef<
 >;
 
 /**
- * Sütunları tip güvenli yazmak için yardımcı (TanStack'in `createColumnHelper`'ı,
- * Plonk'un özellikleriyle bağlı).
+ * Helper for writing type-safe columns (TanStack's `createColumnHelper`, bound to
+ * Plonk's features).
  *
  * ```ts
  * const col = createDataTableColumns<Invoice>();

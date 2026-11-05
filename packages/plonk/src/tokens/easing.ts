@@ -1,15 +1,15 @@
 /**
- * Hareket eğrileri. Yaylar gerçek bir sönümlü yay olarak simüle edilir ve
- * CSS `linear()` fonksiyonuna çevrilir; böylece JavaScript olmadan, sadece
- * CSS geçişleriyle fiziksel bir his elde edilir.
+ * Motion curves. Springs are simulated as a real damped spring and converted to the
+ * CSS `linear()` function, giving a physical feel with CSS transitions alone, no
+ * JavaScript.
  */
 
 export type Easing =
   | {
       type: "spring";
-      /** Yayın bir salınımı kaç saniyede tamamladığı. Küçüldükçe hızlanır. */
+      /** How many seconds one oscillation of the spring takes. Smaller is faster. */
       response: number;
-      /** 0-1 arası sönüm. 1'de hiç aşma yok, küçüldükçe daha çok sekiyor. */
+      /** Damping between 0 and 1. No overshoot at 1, more bounce as it gets smaller. */
       damping: number;
     }
   | {
@@ -27,7 +27,7 @@ export type Easing =
   | { type: "instant" };
 
 export interface ResolvedEasing {
-  /** CSS `transition-timing-function` değeri */
+  /** A CSS `transition-timing-function` value */
   easing: string;
   /** ms */
   duration: number;
@@ -36,7 +36,7 @@ export interface ResolvedEasing {
 // Hedefe bu kadar yaklaşınca yay "durdu" sayılır; daha küçüğü gözle görülmez.
 const SETTLE = 0.004;
 
-/** Durgun hâlden 1'e çekilen, kütlesi 1 olan yayın t saniyedeki konumu. */
+/** Position at t seconds of a spring with mass 1 pulled from rest to 1. */
 export function springPosition(
   t: number,
   response: number,
@@ -59,7 +59,7 @@ export function springPosition(
   return 1 - (r2 * Math.exp(r1 * t) - r1 * Math.exp(r2 * t)) / (r2 - r1);
 }
 
-/** Yayın hedefe yerleşip durduğu süre (saniye). */
+/** Time (seconds) for the spring to settle at its target. */
 export function springDuration(response: number, damping: number): number {
   const w0 = (2 * Math.PI) / response;
   if (damping < 1) {
@@ -105,7 +105,7 @@ function cubicBezier([x1, y1, x2, y2]: [number, number, number, number]) {
 
 type Point = [number, number];
 
-/** Ramer-Douglas-Peucker: eğriyi bozmadan gereksiz noktaları atar. */
+/** Ramer-Douglas-Peucker: drops unneeded points without distorting the curve. */
 function simplify(points: Point[], tolerance: number): Point[] {
   if (points.length < 3) return points;
   const [ax, ay] = points[0]!;
@@ -133,7 +133,7 @@ const round = (n: number, digits: number) => {
   return Math.round(n * f) / f;
 };
 
-/** Eğriyi çizmek için 0-1 zaman aralığında örnek noktalar. */
+/** Sample points in the 0-1 time range for drawing the curve. */
 export function sampleEasing(easing: Easing, count = 120): Point[] {
   const ts = Array.from({ length: count + 1 }, (_, i) => i / count);
   switch (easing.type) {
@@ -158,7 +158,7 @@ export function sampleEasing(easing: Easing, count = 120): Point[] {
   }
 }
 
-/** Easing tanımını CSS'te kullanılacak eğri + süre ikilisine çevirir. */
+/** Turns an easing definition into a curve + duration pair for CSS. */
 export function resolveEasing(easing: Easing): ResolvedEasing {
   switch (easing.type) {
     case "spring": {
@@ -190,7 +190,7 @@ export function resolveEasing(easing: Easing): ResolvedEasing {
   }
 }
 
-/** Yay eğrisinin en yüksek noktası; 1'in üstü hedefi ne kadar aştığını gösterir. */
+/** Peak of the spring curve; above 1 shows how far it overshoots the target. */
 export function overshoot(easing: Easing): number {
   return Math.max(...sampleEasing(easing).map(([, x]) => x));
 }

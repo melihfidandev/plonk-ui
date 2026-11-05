@@ -1,12 +1,12 @@
 import type { CSSProperties } from "react";
 import type { ColorToken, MotionToken, Personality } from "./personalities";
 
-/** "inkMuted" → "ink-muted" (tip düzeyinde). */
+/** "inkMuted" → "ink-muted" (at the type level). */
 type Kebab<S extends string> = S extends `${infer Head}${infer Tail}`
   ? `${Head extends Lowercase<Head> ? Head : `-${Lowercase<Head>}`}${Kebab<Tail>}`
   : S;
 
-/** Kullanıcının ezebileceği bütün `--plonk-*` token değişkenleri. */
+/** Every `--plonk-*` token variable the user can override. */
 export type PlonkVariable =
   | `--plonk-color-${Kebab<ColorToken>}`
   | "--plonk-border-width"
@@ -20,8 +20,8 @@ export type PlonkVariable =
   | `--plonk-jelly-${"amount" | "duration"}`;
 
 /**
- * React'in stil tipi + Plonk token'ları. `style={{ "--plonk-color-focus": "#f0c" }}`
- * cast yazmadan çalışır; editör token adlarını önerir, yanlış yazılan adı yakalar.
+ * React's style type + Plonk tokens. `style={{ "--plonk-color-focus": "#f0c" }}`
+ * works without a cast; the editor suggests token names and catches misspelled ones.
  */
 export type PlonkStyle = CSSProperties & {
   [K in PlonkVariable]?: string | number;

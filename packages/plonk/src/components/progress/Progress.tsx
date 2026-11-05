@@ -8,13 +8,13 @@ export interface ProgressProps extends Omit<
   ComponentPropsWithRef<"div">,
   "children"
 > {
-  /** Şu anki değer. `null` ya da verilmezse belirsiz (süre bilinmiyor). */
+  /** Current value. `null` or omitted means indeterminate (duration unknown). */
   value?: number | null;
   max?: number;
   label?: ReactNode;
-  /** Yüzdeyi etiketin karşısında gösterir. */
+  /** Shows the percentage opposite the label. */
   showValue?: boolean;
-  /** Yüzde metnini özelleştirir (ekran okuyucu da bunu okur). */
+  /** Customizes the percentage text (screen readers read it too). */
   formatValue?: (value: number, max: number) => string;
   variant?: ProgressVariant;
 }
@@ -32,8 +32,8 @@ const percent = (value: number, max: number) =>
   `${Math.round((value / max) * 100)}%`;
 
 /**
- * İlerleme çubuğu. Dolgu yayla ilerler; Retro'da bloklar halinde kademeli
- * dolar.
+ * Progress bar. The fill moves with a spring; in Retro it fills in blocks, step by
+ * step.
  */
 export function Progress({
   value = null,

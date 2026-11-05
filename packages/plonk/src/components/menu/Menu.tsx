@@ -33,8 +33,8 @@ export interface MenuProps<T> extends Omit<
 }
 
 /**
- * Eylem menüsü. `MenuTrigger` içinde bir `Button` ile kullanılır. Ok tuşları,
- * yazarak arama ve Esc React Aria'dan gelir.
+ * Action menu. Used with a `Button` inside a `MenuTrigger`. Arrow keys, type-to-search
+ * and Esc come from React Aria.
  */
 export function Menu<T extends object>({
   placement = "bottom start",
@@ -53,7 +53,7 @@ export interface MenuItemProps<T>
     Omit<AriaMenuItemProps<T>, "children" | "className" | "style">,
     ItemContentProps {
   children: ReactNode;
-  /** `danger`: silme gibi yıkıcı eylemler. */
+  /** `danger`: destructive actions such as deleting. */
   variant?: "default" | "danger";
   className?: string;
 }

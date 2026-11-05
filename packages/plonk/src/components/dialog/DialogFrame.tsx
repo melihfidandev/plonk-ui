@@ -9,9 +9,9 @@ const render = (slot: RenderSlot, close: () => void) =>
   typeof slot === "function" ? slot({ close }) : slot;
 
 /**
- * Dialog ve Drawer'ın ortak iç düzeni: başlık (ve kapatma kutusu), açıklama,
- * kayan içerik, alt eylemler. `.plonk-card-*` sınıflarını kullanır; Retro'da
- * başlık, pencere başlık çubuğuna yerleşir.
+ * Shared inner layout of Dialog and Drawer: title (and close box), description,
+ * scrolling content, actions at the bottom. Uses the `.plonk-card-*` classes; in Retro
+ * the title sits in the window's title bar.
  */
 export function DialogFrame({
   close,
@@ -31,7 +31,7 @@ export function DialogFrame({
   footer?: RenderSlot;
   hideClose: boolean;
   closeLabel: string;
-  /** Açıklamanın altında, içerikten önce (Dialog'un geri sayımı). */
+  /** Below the description, before the content (the dialog's countdown). */
   countdown?: ReactNode;
   children?: RenderSlot;
 }) {

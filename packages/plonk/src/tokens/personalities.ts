@@ -42,15 +42,15 @@ export interface Personality {
   radius: { sm: string; md: string; lg: string; pill: string };
   font: { display: string; body: string; mono: string };
   /**
-   * Başlık fontunun harf biçimi ve aralığı. Retro'da her şey büyük harf:
-   * eski sistem ekranları gibi. Tarayıcı sayfanın diline göre çevirir (tr: i → İ).
+   * Letter case and spacing of the heading font. Everything is uppercase in Retro, like
+   * old system screens. The browser converts it by the page's language (tr: i → İ).
    */
   displayCase: "none" | "uppercase";
   displayTracking: string;
-  /** Sticker gibi hafif eğik yerleşim açısı. */
+  /** Slight tilt angle for a Sticker-like placement. */
   tilt: string;
   motion: Record<MotionToken, Easing>;
-  /** Bırakınca esneme: 0 kapalı, 1 tam jöle. */
+  /** Wobble on release: 0 off, 1 full jelly. */
   jelly: { amount: number; duration: number };
 }
 

@@ -12,8 +12,8 @@ import { cn } from "../../lib/cn";
 export type TooltipTriggerProps = TooltipTriggerComponentProps;
 
 /**
- * İpucu tetikleyicisi. React Aria'nın 1.5 saniyelik varsayılanı yerine
- * 500ms bekler; bir ipucu açıkken diğerine geçişte beklemez.
+ * Tooltip trigger. Waits 500ms instead of React Aria's 1.5 second default; no
+ * delay when moving from one open tooltip to another.
  */
 export function TooltipTrigger({
   delay = 500,
@@ -34,8 +34,8 @@ export interface TooltipProps extends Pick<
 }
 
 /**
- * Kısa açıklama balonu. Sadece metin içindir; etkileşimli içerik için
- * Popover kullan. Sticker'da eğik küçük bir etiket gibi zıplayarak gelir.
+ * A short explanation bubble. Text only; use Popover for interactive content.
+ * In Sticker it hops in like a small tilted label.
  */
 export function Tooltip({ className, offset = 10, ...props }: TooltipProps) {
   return (

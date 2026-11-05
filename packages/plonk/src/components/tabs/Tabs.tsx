@@ -23,8 +23,8 @@ export interface TabsProps extends Omit<
 }
 
 /**
- * Sekmeler. Ok tuşlarıyla sekmeler arasında gezilir (React Aria).
- * Seçili sekmenin göstergesi yeni sekmeye yayla kayar ve yolda ezilip uzar.
+ * Tabs. Arrow keys move between tabs (React Aria).
+ * The selected tab's indicator springs to the new tab, squishing and stretching on the way.
  */
 export function Tabs({ className, ...props }: TabsProps) {
   // grid değil flex: dış yerleşim Tabs'ı gererse sekme çubuğu uzamasın.
@@ -44,9 +44,9 @@ export interface TabListProps<T> extends Omit<
 }
 
 /**
- * Sekme çubuğu. Seçili sekmenin arkasında tek bir gösterge durur; konumu ve
- * boyutu seçili sekmeden ölçülüp CSS değişkenlerine yazılır, geçiş CSS'te.
- * Sekmelerin boyutu değişirse (font yüklenmesi, pencere) yeniden ölçülür.
+ * Tab bar. A single indicator sits behind the selected tab; its position and size
+ * are measured from the selected tab and written to CSS variables, the transition is
+ * in CSS. Measured again when tab sizes change (font loading, window resize).
  */
 export function TabList<T extends object>({
   className,
@@ -144,7 +144,7 @@ export interface TabPanelProps extends Omit<
   className?: string;
 }
 
-/** Sekme içeriği. Açılırken hafifçe yukarı kayarak belirir. */
+/** Tab content. Fades in sliding up slightly. */
 export function TabPanel({ className, ...props }: TabPanelProps) {
   return (
     <AriaTabPanel

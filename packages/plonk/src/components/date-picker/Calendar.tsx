@@ -40,12 +40,12 @@ export interface CalendarProps<T extends DateValue> extends Omit<
 }
 
 /**
- * Tek gün seçilen takvim. Ok tuşlarıyla günler, PageUp/PageDown ile aylar
- * arasında gezilir (React Aria).
+ * A calendar for picking a single day. Arrow keys move between days, PageUp/PageDown
+ * between months (React Aria).
  *
- * Sticker'da masa takvimi: ileri giderken yaprak koparılıp düşer, seçilen
- * gün sticker olarak yapışır. Retro'da pencere: seçim ters renk, sayfa
- * kademeli kayar.
+ * In Sticker a desk calendar: going forward tears the page off and drops it, the
+ * chosen day sticks on as a sticker. In Retro a window: inverted selection, the page
+ * slides in steps.
  */
 export function Calendar<T extends DateValue>({
   className,
@@ -60,10 +60,10 @@ export function Calendar<T extends DateValue>({
   );
 }
 
-/** Aralık takviminin yanındaki hazır seçenek ("Son 7 gün" gibi). */
+/** A preset next to the range calendar ("Last 7 days" and so on). */
 export interface CalendarPreset {
   label: ReactNode;
-  /** Seçilecek aralık. Fonksiyon verilirse tıklandığı an hesaplanır. */
+  /** The range to select. A function is evaluated at the moment it's clicked. */
   range: DateRange | (() => DateRange);
 }
 
@@ -71,14 +71,14 @@ export interface RangeCalendarProps<T extends DateValue> extends Omit<
   AriaRangeCalendarProps<T>,
   "className" | "style" | "children"
 > {
-  /** Takvimin yanında hazır aralık düğmeleri. */
+  /** Preset range buttons next to the calendar. */
   presets?: CalendarPreset[];
   className?: string;
 }
 
 /**
- * Başlangıç ve bitiş seçilen takvim. Sticker'da aralık fosforlu kalemle
- * çizilir; Retro'da araya noktalı desen dolar.
+ * A calendar for picking a start and an end. In Sticker the range is drawn with a
+ * highlighter; in Retro a dotted pattern fills the days between.
  */
 export function RangeCalendar<T extends DateValue>({
   presets,
@@ -265,10 +265,10 @@ function Arrow({ d }: { d: string }) {
 }
 
 /**
- * Ay değişince eski sayfanın hareketi. React eski ayı hemen kaldırdığı için
- * her render'dan sonra ızgaranın bir kopyası tutulur; ay değişince kopya
- * sahneye konur ve CSS'teki hareketi bitince silinir (Sticker'da koparılıp
- * düşen yaprak, Retro'da kayan sayfa). Yeni ızgara da `data-turn` ile girer.
+ * Motion of the old page when the month changes. React removes the old month right
+ * away, so a copy of the grid is kept after every render; when the month changes the
+ * copy is put on stage and removed once its CSS motion ends (a page torn off and
+ * dropped in Sticker, a sliding page in Retro). The new grid enters with `data-turn`.
  */
 function usePageTurn(
   stage: RefObject<HTMLDivElement | null>,

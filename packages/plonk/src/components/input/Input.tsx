@@ -13,15 +13,15 @@ import {
 
 export interface InputProps
   extends Omit<ComponentPropsWithRef<"input">, "size">, FieldProps {
-  /** Alanın başındaki ikon (arama büyüteci gibi). */
+  /** Icon at the start of the field (like a search magnifier). */
   iconStart?: ReactNode;
-  /** Alanın sonundaki ikon ya da ek (birim, kısayol…). */
+  /** Icon or addon at the end of the field (a unit, a shortcut…). */
   iconEnd?: ReactNode;
 }
 
 /**
- * Odaklanınca yerinden kalkar ve odak renginde sert bir gölge bırakır.
- * Hata gelince "hayır" der gibi sallanır.
+ * Lifts when focused and leaves a hard shadow in the focus color.
+ * Shakes like a "no" when an error appears.
  */
 export function Input({
   label,

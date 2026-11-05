@@ -20,7 +20,7 @@ import {
 
 interface RadioGroupContext {
   name: string;
-  /** `undefined`: kontrolsüz. `null`: kontrollü, hiçbiri seçili değil. */
+  /** `undefined`: uncontrolled. `null`: controlled, nothing selected. */
   value: string | null | undefined;
   defaultValue: string | undefined;
   onValueChange: ((value: string) => void) | undefined;
@@ -35,14 +35,14 @@ export interface RadioGroupProps
   extends
     Omit<ComponentPropsWithRef<"fieldset">, "defaultValue" | "onChange">,
     FieldProps {
-  /** Form gönderiminde kullanılacak ad. Verilmezse otomatik üretilir. */
+  /** Name used in form submission. Generated automatically when omitted. */
   name?: string;
   /**
-   * Kontrollü kullanım için seçili değer. Hiçbiri seçili değilse `null`
-   * (`undefined` vermek grubu kontrolsüz yapar).
+   * Selected value for controlled use. `null` when nothing is selected
+   * (passing `undefined` makes the group uncontrolled).
    */
   value?: string | null;
-  /** Kontrolsüz kullanım için başlangıç değeri. */
+  /** Initial value for uncontrolled use. */
   defaultValue?: string;
   onValueChange?: (value: string) => void;
   required?: boolean;
@@ -50,8 +50,8 @@ export interface RadioGroupProps
 }
 
 /**
- * Bir seçenek grubu. Ok tuşlarıyla gezinme tarayıcının doğal radyo
- * davranışından gelir.
+ * A group of options. Arrow-key navigation comes from the browser's native radio
+ * behavior.
  */
 export function RadioGroup({
   label,
@@ -130,7 +130,7 @@ export interface RadioProps extends Omit<
   description?: ReactNode;
 }
 
-/** Seçilince içindeki nokta yayla büyüyerek gelir. */
+/** When selected, the inner dot grows in with a spring. */
 export function Radio({
   value,
   label,

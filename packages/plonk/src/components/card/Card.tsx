@@ -8,27 +8,27 @@ export interface CardProps extends Omit<
 > {
   title?: ReactNode;
   description?: ReactNode;
-  /** Başlığın sağındaki eylemler (buton, menü…). */
+  /** Actions to the right of the title (buttons, a menu…). */
   actions?: ReactNode;
   footer?: ReactNode;
   /**
-   * Kapatma kutusu. Retro'da başlık çubuğunun solunda, Sticker'da sağ üstte
-   * durur. Verilmezse gösterilmez.
+   * Close box. Sits on the left of the title bar in Retro, top right in Sticker.
+   * Not shown unless given.
    */
   onClose?: () => void;
-  /** Kapatma kutusunun ekran okuyucu adı. */
+  /** Screen reader name of the close box. */
   closeLabel?: string;
-  /** Sticker'da üstte yarı saydam bir bant. Retro'da görünmez. */
+  /** A translucent strip of tape on top. Each personality draws its own version. */
   tape?: boolean;
-  /** Kişiliğin eğim açısıyla yapıştırır. Retro'da eğim 0'dır. */
+  /** Sticks the card on at the personality's tilt angle. The tilt is 0 in Retro. */
   tilt?: "left" | "right";
-  /** Başlık etiketinin seviyesi (sayfadaki başlık sırasına uysun diye). */
+  /** Level of the heading element (to fit the page's heading order). */
   headingLevel?: 2 | 3 | 4 | 5 | 6;
 }
 
 /**
- * İçerik kutusu. Retro'da her kart bir pencere: başlık, çizgili bir
- * başlık çubuğuna yerleşir.
+ * Content box. In Retro every card is a window: the title sits in a striped
+ * title bar.
  */
 export function Card({
   title,

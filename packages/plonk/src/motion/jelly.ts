@@ -1,17 +1,17 @@
 import { useEffect, useRef } from "react";
 
 /**
- * pop: bırakınca esneme. squish: yer değiştirirken ezilme.
- * shake: hata anında "hayır" sallanması.
+ * pop: wobble on release. squish: squash while moving.
+ * shake: a "no" shake on error.
  */
 export type JellyKind = "pop" | "squish" | "shake";
 
 /**
- * Elemanda jöle animasyonunu (yeniden) başlatır.
+ * Starts (or restarts) the jelly animation on an element.
  *
- * Sınıf yerine `data-plonk-jelly` özelliği kullanılır: React `className`'i
- * yeniden yazdığında animasyon silinmez, çünkü bu özelliği React yönetmez.
- * Miktar ve süre `--plonk-jelly-*` token'larından gelir.
+ * A `data-plonk-jelly` attribute is used instead of a class: when React rewrites
+ * `className` the animation isn't removed, because React doesn't manage this attribute.
+ * Amount and duration come from the `--plonk-jelly-*` tokens.
  */
 export function playJelly(el: HTMLElement, kind: JellyKind = "pop") {
   el.removeAttribute("data-plonk-jelly");
@@ -21,8 +21,8 @@ export function playJelly(el: HTMLElement, kind: JellyKind = "pop") {
 }
 
 /**
- * Hata durumu yeni başladığında elemanı sallar. İlk render'da sallamaz;
- * sadece geçerliden geçersize geçişte çalışır.
+ * Shakes the element when an error state begins. Doesn't shake on the first render;
+ * only on a change from valid to invalid.
  */
 export function useShakeOnInvalid<T extends HTMLElement>(invalid: boolean) {
   const ref = useRef<T>(null);

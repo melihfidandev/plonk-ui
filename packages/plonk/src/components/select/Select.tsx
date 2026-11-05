@@ -30,15 +30,15 @@ export interface SelectProps<T extends object>
   extends
     Omit<AriaSelectProps<T>, "children" | "className" | "style">,
     FieldProps {
-  /** Seçenekler: `SelectItem`'lar ya da `items` ile birlikte bir render fonksiyonu. */
+  /** Options: `SelectItem`s, or a render function together with `items`. */
   children: ReactNode | ((item: T) => ReactNode);
   items?: Iterable<T>;
   className?: string;
 }
 
 /**
- * Açılır seçim listesi. Klavyeyle açılır, ok tuşları ve yazarak arama çalışır;
- * formda gizli bir `<select>` ile birlikte gönderilir (React Aria).
+ * A dropdown select. Opens from the keyboard, arrow keys and type-to-search work;
+ * submitted with a form through a hidden `<select>` (React Aria).
  */
 export function Select<T extends object>({
   label,
@@ -111,7 +111,7 @@ export interface SelectItemProps<T>
   className?: string;
 }
 
-/** Seçenek. Seçili olanın yanında tik çizilir. */
+/** An option. A tick is drawn next to the selected one. */
 export function SelectItem<T extends object>({
   children,
   icon,
