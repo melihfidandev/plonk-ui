@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/melihfidandev/plonk/main/.github/assets/logo.svg" width="72" alt="Plonk logo" />
+<img src="https://raw.githubusercontent.com/melihfidandev/plonk-ui/main/.github/assets/logo.svg" width="72" alt="Plonk logo" />
 
 # Plonk
 
@@ -19,7 +19,7 @@ _Same components, four personalities, each with its own look and motion._
 
 </div>
 
-<p align="center"><img src="https://raw.githubusercontent.com/melihfidandev/plonk/main/.github/assets/personalities.png" alt="The same card in Plonk's four personalities: Sticker, Retro, Comic and Arcade" width="100%" /></p>
+<p align="center"><img src="https://raw.githubusercontent.com/melihfidandev/plonk-ui/main/.github/assets/personalities.png" alt="The same card in Plonk's four personalities: Sticker, Retro, Comic and Arcade" width="100%" /></p>
 
 ---
 
@@ -156,8 +156,8 @@ More in [Accessibility](__DOCS_URL__/docs/accessibility) and [Localization](__DO
 **Requirements:** Node.js 22+ and pnpm.
 
 ```bash
-git clone https://github.com/melihfidandev/plonk.git
-cd plonk
+git clone https://github.com/melihfidandev/plonk-ui.git
+cd plonk-ui
 pnpm install
 pnpm dev   # docs site on http://localhost:3000
 ```
@@ -173,7 +173,7 @@ The docs site uses the library's source directly, so changes show up without a b
 | `pnpm --filter plonk tokens`   | Regenerate the personality CSS from the token source |
 
 ```
-plonk/
+plonk-ui/
 ├── packages/plonk/          # the library published to npm
 │   └── src/
 │       ├── components/      # every component, one folder each
@@ -187,6 +187,6 @@ plonk/
 
 ## License
 
-[MIT](https://github.com/melihfidandev/plonk/blob/main/LICENSE) © 2026 Melih Fidan
+[MIT](https://github.com/melihfidandev/plonk-ui/blob/main/LICENSE) © 2026 Melih Fidan
 
 The bundled fonts (Baloo 2, Nunito, Tiny5, IBM Plex Mono, Bangers, Kalam, Bungee, Rubik) are licensed under the [SIL Open Font License](https://openfontlicense.org); their license files ship next to them in `dist/fonts`.

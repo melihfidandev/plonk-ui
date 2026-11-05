@@ -13,6 +13,13 @@ next-env.d.ts
 # tanıtım videosu (Remotion): yerelde kalır, asla push edilmez
 /video/
 
+# Claude Code: proje hafızası ve yerel ayarlar, yayına çıkmaz
+CLAUDE.md
+.claude/
+
+# pnpm pack çıktıları
+*.tgz
+
 # ortam
 .env*
 .vercel
