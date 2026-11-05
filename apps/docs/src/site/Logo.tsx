@@ -6,14 +6,7 @@
 export function LogoMark() {
   return (
     <svg className="site-logo-mark" viewBox="0 0 32 32" aria-hidden="true">
-      <rect
-        className="site-logo-shadow"
-        x="5"
-        y="5"
-        width="25"
-        height="25"
-        rx="3"
-      />
+      <rect className="site-logo-shadow" x="5" y="5" width="24" height="24" />
       <g className="site-logo-tiles" strokeWidth="2.2">
         <rect x="2" y="2" width="12" height="12" fill="#FFD23F" />
         <rect x="14" y="2" width="12" height="12" fill="#5B4CFF" />
